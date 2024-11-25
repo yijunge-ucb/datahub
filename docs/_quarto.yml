@@ -46,6 +46,7 @@ website:
           - tasks/rebuild-postgres-image.qmd
           - tasks/managing-multiple-user-image-repos.qmd
           - tasks/new-image.qmd
+          - tasks/repo2docker-local.qmd
           - tasks/transition-image.qmd
           - tasks/new-packages.qmd
           - tasks/course-config.qmd
@@ -57,6 +58,7 @@ website:
           - tasks/github-token.qmd
           - tasks/google-sheets.qmd
           - tasks/cheatsheet.qmd
+          - tasks/semester-start-end-tasks.qmd
       - section: "Policy"
         contents:
           - policy/create_policy.qmd
