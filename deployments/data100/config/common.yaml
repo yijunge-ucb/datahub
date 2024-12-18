@@ -41,30 +41,19 @@ jupyterhub:
         # this role will be assigned to...
         groups:
           - course::1524699::group::all-admins
+
        #Data 100, Fall 2024, https://github.com/berkeley-dsep-infra/datahub/issues/6458
-      course-staff-1537664:
+      #course-staff-1537664:
       #  description: Enable course staff to view and access servers.
         # this role provides permissions to...
-        scopes:
-          - admin-ui
-          - list:users!group=course::1537664
-          - admin:servers!group=course::1537664
-          - access:servers!group=course::1537664
+       # scopes:
+        #  - admin-ui
+        #  - list:users!group=course::1537664
+        #  - admin:servers!group=course::1537664
+        #  - access:servers!group=course::1537664
         # this role will be assigned to...
-        groups:
-          - course::1537664::group::Admins
-      # Econ 148, Spring 2024, DH-225
-      #course-staff-1532866:
-      #  description: Enable course staff to view and access servers.
-        # this role provides permissions to...
-      #  scopes:
-      #    - admin-ui
-      #    - list:users!group=course::1532866
-      #   - admin:servers!group=course::1532866
-      #    - access:servers!group=course::1532866
-        # this role will be assigned to...
-      #  groups:
-      #   - course::1532866::group::admin
+        #groups:
+         # - course::1537664::group::Admins
 
 #  prePuller:
 #    extraImages:
@@ -112,23 +101,6 @@ jupyterhub:
         admin: true
         mem_limit: 4G
 
-      # Data C100, Fall 2024, https://github.com/berkeley-dsep-infra/datahub/issues/6316
-      course::1537664::enrollment_type::teacher:
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/data100-shared-readwrite
-            subPath: _shared/course/data100-shared
-      course::1537664::enrollment_type::ta:
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/data100-shared-readwrite
-            subPath: _shared/course/data100-shared
-      course::1537664::enrollment_type::student:
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/data100-shared
-            subPath: _shared/course/data100-shared
-            readOnly: true
     admin:
       mem_guarantee: 2G
       extraVolumeMounts:
