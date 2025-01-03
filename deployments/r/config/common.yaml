@@ -96,6 +96,3 @@ jupyterhub:
       course::1524699::group::all-admins:
         mem_limit: 2048M
         mem_guarantee: 2048M
-      course::1537932: # Data C131A, https://github.com/berkeley-dsep-infra/datahub/issues/6121
-        mem_limit: 2048M
-        mem_guarantee: 2048M
