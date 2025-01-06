@@ -1,6 +1,6 @@
 images:
   images:
-    - name: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/ischool-user-image:bf3004dcb234
+    - name: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/ischool-user-image:7f769a0f30ae
 
 cluster:
   provider: gcloud
