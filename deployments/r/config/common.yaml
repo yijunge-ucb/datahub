@@ -96,3 +96,8 @@ jupyterhub:
       course::1524699::group::all-admins:
         mem_limit: 2048M
         mem_guarantee: 2048M
+
+      # PS 191, https://github.com/berkeley-dsep-infra/datahub/issues/6593
+      course::1541486:
+        mem_limit: 6144M
+        mem_guarantee: 6144M
