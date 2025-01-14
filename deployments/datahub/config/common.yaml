@@ -152,12 +152,12 @@ jupyterhub:
         mem_limit: 4096M
         mem_guarantee: 4096M
 
-      # ENVECON 153, https://github.com/berkeley-dsep-infra/datahub/issues/6575
+      # ENVECON 153, Spring 25, https://github.com/berkeley-dsep-infra/datahub/issues/6575
       course::1541477:
         mem_limit: 4096M
         mem_guarantee: 4096M
 
-      # ECON 148, https://github.com/berkeley-dsep-infra/datahub/issues/6576
+      # ECON 148, Spring 25, https://github.com/berkeley-dsep-infra/datahub/issues/6576
       course::1541056:
         mem_limit: 4096M
         mem_guarantee: 4096M
