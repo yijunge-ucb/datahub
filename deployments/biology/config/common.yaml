@@ -50,17 +50,16 @@ jupyterhub:
         groups:
           - course::1524699::group::biology-admins
   custom:
-    admin:
-      extraVolumeMounts:
-        - name: home
-          mountPath: /home/jovyan/shared-readwrite
-          subPath: _shared
     group_profiles:
       # DataHub Infrastructure staff
       # https://bcourses.berkeley.edu/courses/1524699/groups#tab-80607
       course::1524699::group::all-admins:
         mem_limit: 4096M
         mem_guarantee: 4096M
+        extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/shared-readwrite
+            subPath: _shared
 
   singleuser:
     extraEnv:
