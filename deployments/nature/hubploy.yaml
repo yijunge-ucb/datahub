@@ -1,6 +1,6 @@
 images:
   images:
-    - name: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/nature-user-image:5a46ef14206c
+    - name: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/nature-user-image:322b52a42fcb
 
 cluster:
   provider: gcloud
