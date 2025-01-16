@@ -1,0 +1,14 @@
+---
+title: Nature
+categories:
+  - college
+  - course
+  - jupyterlab
+  - quarto 
+  - r
+  - rstudio 
+  - shiny 
+  - vscode 
+---
+
+nature.datahub.berkeley.edu is a hub for courses within the [College of Natural Resources](https://nature.berkeley.edu). The [user environment](https://github.com/berkeley-dsep-infra/nature-user-image) is based on repo2docker and contains a Jupyter stack, RStudio, Shiny, and VS Code.
