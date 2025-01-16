@@ -1,5 +1,7 @@
 ---
 title: Test User Images Locally
+aliases:
+  - ../repo2docker-local.html
 ---
 
 You should use `repo2docker` to build and test the image on your own device before you push and create a PR. It is often faster to do this first before using CI/CD since you can take advantage of local caching and rapid iteration. There's no need to waste Github Action minutes to test build images when you can do this on your own device.
