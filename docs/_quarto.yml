@@ -43,12 +43,15 @@ website:
           - tasks/core-pool.qmd
           - tasks/new-hub.qmd
           - tasks/rebuild-hub-image.qmd
-          - tasks/rebuild-postgres-image.qmd
-          - tasks/managing-multiple-user-image-repos.qmd
-          - tasks/new-image.qmd
-          - tasks/repo2docker-local.qmd
-          - tasks/transition-image.qmd
-          - tasks/new-packages.qmd
+          - section: "User Images"
+            contents:
+              - tasks/user-images/new-image.qmd
+              - tasks/user-images/update-image.qmd
+              - tasks/user-images/new-packages.qmd
+              - tasks/user-images/repo2docker-local.qmd
+              - tasks/user-images/managing-multiple-user-image-repos.qmd
+              - tasks/user-images/transition-image.qmd
+              - tasks/user-images/rebuild-postgres-image.qmd
           - tasks/course-config.qmd
           - tasks/calendar-scaler.qmd
           - tasks/prometheus-grafana.qmd

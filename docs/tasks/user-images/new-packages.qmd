@@ -1,0 +1,82 @@
+---
+title: Testing and Upgrading New Packages
+aliases:
+  - ../admins/howto/new-packages.html
+  - ../new-packages.html
+---
+
+It is helpful to test package additions and upgrades for yourself before
+they are installed for all users. You can make sure the change behaves
+as you think it should, and does not break anything else. Once tested,
+request that the change by installed for all users by by [creating a new
+issue in
+github](https://github.com/berkeley-dsep-infra/datahub/issues),contacting
+cirriculum support staff, or creating a new pull request. Ultimately,
+thoroughly testing changes locally and submitting a pull request will
+result in the software being rolled out to everyone much faster.
+
+Install a python package in your notebook
+==================================
+
+When testing a notebook with new version of the package, add the
+following line to a cell at the beginning of your notebook.
+
+``` bash
+!pip install --upgrade packagename==version
+```
+
+You can then execute this cell every time you run the notebook. This
+will ensure you have the version you think you have when running your
+code.
+
+To avoid complicated errors, make sure you always specify a version. You
+can find the latest version by searching on
+[pypi.org](https://pypi.org).
+
+Find current version of a python package
+===============================
+
+To find the current version of a particular installed package, you can
+run the following in a notebook.
+
+``` bash
+!pip list | grep <name-of-package>
+```
+
+This should show you the particular package you are interested in and
+its current version.
+
+Install/Update a R package in your RStudio
+==================================
+
+When the required version of package is missing in the R Studio, Try the
+following command to check whether the default installation repo
+contains the package (and the version) required.
+
+``` R
+install.packages("packagename")
+```
+
+This should install the particular package you are interested in and its
+latest version. You can find the latest version of a R package by
+searching on [CRAN](https://cran.r-project.org/).
+
+Find current version of a R package ===============================
+
+To find the current version of a particular installed package, you can
+run the following in RStudio.
+
+``` R
+packageVersion("<name-of-package>") 
+```
+
+This should show you the particular package you are interested in and
+its current version.
+
+## Tips for Upgrading Package
+
+-   Conda can take an extremely long time to resolve version dependency
+    conflicts, if they are resolvable at all. When upgrading Python
+    versions or a core package that is used by many other packages, such
+    as [requests]{.title-ref}, clean out or upgrade old packages to
+    minimize the number of dependency conflicts.
