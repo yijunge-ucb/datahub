@@ -68,7 +68,7 @@ jupyterhub:
       #    - course::N::enrollment_type::teacher
       #    - course::N::enrollment_type::ta
 
-      # Data 8, Fall 2024, https://github.com/berkeley-dsep-infra/datahub/issues/6014
+      # Data 8, Spring 2025, https://github.com/berkeley-dsep-infra/datahub/issues/6653
       course-staff-1542000:
       #  description: Enable course staff to view and access servers.
       #  # this role provides permissions to...
