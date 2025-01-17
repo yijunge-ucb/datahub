@@ -98,7 +98,7 @@ jupyterhub:
             secretName: user-etc-gitconfig
       extraVolumeMounts:
         - name: etc-gitconfig
-          mountPath: /etc/gitconfig
+          mountPath: /srv/conda/etc/gitconfig
           subPath: gitconfig
           readOnly: true
         - name: etc-gitconfig
