@@ -1,0 +1,15 @@
+---
+title: Update the Image
+---
+
+Updating a user image involves forking the image's git repository, making changes in your fork, and then making a pull request to the original repository. Here is the general outline:
+
+1. Set up your git and development environment by following [the instructions](https://github.com/berkeley-dsep-infra/hub-user-image-template/blob/main/CONTRIBUTING.md).
+1. Fork the image repository.
+1. Create a new branch for this PR.
+1. Make a change in your fork of the image repo and commit it. This may involve modifying [repo2docker's configuration files](https://repo2docker.readthedocs.io/en/latest/configuration/index.html). We typically prefer using `conda` packages, and `pip` only if necessary. Please pin to a specific version (no wildards, etc). Note that package versions for `conda` are specified using `=`, while in `pip` they are specified using `==`.
+1. [Test the changes locally](repo2docker-local.qmd) using `repo2docker`.
+1. Create a [pull request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests) to the repo in `berkeley-dsep-infra`. This will trigger a Github Action workflow that will test to see if the image builds successfully.
+1. If the build succeeds, someone with sufficient access (DataHub staff, or course staff with elevated privileges) can merge the PR. This will trigger another workflow that will build and push the image to the image registry. You can check on the progress of this workflow in your image repo's `Actions` tab.
+1. When that process succeeds, another PR will be created for you in the berkeley-dsep-infra/datahub repo. This will configure the infrastructure to deploy the image's new tag.
+1. Once the PR is reviewed and merged, a GitHub Action workflow will deploy the new image to the staging instance of the hub. You can watch the progress [here](https://github.com/berkeley-dsep-infra/datahub/actions/workflows/deploy-hubs.yaml).

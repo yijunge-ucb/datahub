@@ -36,6 +36,20 @@ jupyterhub:
         groups:
           - course::1524699::group::all-admins
 
+   # Linguistics 243, Spring 2025, https://github.com/berkeley-dsep-infra/datahub/issues/6604
+      course-staff-1541622:
+      #  description: Enable course staff to view and access servers.
+      #  # this role provides permissions to...
+        scopes:
+          - admin-ui
+          - list:users!group=course::1541622
+          - admin:servers!group=course::1541622
+          - access:servers!group=course::1541622
+      #  # this role will be assigned to...
+        groups:
+          - course::1541622::enrollment_type::teacher
+          - course::1541622::enrollment_type::ta
+
     nodeSelector:
       hub.jupyter.org/pool-name: core-pool-2024-05-08
     initContainers:
@@ -104,7 +118,7 @@ jupyterhub:
             secretName: user-etc-gitconfig
       extraVolumeMounts:
         - name: etc-gitconfig
-          mountPath: /etc/gitconfig
+          mountPath: /srv/conda/etc/gitconfig
           subPath: gitconfig
           readOnly: true
         - name: etc-gitconfig
@@ -135,5 +149,15 @@ jupyterhub:
       # DataHub Infrastructure staff
       # https://bcourses.berkeley.edu/courses/1524699/groups#tab-80607
       course::1524699::group::all-admins:
+        mem_limit: 4096M
+        mem_guarantee: 4096M
+
+      # ENVECON 153, Spring 25, https://github.com/berkeley-dsep-infra/datahub/issues/6575
+      course::1541477:
+        mem_limit: 4096M
+        mem_guarantee: 4096M
+
+      # ECON 148, Spring 25, https://github.com/berkeley-dsep-infra/datahub/issues/6576
+      course::1541056:
         mem_limit: 4096M
         mem_guarantee: 4096M
