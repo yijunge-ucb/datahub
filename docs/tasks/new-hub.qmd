@@ -250,8 +250,7 @@ bcourses.
 
 4. Copy gke-key.json from any other hub's secrets to the hub's secrets/
 
-Please reach out to Jonathan Felder to set this up, or
-<bcourseshelp@berkeley.edu> if he is not available.
+Please create a new Jira ticket to set this up, and assign to Jonathan Felder. Contact the DataHub Service Lead or <bcourseshelp@berkeley.edu> if Jonathan is not available.
 
 ### CI/CD and single-user server image
 
