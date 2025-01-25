@@ -62,6 +62,21 @@ jupyterhub:
         groups:
           - course::1541933::enrollment_type::teacher
           - course::1541933::enrollment_type::ta
+
+     # Data C88S, Spring 2025, #https://github.com/berkeley-dsep-infra/datahub/issues/6692
+      course-staff-1541934:
+      #  description: Enable course staff to view and access servers.
+      #  # this role provides permissions to...
+        scopes:
+          - admin-ui
+          - list:users!group=course::1541934
+          - admin:servers!group=course::1541934
+          - access:servers!group=course::1541934
+      #  # this role will be assigned to...
+        groups:
+          - course::1541934::enrollment_type::teacher
+          - course::1541934::enrollment_type::ta
+
     nodeSelector:
       hub.jupyter.org/pool-name: core-pool-2024-05-08
 
