@@ -102,7 +102,7 @@ jupyterhub:
         mem_limit: 2G
         mem_guarantee: 2G
 
-      # ECON 148, Spring 25, https://github.com/berkeley-dsep-infra/datahub/issues/6676
+      # EE 120, Spring 25, https://github.com/berkeley-dsep-infra/datahub/issues/6676
       course::1542501:
         mem_limit: 4096M
         mem_guarantee: 4096M
