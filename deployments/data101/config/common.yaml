@@ -56,19 +56,19 @@ jupyterhub:
       #  groups:
       #    - course::N::group::Admins
 
-      # Data 101, Fall 2024, #https://jira-secure.berkeley.edu/browse/DH-364
-      #course-staff-1536858:
+      # Data 101, Spring 2025, #https://github.com/berkeley-dsep-infra/datahub/issues/6722
+      course-staff-1542742:
         # description: Enable course staff to view and access servers.
         # this role provides permissions to...
-        #scopes:
-         # - admin-ui
-         # - list:users!group=course::1536858
-         # - admin:servers!group=course::1536858
-         # - access:servers!group=course::1536858
+        scopes:
+          - admin-ui
+          - list:users!group=course::1542742
+          - admin:servers!group=course::1542742
+          - access:servers!group=course::1542742
         # this role will be assigned to...
-        #groups:
-         # - course::1536858::enrollment_type::teacher
-          #- course::1536858::enrollment_type::ta
+        groups:
+          - course::1542742::enrollment_type::teacher
+          - course::1542742::enrollment_type::ta
 
     extraConfig:
       data101-new-db: |
