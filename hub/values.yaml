@@ -232,6 +232,7 @@ jupyterhub:
       Authenticator:
         enable_auth_state: true
         manage_groups: true
+      OAuthenticator:
         allow_all: true
       KubeSpawner:
         # Make sure working directory is ${HOME}
