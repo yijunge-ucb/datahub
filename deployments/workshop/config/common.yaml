@@ -28,6 +28,7 @@ jupyterhub:
         admin_access: true
         authenticator_class: dummy
       Authenticator:
+        manage_groups: false
         admin_users:
           # infrastructure
           - rylo
