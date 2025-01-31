@@ -161,3 +161,8 @@ jupyterhub:
       course::1541056:
         mem_limit: 4096M
         mem_guarantee: 4096M
+
+      # Demog 175, Spring 25, https://github.com/berkeley-dsep-infra/datahub/issues/6725
+      course::1542976:
+        mem_limit: 4096M
+        mem_guarantee: 4096M
