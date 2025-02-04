@@ -9,11 +9,9 @@ jupyterhub:
       # DataHub Infrastructure staff
       # https://bcourses.berkeley.edu/courses/1524699/groups#tab-80607
       course::1524699::group::all-admins:
-        admin: true
-    admin:
-      extraVolumeMounts:
-        - name: home
-          mountPath: /srv/homes
+        extraVolumeMounts:
+          - name: home
+            mountPath: /srv/homes
 
   scheduling:
     userScheduler:
@@ -70,19 +68,19 @@ jupyterhub:
       #    - course::N::enrollment_type::teacher
       #    - course::N::enrollment_type::ta
 
-      # Data 8, Fall 2024, https://github.com/berkeley-dsep-infra/datahub/issues/6014
-      #course-staff-1538208:
+      # Data 8, Spring 2025, https://github.com/berkeley-dsep-infra/datahub/issues/6653
+      course-staff-1542000:
       #  description: Enable course staff to view and access servers.
       #  # this role provides permissions to...
-       # scopes:
-        #  - admin-ui
-        #  - list:users!group=course::1538208
-         # - admin:servers!group=course::1538208
-         # - access:servers!group=course::1538208
+        scopes:
+          - admin-ui
+          - list:users!group=course::1542000
+          - admin:servers!group=course::1542000
+          - access:servers!group=course::1542000
       #  # this role will be assigned to...
-        #groups:
-         # - course::1538208::enrollment_type::teacher
-         # - course::1538208::enrollment_type::ta
+        groups:
+          - course::1542000::enrollment_type::teacher
+          - course::1542000::enrollment_type::ta
 
   singleuser:
     extraFiles:

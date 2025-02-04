@@ -1,0 +1,180 @@
+# A melding of https://ucsd-prp.gitlab.io/userdocs/jupyter/values.yaml and
+# datahub-based deployment configuration.
+
+# Nautilus does not use an NFS server.
+nfsPVC:
+  enabled: false
+
+# Nautilus does not let cluster admins set this.
+node-placholder:
+  priorityClass:
+    create: false
+
+jupyterhub:
+  scheduling:
+    podPriority:
+      enabled: false
+    userScheduler:
+      enabled: false
+    userPlaceholder:
+      enabled: false
+
+  prePuller:
+    hook:
+      enabled: false
+    continuous:
+      enabled: false
+
+  # We set this in hub/values, but we are forbidden from setting
+  # net.ipv4.ip_local_port_range at Nautilus, and the proxy replicaset will
+  # fail to deploy without this. This setting might not be relevant for
+  # Nautilus since their proxy might not be leaky.
+  proxy:
+    chp:
+      extraPodSpec:
+        securityContext:
+          sysctls: null
+
+  hub:
+    # Nautilus uses rook-ceph-block for hub db storage.
+    db:
+      type: sqlite-pvc
+      pvc:
+        accessModes:
+          - ReadWriteOnce
+        storage: 1Gi
+        storageClassName: rook-ceph-block
+    resources:
+      limits:
+        cpu: "2"
+        memory: 1Gi
+      requests:
+        cpu: 100m
+        memory: 512Mi
+    # We set this in hub/values, but we should unset it on Nautilus
+    networkPolicy:
+      enabled: false
+      egress: null
+    config:
+    loadRoles:
+      # datahub staff
+      datahub-staff:
+        description: Enable admin for datahub staff
+        # this role provides permissions to...
+        scopes:
+          - admin-ui
+          - admin:groups
+          - admin:users
+          - admin:servers
+          - read:roles
+          - read:hub
+          - access:servers
+        # this role will be assigned to...
+        groups:
+          - course::1524699::group::all-admins
+
+  # Nautilus uses haproxy for ingress
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: haproxy
+    #hosts:
+    #  #- "cdss-discovery-staging.nrp-nautilus.io"
+    #  - cdss-discovery-staging.datahub.berkeley.edu
+    pathSuffix: ''
+    #tls:
+    #  - hosts:
+    #    #- cdss-discovery-staging.nrp-nautilus.io
+    #    - cdss-discovery-staging.datahub.berkeley.edu
+
+  singleuser:
+    # Nautilus-specific configuration
+    uid: 0
+    fsGid: 100
+    extraEnv:
+      GRANT_SUDO: "yes"
+      # Unset NotebookApp from hub/values. Necessary for recent lab versions.
+      JUPYTERHUB_SINGLEUSER_APP: "jupyter_server.serverapp.ServerApp"
+    extraPodConfig:
+      securityContext:
+          fsGroupChangePolicy: "OnRootMismatch"
+          fsGroup: 100
+    extraNodeAffinity:
+      required:
+        - matchExpressions:
+          - 'key': 'topology.kubernetes.io/region'
+            'operator': 'In'
+            'values': ["us-west"]
+    cloudMetadata:
+      blockWithIptables: false
+    networkPolicy:
+      enabled: false
+    # /Nautilus-specific configuration
+    extraFiles:
+      # DH-216
+      remove-exporters:
+        mountPath: /etc/jupyter/jupyter_notebook_config.py
+        stringData: |
+          c.QtPDFExporter.enabled = False
+          c.QtPNGExporter.enabled = False
+          c.WebPDFExporter.enabled = False
+
+    # Nautilus-specific configuration
+    storage:
+      type: dynamic
+      extraLabels: {}
+      extraVolumes: []
+      extraVolumeMounts: []
+      capacity: 5Gi
+      homeMountPath: /home/jovyan
+      dynamic:
+        storageClass: rook-ceph-block
+        pvcNameTemplate: claim-{username}{servername}
+        volumeNameTemplate: volume-{username}{servername}
+        storageAccessModes: [ReadWriteOnce]
+    # /Nautilus-specific configuration
+
+    startTimeout: 600
+    cpu:
+      limit: 3
+      guarantee: 3
+    memory:
+      guarantee: 10G
+      limit: 10G
+
+  #custom:
+  #  group_profiles:
+  #
+  #    # Example: increase memory for everyone affiliated with a course.
+  #
+  #    # Name of Class 100, Fall '22; requested in #98765
+  #    course::123456:
+  #      mem_limit: 4096M
+  #      mem_guarantee: 2048M
+  #
+  #    # Example: grant admin rights to course staff.
+  #    # Enrollment types returned by the Canvas API are `teacher`,
+  #    # `student`, `ta`, `observer`, and `designer`.
+  #    # https://canvas.instructure.com/doc/api/enrollments.html
+  #
+  #    # Some other class 200, Spring '23; requested in #98776
+  #    course::234567::enrollment_type::teacher:
+  #      mem_limit: 2096M
+  #      mem_guarantee: 2048M
+  #    course::234567::enrollment_type::ta:
+  #      mem_limit: 2096M
+  #      mem_guarantee: 2048M
+  #
+  #
+  #    # Example: a fully specified CanvasOAuthenticator group name.
+  #    # This could be useful for temporary resource bumps where the
+  #    # instructor could add people to groups in the bCourses UI. This
+  #    # would benefit from the ability to read resource bumps from
+  #    # jupyterhub's properties. (attributes in the ORM)
+  #
+  #    # Name of Class 100, Fall '22; requested in #98770
+  #    course::123456::group::lab4-bigdata:
+  #      - mountPath: /home/rstudio/.ssh
+  #        name: home
+  #        subPath: _some_directory/_ssh
+  #        readOnly: true

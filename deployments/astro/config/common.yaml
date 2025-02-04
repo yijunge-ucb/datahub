@@ -95,9 +95,7 @@ jupyterhub:
       # https://bcourses.berkeley.edu/courses/1524699/groups#tab-80607
       course::1524699::group::all-admins:
         mem_limit: 4G
-
-    admin:
-      extraVolumeMounts:
-        - name: home
-          mountPath: /home/jovyan/shared-readwrite
-          subPath: _shared
+        extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/shared-readwrite
+            subPath: _shared

@@ -57,8 +57,7 @@ Documentation is published to <https://docs.datahub.berkeley.edu/> via a
 
 ## User Images
 
-Each user image is stored in it's own repository in the `berkeley-dsep-infra`
-organization.  You can find them [here](https://github.com/orgs/berkeley-dsep-infra/repositories?language=&q=image&sort=&type=all).
+Each user image is managed in [separate repositories](https://github.com/orgs/berkeley-dsep-infra/repositories?language=&q=image&sort=&type=all) in the `berkeley-dsep-infra` organization.
 
 These repositories determine the environment provided to the user. For example,
 it controls:

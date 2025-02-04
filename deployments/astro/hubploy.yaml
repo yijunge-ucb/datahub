@@ -1,5 +1,5 @@
 images:
-  image_name: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/astro-user-image:ffc76921fb47
+  image_name: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/astro-user-image:0063ed5f1d8f
 
 cluster:
   provider: gcloud
