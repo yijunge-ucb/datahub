@@ -38,19 +38,19 @@ jupyterhub:
         groups:
           - course::1524699::group::all-admins
 
-      # PHW 142, Fall 2024, #https://github.com/berkeley-dsep-infra/datahub/issues/6026
-      #course-staff-1537782:
+      # PHW 142, Spring 2025, #https://github.com/berkeley-dsep-infra/datahub/issues/6685
+      course-staff-1540322:
         # description: Enable course staff to view and access servers.
         # this role provides permissions to...
-        #scopes:
-        #  - admin-ui
-        #  - list:users!group=course::1537782
-        #  - admin:servers!group=course::1537782
-        #  - access:servers!group=course::1537782
+        scopes:
+          - admin-ui
+          - list:users!group=course::1540322
+          - admin:servers!group=course::1540322
+          - access:servers!group=course::1540322
         # this role will be assigned to...
-        #groups:
-         # - course::1537782::enrollment_type::teacher
-         # - course::1537782::enrollment_type::ta
+        groups:
+          - course::1540322::enrollment_type::teacher
+          - course::1540322::enrollment_type::ta
 
     extraConfig:
       # Use 1x-<title> in `common.yaml` extraConfig values.
@@ -98,7 +98,7 @@ jupyterhub:
             secretName: user-etc-gitconfig
       extraVolumeMounts:
         - name: etc-gitconfig
-          mountPath: /etc/gitconfig
+          mountPath: /srv/conda/etc/gitconfig
           subPath: gitconfig
           readOnly: true
         - name: etc-gitconfig
@@ -113,4 +113,5 @@ jupyterhub:
     group_profiles:
       # https://bcourses.berkeley.edu/courses/1524699/groups#tab-80607
       course::1524699::group::all-admins:
-        admin: true
+        mem_limit: 2G
+        mem_guarantee: 2G

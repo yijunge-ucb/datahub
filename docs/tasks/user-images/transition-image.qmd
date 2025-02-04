@@ -2,12 +2,12 @@
 title: Transition Single User Image to GitHub Actions
 aliases:
   - ../admins/howto/transition-image.html
+  - ../transition-image.html
 ---
 
-Single user images have been maintained within the main datahub repo since its inception, however we decided to move them into their own repositories. It will make testing notebooks easier, and we will be able to delegate write access to course staff if necessary.
+Single user images were originally maintained within the main datahub repo, however we moved them into their own repositories. It makes testing notebooks easier, and we can delegate write access to course staff if necessary.
 
-This is the process for transitioning images to their own repositories. Eventually, once all repositories have been migrated, we can update our documentation on creating new single user image repositories, and maintaining them.
-
+This was the process for transitioning images to their own repositories.
 
 ## Prerequisites
 
@@ -86,13 +86,3 @@ As part of this process, we will pull the previous image's git history into the 
    ```bash
    /github subscribe berkeley-dsep-infra/<repo>
    ```
-
-## Making changes
-
-Once the image repo is set up, you will need to follow this procedure to update it and make it available to the hub.
-
-1. Make a change in your fork of the image repo.
-1. Make a pull request to the repo in `berkeley-dsep-infra`. This will trigger a github action that will test to see if the image builds successfully.
-1. If the build succeeds, someone with sufficient access (DataHub staff, or course staff with elevated privileges) can merge the PR. This will trigger another build, and will then push the image to the image registry.
-1. In order for the newly built and pushed image to be referenced by datahub, you will need to make PR at datahub. Visit the previous merge action's *update-deployment-image-tag* entry and expand the *Create feature branch, add, commit and push changes* step. Find the URL beneath, *Create a pull request for 'update-{hub}-image-tag-{slug}*, and visit it. This will draft a new PR at datahub for you to create.
-1. Once the PR is submitted, an action will run. It is okay if CircleCI-related tasks fail here. Merge the PR into staging once the action is complete.

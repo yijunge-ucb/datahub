@@ -2,6 +2,7 @@
 title: Create a New Single User Image
 aliases:
   - ../admins/howto/new-image.html
+  - ../new-image.html
 ---
 
 You might need to create a new user image when deploying a new hub, or changing
@@ -13,24 +14,15 @@ There are two approaches to creating a repo2docker image:
 1. Use a repo2docker-style image [template](https://github.com/berkeley-dsep-infra/datahub/tree/staging/deployments/data100/image) (environment.yaml, etc)
 2. Use a [Dockerfile](https://github.com/berkeley-dsep-infra/datahub/tree/staging/deployments/datahub/images/default) (useful for larger/more complex images)
 
-Generally, we prefer to use the former approach, unless we need to
-install specific packages or utilities outside of python/apt as `root`.
-If that is the case, only a `Dockerfile` format will work.
+Generally, we prefer to use the former approach.
 
-As always, create a feature branch for your changes, and submit a PR when done.
+If we need to install software as `root`, you can add a [Dockerfile.appendix](https://repo2docker.readthedocs.io/en/latest/usage.html#cmdoption-jupyter-repo2docker-appendix) to the repo. (this involves setting `APPENDEX_FILE: Dockerfile.appendix` within the build-* GitHub Actions workflows as is done in the ugr01 image)
 
 There are two approaches to pre-populate the image's assets:
 
- - Use an existing image as a template.
-   Browse through our [image
-repos](https://github.com/orgs/berkeley-dsep-infra/repositories?language=&q=image&sort=&type=all)
-   to find a hub that is similar to the one you are trying to create. This will
-   give you a good starting point.
+1. Use an existing image as a template. Browse through our [image repos](https://github.com/orgs/berkeley-dsep-infra/repositories?language=&q=image&sort=&type=all) to find a hub that is similar to the one you are trying to create. This will give you a good starting point.
 
- - Fork [hub-user-image-template](https://github.com/berkeley-dsep-infra/hub-user-image-template). Click "Use this template" > "Create a new repository".
-   Be sure to follow convention and name the repo `<hubname>-user-image`, and
-   the owner needs to be `berkeley-dsep-infra`. When that is done, create your
-   own fork of the new repo.
+1. Fork [hub-user-image-template](https://github.com/berkeley-dsep-infra/hub-user-image-template). Click "Use this template" > "Create a new repository". Be sure to follow convention and name the repo `<hubname>-user-image`, and the owner needs to be `berkeley-dsep-infra`. When that is done, create your own fork of the new repo.
 
 ### Image Repository Settings
 
