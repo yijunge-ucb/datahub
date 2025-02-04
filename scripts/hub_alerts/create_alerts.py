@@ -7,16 +7,18 @@ import argparse
 
 
 
-def find_target_channel(namespace, project_id):
-    target_channel = ""
+def find_target_channels(namespace, project_id):
+    target_channels = []
     if "staging" in namespace:
-        target_channel = project_id + "-staging-alert-channel"
+        target_channels.append(project_id + "-staging-alert-channel")
     if "prod" in namespace:
-        target_channel = project_id + "-prod-alert-channel"
-    return target_channel
+        target_channels.append(project_id + "-prod-alert-channel")
+        target_channels.append("Berkeley Datahub - PagerDuty")
+        target_channels.append("ds-infrastructure-email")
+    return target_channels
 
 
-def extract_channel_name(target_channel):
+def extract_channel_names(target_channels):
     try:
         result = subprocess.run(
             ['gcloud', 'alpha', 'monitoring', 'channels', 'list'], 
@@ -29,18 +31,19 @@ def extract_channel_name(target_channel):
     yaml_content = result.stdout
     documents = yaml.safe_load_all(yaml_content)
     
+    channel_names = []
     for document in documents:
-        if document.get('displayName') == target_channel:
-            return document.get('name')
+        if document.get('displayName') in target_channels:
+            channel_names.append(document.get('name'))
     
-    return None
+    return channel_names
 
 
 
-def get_notification_channel(namespace, project_id):
-    target_channel = find_target_channel(namespace, project_id)
-    notification_channel = extract_channel_name(target_channel)
-    return notification_channel
+def get_notification_channels(namespace, project_id):
+    target_channels = find_target_channels(namespace, project_id)
+    notification_channels = extract_channel_names(target_channels)
+    return notification_channels
     
     
 
@@ -48,10 +51,17 @@ def create_uptime_check(namespace, domain, project_id):
     """
     Function to create the uptime check and capture the uptime_check_id
     """
+    if "staging" in namespace:
+        host = namespace + "." + domain
+    elif "prod" in namespace:
+        host = namespace.split('-')[0] + "." + domain
+    else:
+        print(f"Could not create uptime check for {host}. ")
+        return None
     # Run the uptime check creation command
     command = [
         "gcloud", "monitoring", "uptime", "create", f"{namespace}.{domain}",
-        "--resource-labels", f"host={namespace}.{domain},project_id={project_id}",
+        "--resource-labels", f"host={host},project_id={project_id}",
         "--resource-type", "uptime-url",
         "--request-method", "get",
         "--validate-ssl", "true",
@@ -85,8 +95,8 @@ def create_uptime_check(namespace, domain, project_id):
 
 def create_alerts(namespaces, domain, project_id):
     for namespace in namespaces:
-        notification_channel = get_notification_channel(namespace, project_id)
-        if not notification_channel:
+        notification_channels = get_notification_channels(namespace, project_id)
+        if not len(notification_channels):
             print(f"Could not find a notification channel for {namespace}. ")
             continue
         
@@ -99,6 +109,10 @@ def create_alerts(namespaces, domain, project_id):
             print(f"Skipping alert policy creation for {namespace}.{domain} due to uptime check creation failure.")
             continue
         
+        duration = "600s"
+        if "staging" in namespace:
+            duration = "1800s"
+            
         # Create JSON structure for alert policy
         alert_policy = {
             "displayName": f"{namespace} uptime failure",
@@ -118,7 +132,7 @@ def create_alerts(namespaces, domain, project_id):
                             }
                         ],
                         "comparison": "COMPARISON_GT",
-                        "duration": "600s",
+                        "duration": duration,
                         "filter": f"resource.type = \"uptime_url\" AND metric.type = \"monitoring.googleapis.com/uptime_check/check_passed\" AND metric.labels.check_id = \"{uptime_check_id}\"",
                         "thresholdValue": 1,
                         "trigger": {
@@ -130,7 +144,8 @@ def create_alerts(namespaces, domain, project_id):
             "alertStrategy": {},
             "combiner": "OR",
             "enabled": True,
-            "notificationChannels": [notification_channel]
+            "notificationChannels": notification_channels,
+            "severity": "CRITICAL"
         }
         
         # Write the alert policy to a JSON file
