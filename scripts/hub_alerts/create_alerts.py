@@ -52,9 +52,9 @@ def create_uptime_check(namespace, domain, project_id):
     Function to create the uptime check and capture the uptime_check_id
     """
     if "staging" in namespace:
-        host = namespace + "." + domain
+        host = namespace + "." + domain if namespace != "datahub-staging" else "staging." + domain
     elif "prod" in namespace:
-        host = namespace.split('-')[0] + "." + domain
+        host = namespace.split('-')[0] + "." + domain if namespace != "datahub-prod" else domain
     else:
         print(f"Could not create uptime check for {host}. ")
         return None
