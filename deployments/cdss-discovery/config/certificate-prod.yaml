@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  annotations:
+  name: tls-cert
+spec:
+  commonName: cdss-discovery.datahub.berkeley.edu
+  dnsNames:
+  - cdss-discovery.datahub.berkeley.edu
+  issuerRef:
+    kind: Issuer
+    name: letsencrypt
+  secretName: tls-cert
