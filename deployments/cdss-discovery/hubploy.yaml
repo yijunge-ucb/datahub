@@ -1,9 +1,11 @@
 images:
   images:
     #- name: quay.io/jupyter/datascience-notebook:2024-04-22
-    - name: "quay.io/jupyter/base-notebook:2025-01-28"
+    #- name: "quay.io/jupyter/base-notebook:2025-01-28"
+    - name: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/base:cuda-test"
 
 cluster:
   provider: kubeconfig
   kubeconfig:
-    filename: nautilus-kubeconfig.yaml
+    filename: kubeconfig.yaml
+    context: "{namespace}"
