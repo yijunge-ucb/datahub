@@ -22,22 +22,7 @@ which also updates `hub/values.yaml` with the new image version.
    modify `hub/values.yaml` appropriately.
 4. Make a commit with the `hub/values.yaml` file, so the new hub image
    name and tag are committed.
-5. Before the deployment, disable the gcloud alert for the hub.
-
-Run the create_alerts.py script in https://github.com/berkeley-dsep-infra/datahub/tree/staging/scripts/hub_alerts
-
-```
-python3 create_alerts.py --disable_alerts --namespaces <namespace>
-
-```
-
-6. Proceed to deployment as normal.
-7. After the deployment, enable the gcloud alert for the hub.
-
-```
-python3 create_alerts.py --enable_alerts --namespaces <namespace>
-
-```
+5. Proceed to deployment as normal.
 
 Some of the following commands may be required to configure your
 environment to run the above chartpress workflow successfully:
