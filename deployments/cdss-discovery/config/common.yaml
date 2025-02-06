@@ -78,14 +78,7 @@ jupyterhub:
     enabled: true
     annotations:
       kubernetes.io/ingress.class: haproxy
-    #hosts:
-    #  #- "cdss-discovery-staging.nrp-nautilus.io"
-    #  - cdss-discovery-staging.datahub.berkeley.edu
     pathSuffix: ''
-    #tls:
-    #  - hosts:
-    #    #- cdss-discovery-staging.nrp-nautilus.io
-    #    - cdss-discovery-staging.datahub.berkeley.edu
 
   singleuser:
     # Nautilus-specific configuration
