@@ -2,7 +2,7 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   annotations:
-  name: cdss-discovery-staging-cert
+  name: tls-cert
 spec:
   commonName: cdss-discovery-staging.datahub.berkeley.edu
   dnsNames:
@@ -10,4 +10,4 @@ spec:
   issuerRef:
     kind: Issuer
     name: letsencrypt
-  secretName: cdss-discovery-staging-tls
+  secretName: tls-cert
