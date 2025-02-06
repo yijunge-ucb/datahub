@@ -134,6 +134,11 @@ jupyterhub:
     memory:
       guarantee: 10G
       limit: 10G
+    extraResource:
+      limits:
+        nvidia.com/gpu: "1"
+      guarantees:
+        nvidia.com/gpu: "1"
 
   #custom:
   #  group_profiles:
