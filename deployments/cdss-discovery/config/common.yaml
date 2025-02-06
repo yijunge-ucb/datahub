@@ -56,6 +56,13 @@ jupyterhub:
       enabled: false
       egress: null
     config:
+      OAuthenticator:
+        allowed_groups:
+          # CDSS Discovery 2025 Spring
+          # https://bcourses.berkeley.edu/courses/1543936
+          - "course::1543936"
+          # DataHub staff
+          - "course::1524699::group::all-admins"
     loadRoles:
       # datahub staff
       datahub-staff:
@@ -176,6 +183,3 @@ jupyterhub:
   #        name: home
   #        subPath: _some_directory/_ssh
   #        readOnly: true
-
-
-  # https://bcourses.berkeley.edu/courses/1543936
