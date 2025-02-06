@@ -176,3 +176,6 @@ jupyterhub:
   #        name: home
   #        subPath: _some_directory/_ssh
   #        readOnly: true
+
+
+  # https://bcourses.berkeley.edu/courses/1543936
