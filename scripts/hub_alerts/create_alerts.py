@@ -1,8 +1,9 @@
-import subprocess
+import argparse
 import json
 import re
+import subprocess
+
 import yaml
-import argparse
 
 
 def find_target_channels(namespace, project_id):
@@ -89,7 +90,7 @@ def disable_alert_for_policy(namespace):
         print(f"Could not find an alert policy for {namespace}. ")
         return
     try:
-        result = subprocess.run(
+        subprocess.run(
             [
                 "gcloud",
                 "alpha",
@@ -114,7 +115,7 @@ def enable_alert_for_policy(namespace):
         print(f"Could not find an alert policy for {namespace}. ")
         return
     try:
-        result = subprocess.run(
+        subprocess.run(
             [
                 "gcloud",
                 "alpha",
@@ -137,7 +138,6 @@ def create_uptime_check(host, project_id):
     """
     Function to create the uptime check and capture the uptime_check_id
     """
-
     # Run the uptime check creation command
     command = [
         "gcloud",
@@ -166,7 +166,7 @@ def create_uptime_check(host, project_id):
     ]
 
     # Run the command and capture the output
-    result = subprocess.run(command, capture_output=True, text=True)
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
 
     if result.returncode != 0:
         print(f"Error creating uptime check for {host}. ")
@@ -178,22 +178,26 @@ def create_uptime_check(host, project_id):
     )
     if uptime_check_id_match:
         return uptime_check_id_match.group(1)
-    else:
-        print(f"Could not extract uptime_check_id for {host}. ")
-        return None
+    print(f"Could not extract uptime_check_id for {host}. ")
+    return None
 
-
-# Iterate through each namespace and domain to create and run the `gcloud` command
 
 
 def create_alerts(namespaces, domain, project_id):
+    """
+    Iterate through each namespace and domain to create and run the `gcloud` command
+    """
     for namespace in namespaces:
+        host = find_host(namespace, domain)
+        if not host:
+            print(f"Could not find a notification channel for {host}. ")
+            continue
+
         notification_channels = get_notification_channels(namespace, project_id)
         if not len(notification_channels):
             print(f"Could not find a notification channel for {host}. ")
             continue
 
-        host = find_host(namespace, domain)
         if not host:
             print(f"Could not find a notification channel for {host}. ")
             continue
@@ -277,7 +281,6 @@ def main():
     3. Disable an alert policy for a namespace.
         python3 create_alerts.py --disable_alerts --namespaces dev-staging
     """
-
     parser = argparse.ArgumentParser(
         description="Create alerts with specified parameters."
     )
