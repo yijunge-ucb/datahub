@@ -4,7 +4,6 @@ metadata:
   annotations:
   name: tls-cert
 spec:
-  commonName: cdss-discovery.datahub.berkeley.edu
   dnsNames:
   - cdss-discovery.datahub.berkeley.edu
   issuerRef:
