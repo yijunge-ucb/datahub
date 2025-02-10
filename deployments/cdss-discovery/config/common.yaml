@@ -113,6 +113,9 @@ jupyterhub:
           - 'key': 'topology.kubernetes.io/region'
             'operator': 'In'
             'values': ["us-west"]
+          #- 'key': 'nautilus.io/linstor'
+          #  'operator': 'In'
+          #  'values': ["true"]
     cloudMetadata:
       blockWithIptables: false
     networkPolicy:
