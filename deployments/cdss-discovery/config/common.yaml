@@ -43,7 +43,13 @@ jupyterhub:
         accessModes:
           - ReadWriteOnce
         storage: 1Gi
-        storageClassName: rook-ceph-block
+        # https://docs.nrp.ai/userdocs/storage/intro/
+        #storageClassName: rook-ceph-block
+        # https://docs.nrp.ai/userdocs/storage/linstor/
+        storageClassName: linstor-igrok
+    nodeSelector:
+      "topology.kubernetes.io/region": "us-west"
+      "nautilus.io/linstor": "true"
     resources:
       limits:
         cpu: "2"
