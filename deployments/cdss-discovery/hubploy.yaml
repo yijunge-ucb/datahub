@@ -1,8 +1,6 @@
 images:
   images:
-    #- name: quay.io/jupyter/datascience-notebook:2024-04-22
-    #- name: "quay.io/jupyter/base-notebook:2025-01-28"
-    - name: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/base:cuda-test"
+    - name: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:latest"
 
 cluster:
   provider: kubeconfig
