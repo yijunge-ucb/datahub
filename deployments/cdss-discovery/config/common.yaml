@@ -137,7 +137,7 @@ jupyterhub:
       extraLabels: {}
       extraVolumes: []
       extraVolumeMounts: []
-      capacity: 5Gi
+      capacity: 20Gi
       homeMountPath: /home/jovyan
       dynamic:
         storageClass: rook-ceph-block
