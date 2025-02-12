@@ -63,6 +63,7 @@ jupyterhub:
       egress: null
     config:
       OAuthenticator:
+        allow_all: False
         allowed_groups:
           # CDSS Discovery 2025 Spring
           # https://bcourses.berkeley.edu/courses/1543936
