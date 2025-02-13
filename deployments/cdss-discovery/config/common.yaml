@@ -63,6 +63,7 @@ jupyterhub:
       egress: null
     config:
       OAuthenticator:
+        allow_all: False
         allowed_groups:
           # CDSS Discovery 2025 Spring
           # https://bcourses.berkeley.edu/courses/1543936
@@ -113,9 +114,15 @@ jupyterhub:
           - 'key': 'topology.kubernetes.io/region'
             'operator': 'In'
             'values': ["us-west"]
+
           #- 'key': 'nautilus.io/linstor'
           #  'operator': 'In'
           #  'values': ["true"]
+
+          # https://docs.nationalresearchplatform.org/userdocs/running/gpu-pods/
+          - 'key': 'nvidia.com/gpu.product'
+            'operator': 'In'
+            'values': ["NVIDIA-A10", "NVIDIA-L40", "NVIDIA-L4"]
     cloudMetadata:
       blockWithIptables: false
     networkPolicy:
@@ -136,7 +143,7 @@ jupyterhub:
       extraLabels: {}
       extraVolumes: []
       extraVolumeMounts: []
-      capacity: 5Gi
+      capacity: 20Gi
       homeMountPath: /home/jovyan
       dynamic:
         storageClass: rook-ceph-block
