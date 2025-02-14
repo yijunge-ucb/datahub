@@ -2,7 +2,7 @@ name: Bug Report for Performance Issues
 description: Report performance issues in Datahub
 labels: "support"
 assignees:
-- sknapp
+- yijunge-ucb
 - felder
 - balajialg
 body:
@@ -55,7 +55,7 @@ body:
   - type: textarea
     attributes:
       label: URL to the notebook file (.ipynb, .rmd etc..) with solutions
-      description: Paste the URL to the notebook file with solution. If you have clarity about which cell causes issue then please add info about that too. If the assignment is currently released to students, Email the notebook(s) to ds-infrastructure@lists.berkeley.edu or paste the URL to the private github repository and add @sknapp, @felder, @balajialg as members of the repository
+      description: Paste the URL to the notebook file with solution. If you have clarity about which cell causes issue then please add info about that too. If the assignment is currently released to students, Email the notebook(s) to ds-infrastructure@lists.berkeley.edu or paste the URL to the private github repository and add @yijunge-ucb, @felder, @balajialg as members of the repository
       value: |
         - <!--Eg: URL to the notebook file -->
   - type: textarea
