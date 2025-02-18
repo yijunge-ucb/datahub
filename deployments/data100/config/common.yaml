@@ -83,11 +83,6 @@ jupyterhub:
       static:
         pvcName: home-nfs-v3
         subPath: "{username}"
-      extraVolumeMounts:
-        - name: home
-          mountPath: /home/jovyan/shared
-          subPath: _shared
-          readOnly: true
     memory:
       guarantee: 4G
       limit: 4G
@@ -100,12 +95,6 @@ jupyterhub:
       course::1524699::group::all-admins:
         mem_limit: 4G
         mem_guarantee: 2G
-        extraVolumeMounts:
-          - name: home
-            mountPath: /srv/homes
-#          - name: home
-#            mountPath: /home/jovyan/shared-readwrite
-#            subPath: _shared
 
       # Data 100, Spring 2025, https://github.com/berkeley-dsep-infra/datahub/issues/6806
       course::1541798::enrollment_type::teacher:
