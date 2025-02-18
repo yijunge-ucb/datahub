@@ -64,6 +64,20 @@ jupyterhub:
           - course::1541056::enrollment_type::teacher
           - course::1541056::enrollment_type::ta
 
+   # Econ 140, Spring 2025, https://github.com/berkeley-dsep-infra/datahub/issues/6799
+      course-staff-1542035:
+      #  description: Enable course staff to view and access servers.
+      #  # this role provides permissions to...
+        scopes:
+          - admin-ui
+          - list:users!group=course::1542035
+          - admin:servers!group=course::1542035
+          - access:servers!group=course::1542035
+      #  # this role will be assigned to...
+        groups:
+          - course::1542035::enrollment_type::teacher
+          - course::1542035::enrollment_type::ta
+
     nodeSelector:
       hub.jupyter.org/pool-name: core-pool-2024-05-08
     initContainers:
