@@ -11,8 +11,8 @@ jupyterhub:
   prePuller:
     extraImages:
       postgres:
-        name: gcr.io/ucb-datahub-2018/jupyterhub-postgres
-        tag: 0.0.1-n5296.hdee70868
+        name: us-central1-docker.pkg.dev/ucb-datahub-2018/core/postgres
+        tag: 20240731-224556.git.9076.h5fdc5d69
   proxy:
     chp:
       nodeSelector:
@@ -149,7 +149,7 @@ jupyterhub:
             memory: 64Mi
             cpu: 0.01
       - name: postgres
-        image: gcr.io/ucb-datahub-2018/jupyterhub-postgres:0.0.1-n5296.hdee70868
+        image: us-central1-docker.pkg.dev/ucb-datahub-2018/core/postgres:20240731-224556.git.9076.h5fdc5d69
         resources:
           limits:
             # Best effort only. No more than 1 CPU
