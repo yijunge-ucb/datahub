@@ -36,6 +36,10 @@ jupyterhub:
           sysctls: null
 
   hub:
+    # TODO: deploy via gitlab
+    image:
+      name: gcr.io/ucb-datahub-2018/jupyterhub-hub
+      tag: '20240731-224556.git.8881.h7a44ade9'
     # Nautilus uses rook-ceph-block for hub db storage.
     db:
       type: sqlite-pvc
@@ -104,6 +108,7 @@ jupyterhub:
       GRANT_SUDO: "yes"
       # Unset NotebookApp from hub/values. Necessary for recent lab versions.
       JUPYTERHUB_SINGLEUSER_APP: "jupyter_server.serverapp.ServerApp"
+    defaultUrl: /lab
     extraPodConfig:
       securityContext:
           fsGroupChangePolicy: "OnRootMismatch"
