@@ -36,10 +36,9 @@ jupyterhub:
           sysctls: null
 
   hub:
-    # TODO: deploy via gitlab
     image:
-      name: gcr.io/ucb-datahub-2018/jupyterhub-hub
-      tag: '20240731-224556.git.8881.h7a44ade9'
+      name: gitlab-registry.nrp-nautilus.io/ryanlovett/datahub-nrp-hub-image
+      tag: b04f18a4
     # Nautilus uses rook-ceph-block for hub db storage.
     db:
       type: sqlite-pvc
