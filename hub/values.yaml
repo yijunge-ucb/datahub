@@ -1,4 +1,4 @@
-etcGitConfig:
+etcGitConfig: 
   enabled: false
 nfsPVC:
   enabled: true
