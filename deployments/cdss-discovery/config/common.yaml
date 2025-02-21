@@ -158,11 +158,11 @@ jupyterhub:
 
     startTimeout: 600
     cpu:
-      limit: 3
-      guarantee: 3
+      guarantee: 2
+      limit: 4
     memory:
       guarantee: 10G
-      limit: 10G
+      limit: 128G
     extraResource:
       limits:
         nvidia.com/gpu: "1"
