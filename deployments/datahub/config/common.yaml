@@ -194,3 +194,8 @@ jupyterhub:
       course::1542976:
         mem_limit: 4096M
         mem_guarantee: 4096M
+
+      # Legal Studies 123, Spring 25, https://github.com/berkeley-dsep-infra/datahub/issues/6828
+      course::1542364:
+        mem_limit: 4096M
+        mem_guarantee: 4096M
