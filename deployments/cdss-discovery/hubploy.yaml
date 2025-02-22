@@ -1,6 +1,7 @@
 images:
   images:
-    - name: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:latest"
+    #- name: "us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/cdss-discovery-user-image:0df58a734f77"
+    - name: "gitlab-registry.nrp-nautilus.io/ryanlovett/cdss-discovery-user-image/cdss-discovery-user-image:0df58a734f77"
 
 cluster:
   provider: kubeconfig
