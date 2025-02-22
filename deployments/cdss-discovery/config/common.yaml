@@ -38,7 +38,7 @@ jupyterhub:
   hub:
     image:
       name: gitlab-registry.nrp-nautilus.io/ryanlovett/datahub-nrp-hub-image
-      tag: ce0951fa
+      tag: b04f18a4
     # Nautilus uses rook-ceph-block for hub db storage.
     db:
       type: sqlite-pvc
@@ -102,7 +102,7 @@ jupyterhub:
   singleuser:
     image:
       name: gitlab-registry.nrp-nautilus.io/ryanlovett/cdss-discovery-user-image
-      tag: 598290f0
+      tag: ce0951fa
 
     # Nautilus-specific configuration
     uid: 0
