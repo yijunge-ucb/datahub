@@ -157,17 +157,20 @@ jupyterhub:
     # /Nautilus-specific configuration
 
     startTimeout: 600
+
+    # Policy on interactive limits
+    # https://docs.nationalresearchplatform.org/userdocs/start/policies/#interactive-use-vs-batch
     cpu:
       guarantee: 2
-      limit: 4
+      limit: 16
     memory:
       guarantee: 10G
-      limit: 128G
+      limit: 32G
     extraResource:
-      limits:
-        nvidia.com/gpu: "1"
       guarantees:
         nvidia.com/gpu: "1"
+      limits:
+        nvidia.com/gpu: "2"
 
   #custom:
   #  group_profiles:
