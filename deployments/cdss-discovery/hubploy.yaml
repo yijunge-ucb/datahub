@@ -1,7 +1,9 @@
-images:
-  images:
-    #- name: "us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/cdss-discovery-user-image:0df58a734f77"
-    - name: "gitlab-registry.nrp-nautilus.io/ryanlovett/cdss-discovery-user-image/cdss-discovery-user-image:0df58a734f77"
+#images:
+#  images:
+#    # Manually pushed
+#    #- name: "gitlab-registry.nrp-nautilus.io/ryanlovett/cdss-discovery-user-image/cdss-discovery-user-image:0df58a734f77"
+#    # Built at NRP
+#    - name: "gitlab-registry.nrp-nautilus.io/ryanlovett/cdss-discovery-user-image:598290f0"
 
 cluster:
   provider: kubeconfig
