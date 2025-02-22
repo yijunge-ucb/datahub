@@ -171,10 +171,11 @@ jupyterhub:
       guarantee: 10G
       limit: 32G
     extraResource:
+      # The gpu request must equal the limit
       guarantees:
         nvidia.com/gpu: "1"
       limits:
-        nvidia.com/gpu: "2"
+        nvidia.com/gpu: "1"
 
   #custom:
   #  group_profiles:
