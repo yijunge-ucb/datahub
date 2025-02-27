@@ -169,7 +169,7 @@ jupyterhub:
         storageAccessModes: [ReadWriteOnce]
     # /Nautilus-specific configuration
 
-    startTimeout: 600
+    startTimeout: 900
 
     # Policy on interactive limits
     # https://docs.nationalresearchplatform.org/userdocs/start/policies/#interactive-use-vs-batch
