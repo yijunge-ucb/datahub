@@ -102,7 +102,7 @@ jupyterhub:
   singleuser:
     image:
       name: gitlab-registry.nrp-nautilus.io/berkeley-cdss/cdss-discovery-user-image
-      tag: 476b008f
+      tag: latest
 
     # Nautilus-specific configuration
     uid: 0
@@ -169,7 +169,7 @@ jupyterhub:
         storageAccessModes: [ReadWriteOnce]
     # /Nautilus-specific configuration
 
-    startTimeout: 600
+    startTimeout: 900
 
     # Policy on interactive limits
     # https://docs.nationalresearchplatform.org/userdocs/start/policies/#interactive-use-vs-batch
@@ -198,6 +198,7 @@ jupyterhub:
           nvidia.com/gpu: "0"
         extra_resource_limits:
           nvidia.com/gpu: "0"
+        image: gitlab-registry.nrp-nautilus.io/berkeley-cdss/cdss-discovery-cpu-user-image:e5750bf2
       profile_options:
         mem_limit:
           display_name: "RAM Limit"
@@ -228,6 +229,7 @@ jupyterhub:
           nvidia.com/gpu: "1"
         extra_resource_limits:
           nvidia.com/gpu: "1"
+        image: gitlab-registry.nrp-nautilus.io/berkeley-cdss/cdss-discovery-user-image:476b008f
       profile_options:
         mem_limit:
           display_name: "RAM Limit"
