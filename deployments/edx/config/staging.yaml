@@ -15,3 +15,6 @@ jupyterhub:
     services:
       otter_grade:
         url: http://grader-srv-staging.datahub.berkeley.edu:10101
+    image:
+      name: us-central1-docker.pkg.dev/data8x-scratch/core/hub
+      tag: '90bb3bf0'
