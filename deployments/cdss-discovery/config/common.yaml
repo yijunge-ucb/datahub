@@ -73,6 +73,8 @@ jupyterhub:
           - "course::1543936"
           # DataHub staff
           - "course::1524699::group::all-admins"
+          # People who want to see what the hub can do
+          - "course::1524699::group::cdss-discovery-observers"
     loadRoles:
       # datahub staff
       datahub-staff:
