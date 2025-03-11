@@ -171,7 +171,7 @@ jupyterhub:
         storageAccessModes: [ReadWriteOnce]
     # /Nautilus-specific configuration
 
-    startTimeout: 900
+    startTimeout: 3600
 
     # Policy on interactive limits
     # https://docs.nationalresearchplatform.org/userdocs/start/policies/#interactive-use-vs-batch
@@ -203,7 +203,7 @@ jupyterhub:
         image: gitlab-registry.nrp-nautilus.io/berkeley-cdss/cdss-discovery-cpu-user-image:e5750bf2
       profile_options:
         mem_limit:
-          display_name: "RAM Limit"
+          display_name: "CPU RAM Limit"
           choices:
             mem_10g:
               default: true
@@ -234,7 +234,7 @@ jupyterhub:
         image: gitlab-registry.nrp-nautilus.io/berkeley-cdss/cdss-discovery-user-image:476b008f
       profile_options:
         mem_limit:
-          display_name: "RAM Limit"
+          display_name: "CPU RAM Limit"
           choices:
             mem_10g:
               default: true
