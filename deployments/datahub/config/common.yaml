@@ -199,3 +199,8 @@ jupyterhub:
       course::1542364:
         mem_limit: 4096M
         mem_guarantee: 4096M
+
+      # PS 231D, Spring 25, https://github.com/berkeley-dsep-infra/datahub/issues/6875, To be removed by end of March
+      course::1542527:
+        mem_limit: 16384M
+        mem_guarantee: 16384M
