@@ -99,3 +99,8 @@ jupyterhub:
           - name: home
             mountPath: /home/jovyan/shared-readwrite
             subPath: _shared
+
+      # Astronomy 128, Spring 25, https://github.com/berkeley-dsep-infra/datahub/issues/6978
+      course::1541507:
+        mem_limit: 8192M
+        mem_guarantee: 8192M
