@@ -47,6 +47,9 @@ configured on the new cluster.  Until this is done, `hubploy` and `helm` will fa
 
 4. Change the corresponding entry in `support/requirements.yaml` to `$cert-manager-version` and commit the changes (do not push).
 
+If you experience errors with certs being issued, this page has some really useful basic troubleshooting steps that likely will uncover most problems:
+<https://cert-manager.io/docs/troubleshooting/acme/>
+
 ## Create the node-placeholder k8s namespace
 The [calendar autoscaler](calendar-scaler.qmd) requires the `node-placeholder` namespace.  Run the following command to create it:
 
