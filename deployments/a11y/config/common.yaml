@@ -73,6 +73,12 @@ jupyterhub:
           c.ServerProxy.servers = {
             "ollama": {
               "command": ["ollama", "serve"],
+              # This is for shared read-only ollama models. Anyone with
+              # read-write access can modify this. They would need to override
+              # the variable to /home/jovyan/shared-readwrite/ollama-models.
+              "environment": {
+                "OLLAMA_ROOT": "/home/jovyan/shared/ollama-models"
+              },
               "port": 11434,
               # This is not a user-facing web application
               "launcher_entry": {
