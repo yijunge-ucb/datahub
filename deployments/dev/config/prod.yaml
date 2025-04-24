@@ -32,5 +32,3 @@ jupyterhub:
           JUPYTERHUB_API_URL: http://localhost:8081/hub/api
           GROUPER_BASE_URL: https://calgroups.berkeley.edu/gws/servicesRest/json/v2_2_100
           GROUPER_ID_PATH: edu:berkeley:app:datahub:datahub-dev-users
-                
-                
