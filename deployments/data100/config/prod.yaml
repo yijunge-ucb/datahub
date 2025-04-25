@@ -29,7 +29,7 @@ jupyterhub:
       pvc:
         # This also holds logs
         storage: 40Gi
-            loadRoles:
+    loadRoles:
       grouper-sync:
         name: grouper-sync
         scopes:
