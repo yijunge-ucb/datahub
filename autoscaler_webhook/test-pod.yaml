@@ -3,6 +3,8 @@ kind: Pod
 metadata:
   name: test-pod
   namespace: test-webhook
+  labels:
+    app.kubernetes.io/component: singleuser-server
 spec:
   containers:
   - name: busybox
