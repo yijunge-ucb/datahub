@@ -1,0 +1,28 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: resource-mutating-webhook
+webhooks:
+  - name: resource.webhook.k8s.io
+    admissionReviewVersions: ["v1"]
+    sideEffects: None
+    clientConfig:
+      service:
+        name: resource-webhook
+        namespace: webhook-system
+        path: /mutate
+        port: 443
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURiRENDQWxTZ0F3SUJBZ0lSQU1JajFtV0xRMHpZUGlFaSthTm1nYUV3RFFZSktvWklodmNOQVFFTEJRQXcKTGpFc01Db0dBMVVFQXhNamNtVnpiM1Z5WTJVdGQyVmlhRzl2YXk1M1pXSm9iMjlyTFhONWMzUmxiUzV6ZG1NdwpIaGNOTWpVd05UQTVNVGcwT0RJeFdoY05NalV3T0RBM01UZzBPREl4V2pBdU1Td3dLZ1lEVlFRREV5TnlaWE52CmRYSmpaUzEzWldKb2IyOXJMbmRsWW1odmIyc3RjM2x6ZEdWdExuTjJZekNDQVNJd0RRWUpLb1pJaHZjTkFRRUIKQlFBRGdnRVBBRENDQVFvQ2dnRUJBS3llZlBIN3lTYTh3TnlTQnNmQzFLKytjSXZZWXZjekFxRWF6R2pRWnhzSwp2YXNTVGk3elhTT3lUNXNUdFk5cDcxbERXMlZ5UEx0U1dIaTdpa0h2UHZJK0JoWUp2MjV6S2ZaSUYrU3ErdTF5CjhGS0F2VTlacWlCalZwdzYwdUJtc2U3dmRGRlR6QyttYi9CQU1TOElBUXFhOTFLelVJUzczdUVYZnBkTWhqOW8KZms4bXdRZEdEUjE3NW9sQWEvaHF2OUNFZmVYNjN4WDN6R1BHMEQxbndnZUpuUEZ1cjl4Z2QvQ1ovUXJVcWpOdAptckxlK0w5SUQ0SFMzK3pXUEV4NFpURzRjTmtrVHMzY3JzQkNiMFhLVDN2dkswd3hjb2JEaU1PV2JndDZkUkNxCnZXRDZMQktNbmhaUUdhQ29tcE5QRk9yYzJGSGRFZ2FESHJFbTJ5S0hGeDhDQXdFQUFhT0JoRENCZ1RBT0JnTlYKSFE4QkFmOEVCQU1DQmFBd0RBWURWUjBUQVFIL0JBSXdBREJoQmdOVkhSRUVXakJZZ2lOeVpYTnZkWEpqWlMxMwpaV0pvYjI5ckxuZGxZbWh2YjJzdGMzbHpkR1Z0TG5OMlk0SXhjbVZ6YjNWeVkyVXRkMlZpYUc5dmF5NTNaV0pvCmIyOXJMWE41YzNSbGJTNXpkbU11WTJ4MWMzUmxjaTVzYjJOaGJEQU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUEKQ1pyUDhoUGw1WmJBZzJkQlU3T3VyZmpsYmFIb0JIV2dKUWFJY1NxekRNSENSUCsrWEdZZjFJWnZSdjd6czl0NwpxcnRvRnFQa1hPbEZESC9oQkc5aDc0dEs1NFRQL2ZUdTdsc2hyY1pTS1ZxRE1PakI1bUpobmYybnNHQXZCRHdJCkRtb3Y0RWdUL2NLMVJvM2h4Qjh5L0QwL2RZUW1HNmNhTW9ORkxQV2t1V081UGVRV0RsRkJ2UGk4WWJ3dWVTbEoKWlRPK1IzbjI1NTUzbFh3TmIwRmFEeDlIajQ0RndRT09TWXU5MFM4eTdpQmJ3MXNyZithVkJaRWFkdk5VZ2dlZApCRnBnQmJoSmdPUDc1OFBNUnNJUEI4WHRuMlowNzZmVm9CUXB5ZlZCUFRpUk05d054cElHN3N0TUp5a29INTJFCkFEWUU4V2NMYlJZZ0R0YVBuZ0NSekE9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+    rules:
+      - operations: ["CREATE"]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["pods"]
+        scope: "Namespaced"
+    failurePolicy: Ignore 
+    namespaceSelector:
+      matchLabels:
+        admission-webhook: "enabled"
+    objectSelector:
+      matchLabels:
+        app.kubernetes.io/component: singleuser-server
