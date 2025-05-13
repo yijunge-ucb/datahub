@@ -17,7 +17,7 @@ spec:
         hub.jupyter.org/pool-name: support-pool
       containers:
       - name: webhook
-        image: us-central1-docker.pkg.dev/ucb-datahub-2018/testing/webhookapp:v0.0.2
+        image: us-central1-docker.pkg.dev/ucb-datahub-2018/testing/webhookapp:v0.0.9
         ports:
         - containerPort: 443
         volumeMounts:
