@@ -56,20 +56,6 @@ jupyterhub:
       #  groups:
       #    - course::N::group::Admins
 
-      # Data 101, Spring 2025, #https://github.com/berkeley-dsep-infra/datahub/issues/6722
-      course-staff-1542742:
-        # description: Enable course staff to view and access servers.
-        # this role provides permissions to...
-        scopes:
-          - admin-ui
-          - list:users!group=course::1542742
-          - admin:servers!group=course::1542742
-          - access:servers!group=course::1542742
-        # this role will be assigned to...
-        groups:
-          - course::1542742::enrollment_type::teacher
-          - course::1542742::enrollment_type::ta
-
     extraConfig:
       data101-new-db: |
         from jupyterhub.utils import exponential_backoff
@@ -230,22 +216,40 @@ jupyterhub:
         mem_limit: 4G
         mem_guarantee: 2G
 
-      # Data 101, Spring 2025, https://github.com/berkeley-dsep-infra/datahub/issues/6793
-      course::1542742::enrollment_type::teacher:
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/data101-readwrite
-            subPath: _shared/2025-spring/courses/1542742
-            readOnly: false
-      course::1542742::enrollment_type::ta:
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/data101-readwrite
-            subPath: _shared/2025-spring/courses/1542742
-            readOnly: false
-      course::1542742::enrollment_type::student:
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/data101-readonly
-            subPath: _shared/2025-spring/courses/1542742
-            readOnly: true
+# This is a template for configuring shared directories in Data101 Hub.
+
+# --- Teacher Configuration ---
+# This section configures settings for teachers enrolled in the course.
+# course::<course_id>::enrollment_type::teacher:
+#   extraVolumeMounts:
+#     - name: home
+#       # Mount path where teachers can have read/write access.
+#       mountPath: /home/jovyan/_shared/<your-course>-readwrite
+#       # Sub-path within the filesystem for the course.
+#       subPath: _shared/<year-semester>/courses/<course_id>
+#       # Set readOnly to false to allow write permissions for teachers.
+#       readOnly: false
+
+# --- Teaching Assistant (TA) Configuration ---
+# This section configures settings for TAs enrolled in the course.
+# course::<course_id>::enrollment_type::ta:
+#   extraVolumeMounts:
+#     - name: home
+#       # Mount path where TAs can have read/write access.
+#       mountPath: /home/jovyan/_shared/<your-course>-readwrite
+#       # Sub-path within the filesystem for the course.
+#       subPath: _shared/<year-semester>/courses/<course_id>
+#       # Set readOnly to false to allow write permissions for TAs.
+#       readOnly: false
+
+# --- Student Configuration ---
+# This section configures settings for students enrolled in the course.
+# course::<course_id>::enrollment_type::student:
+#   extraVolumeMounts:
+#     - name: home
+#       # Mount path where students have read-only access.
+#       mountPath: /home/jovyan/_shared/<your-course>-readonly
+#       # Sub-path within the filesystem for the course.
+#       subPath: _shared/<year-semester>/courses/<course_id>
+#       # Set readOnly to true to restrict write permissions for students.
+#       readOnly: true
