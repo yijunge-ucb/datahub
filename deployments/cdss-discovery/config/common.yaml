@@ -95,8 +95,8 @@ jupyterhub:
   # Nautilus uses haproxy for ingress
   ingress:
     enabled: true
+    ingressClassName: haproxy
     annotations:
-      kubernetes.io/ingress.class: haproxy
       cert-manager.io/issuer: letsencrypt
       cert-manager.io/cluster-issuer: null
     pathSuffix: ''
