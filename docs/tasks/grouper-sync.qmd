@@ -1,0 +1,98 @@
+---
+title: Syncing JupyterHub Users to CalGroups (Grouper)
+aliases:
+  - ../admins/howto/grouper-sync.html
+---
+
+# Syncing JupyterHub Users to CalGroups (Grouper)
+
+This document describes how to configure and operate the [jupyterhub_grouper_sync](https://github.com/berkeley-dsep-infra/jupyterhub_grouper_sync/) service, which synchronizes lists of users who have logged into our JupyterHubs into a campus Grouper instance (CalGroups).
+
+## Overview
+
+The `jupyterhub_grouper_sync` service is a JupyterHub-managed service that periodically syncs the list of users from a JupyterHub instance to a specified Grouper group. This is useful for maintaining up-to-date group membership in CalGroups based on actual hub logins.
+
+## Configuration for Hub Admins
+
+The service is configured via traitlets, and can be set up using either command-line arguments or environment variables. The recommended approach is to configure it as a JupyterHub service in your hub's configuration (e.g., in your `hubploy.yaml` or `config.yaml`), and to provide secrets via environment variables.
+
+### Required Configuration Variables
+
+You must specify the following configuration variables for the sync service:
+
+- `JUPYTERHUB_API_URL`: The URL of the JupyterHub API (e.g., `http://localhost:8081/hub/api`).
+- `JUPYTERHUB_API_TOKEN`: API token for authenticating with the JupyterHub API. This should be provided as a secret.
+- `GROUPER_BASE_URL`: The base URL of the Grouper REST API (e.g., `https://calgroups.berkeley.edu/gws/servicesRest/json/v2_2_100`).
+- `GROUPER_USER`: Username for authenticating with Grouper (service account).
+- `GROUPER_PASSWORD`: Password for Grouper authentication (should be stored as a secret).
+- `GROUPER_ID_PATH`: The Grouper group path to sync with (e.g., `edu:berkeley:app:datahub:datahub-users`).
+
+These can be set as environment variables in your hub deployment's secrets file (e.g., `secrets.yaml`).
+
+#### Example (in a JupyterHub service definition)
+
+```python
+c.JupyterHub.services = [
+    {
+        'name': "grouper-sync",
+        'command': ["grouper-sync"],
+        'environment': {
+            'JUPYTERHUB_API_URL': 'http://localhost:8081/hub/api',
+            'GROUPER_BASE_URL': 'https://calgroups.berkeley.edu/gws/servicesRest/json/v2_2_100',
+            'GROUPER_USER': '<grouper user>',
+            'GROUPER_PASSWORD': '<grouper password>',
+            'GROUPER_ID_PATH': 'edu:berkeley:app:datahub:datahub-users',
+        }
+    }
+]
+```
+
+The `JUPYTERHUB_API_TOKEN` should be provided securely, for example via a Kubernetes secret or your deployment's secrets management system.
+
+### Required JupyterHub Role and Scopes
+
+The service account running the sync must have the following JupyterHub scopes:
+
+- `list:users`
+- `read:users`
+- `admin:auth_state`
+
+Example role assignment:
+
+```python
+c.JupyterHub.load_roles = [
+    {
+        "name": "grouper-sync",
+        "scopes": [
+            "list:users",
+            "read:users",
+            "admin:auth_state",
+        ],
+        "services": ["grouper-sync"],
+    }
+]
+```
+
+## How and When the Script Runs
+
+The sync service runs as a long-lived process managed by JupyterHub. It performs an initial sync immediately on startup, and then continues to sync at a regular interval (default: every hour, configurable via the `sync_every` parameter in seconds).
+
+- **Startup:** The sync runs once immediately when the service starts.
+- **Periodic Sync:** The service then syncs every `sync_every` seconds (default: 3600 seconds = 1 hour).
+- **Manual Run:** You can also run the script manually if needed for testing or troubleshooting.
+
+## Security and Secrets
+
+- **Passwords and tokens** should always be stored in your deployment's secrets (never in version control).
+- The Grouper service account should have only the minimum permissions required.
+
+## Troubleshooting
+
+- Check the logs of the `grouper-sync` service for errors or warnings.
+- Ensure all required environment variables and secrets are set.
+- Verify that the JupyterHub service account has the correct scopes.
+
+## References
+
+- [jupyterhub_grouper_sync GitHub repository](https://github.com/berkeley-dsep-infra/jupyterhub_grouper_sync/)
+- [CalGroups (Grouper) documentation](https://calnetweb.berkeley.edu/calnet-technologists/calgroups)
