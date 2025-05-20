@@ -4,8 +4,6 @@ aliases:
   - ../admins/howto/grouper-sync.html
 ---
 
-# Syncing JupyterHub Users to CalGroups (Grouper)
-
 This document describes how to configure and operate the [jupyterhub_grouper_sync](https://github.com/berkeley-dsep-infra/jupyterhub_grouper_sync/) service, which synchronizes lists of users who have logged into our JupyterHubs into a campus Grouper instance (CalGroups).
 
 ## Overview
@@ -29,7 +27,7 @@ You must specify the following configuration variables for the sync service:
 
 These can be set as environment variables in your hub deployment's secrets file (e.g., `secrets.yaml`).
 
-#### Example (in a JupyterHub service definition)
+### Example (in a JupyterHub service definition)
 
 ```python
 c.JupyterHub.services = [
@@ -85,6 +83,16 @@ The sync service runs as a long-lived process managed by JupyterHub. It performs
 
 - **Passwords and tokens** should always be stored in your deployment's secrets (never in version control).
 - The Grouper service account should have only the minimum permissions required.
+
+## Google Groups Provisioning
+
+The Grouper groups are configured to provision to Google Groups. We manually configure the following settings on the Google Groups:
+
+ - General > Who can post > Group managers
+ - General > Who can view members > Group managers
+ - Member privacy > Who can view member email addresses > Group managers
+
+If a Google Group is ever deprovisioned and then reprovisioned, or if a new Google Group is provisioned, these settings must be applied again through the Google Groups *Group settings*.
 
 ## Troubleshooting
 
