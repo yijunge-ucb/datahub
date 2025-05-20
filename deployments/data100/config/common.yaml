@@ -83,26 +83,29 @@ jupyterhub:
       static:
         pvcName: home-nfs-v3
         subPath: "{username}"
-      extraVolumeMounts:
-        - name: home
-          mountPath: /home/jovyan/shared
-          subPath: _shared
-          readOnly: true
     memory:
-      guarantee: 4G
+      guarantee: 2G
       limit: 4G
     image: {}
 
   custom:
     group_profiles:
-      # DataHub Infrastructure staff
-      # https://bcourses.berkeley.edu/courses/1524699/groups#tab-80607
-      course::1524699::group::all-admins:
-        mem_limit: 4G
-        mem_guarantee: 2G
+      # Data 100, Spring 2025, https://github.com/berkeley-dsep-infra/datahub/issues/6806
+      course::1541798::enrollment_type::teacher:
         extraVolumeMounts:
           - name: home
-            mountPath: /srv/homes
+            mountPath: /home/jovyan/_shared/data100-readwrite
+            subPath: _shared/2025-spring/courses/1541798
+            readOnly: false
+      course::1541798::enrollment_type::ta:
+        extraVolumeMounts:
           - name: home
-            mountPath: /home/jovyan/shared-readwrite
-            subPath: _shared
+            mountPath: /home/jovyan/_shared/data100-readwrite
+            subPath: _shared/2025-spring/courses/1541798
+            readOnly: false
+      course::1541798::enrollment_type::student:
+        extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/data100-readonly
+            subPath: _shared/2025-spring/courses/1541798
+            readOnly: true

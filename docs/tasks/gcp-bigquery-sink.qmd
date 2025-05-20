@@ -1,0 +1,60 @@
+
+---
+title: "Collecting Course Information from GCP Logs"
+---
+
+## Overview
+
+To collect course information using logs, we are using a workflow that uses GCP Logging sinks, BigQuery, and Jupyter notebooks. The workflow is outlined below in detail.
+
+---
+
+## Step 1: Configure Logs Collection Using a GCP Sink
+
+### Instructions:
+1. **Access Logs Router**:
+   - Navigate to the Google Cloud Console.
+   - Go to "Logging" > "Logs Router".
+
+2. **Create a New Sink**:
+   - Provide a sink name, e.g., `Datahub-Semester-Year` (replace "Semester-Year" with the relevant term, e.g., "Fall-24").
+   - Add a descriptive note for the sink.
+
+3. **Specify Sink Destination**:
+   - Set destination service as "BigQuery dataset".
+   - Create a new BigQuery dataset and assign a "Dataset ID":  
+     `SinkName_SemesterYear` (e.g., `datahub_fall2024`).
+
+4. **Configure Log Filters**:
+   - Input filters to ensure only relevant logs are routed. Example configuration for Fall 2024:
+
+```sql
+timestamp >= "2024-08-21T00:00:00Z"
+AND timestamp <= "2024-12-20T23:59:59Z"
+AND logName="projects/ucb-datahub-2018/logs/stderr"
+AND resource.type="k8s_container"
+AND resource.labels.cluster_name=""
+AND (
+  textPayload : "302 GET /hub/user-redirect/git-sync?"
+  OR textPayload : "302 GET /hub/user-redirect/git-pull?"
+  OR textPayload : "302 GET /hub/user-redirect/interact?"
+)
+```
+
+5. **Confirmation**:
+   - Create Sink and you should get a confirmation that the sink is successfully created. You should also be able to see the bigquery dataset when you access Big Query service. 
+
+## Step 2: Post Process Logs from BigQuery Table
+
+1. **Create Service Account**: Create a Service Account in GCP and download the JSON key to authenticate BigQuery access.
+2. **Launch Jupyter Notebook**: Open the Jupyter Notebook provided in the [`datahub-usage-analysis` repository](https://github.com/berkeley-dsep-infra/datahub-usage-analysis/blob/main/notebooks/nbgitpuller_processing_visualization.ipynb).
+
+3. **Update Latest BigQuery Table**: Update the notebook to use the newly created BigQuery table. Example query from Summer 24:
+
+```sql
+query = """
+SELECT *
+FROM `ucb-datahub-2018.datahub_su24.stderr_*`
+"""
+```
+4. **Collect Data**: Execute the notebook to process and visualize the collected log data, generating insights related to course using DataHub during a specific timeframe.

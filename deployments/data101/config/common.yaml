@@ -11,8 +11,8 @@ jupyterhub:
   prePuller:
     extraImages:
       postgres:
-        name: gcr.io/ucb-datahub-2018/jupyterhub-postgres
-        tag: 0.0.1-n5296.hdee70868
+        name: us-central1-docker.pkg.dev/ucb-datahub-2018/core/postgres
+        tag: 20240731-224556.git.9076.h5fdc5d69
   proxy:
     chp:
       nodeSelector:
@@ -149,7 +149,7 @@ jupyterhub:
             memory: 64Mi
             cpu: 0.01
       - name: postgres
-        image: gcr.io/ucb-datahub-2018/jupyterhub-postgres:0.0.1-n5296.hdee70868
+        image: us-central1-docker.pkg.dev/ucb-datahub-2018/core/postgres:20240731-224556.git.9076.h5fdc5d69
         resources:
           limits:
             # Best effort only. No more than 1 CPU
@@ -229,3 +229,23 @@ jupyterhub:
       course::1524699::group::all-admins:
         mem_limit: 4G
         mem_guarantee: 2G
+
+      # Data 101, Spring 2025, https://github.com/berkeley-dsep-infra/datahub/issues/6793
+      course::1542742::enrollment_type::teacher:
+        extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/data101-readwrite
+            subPath: _shared/2025-spring/courses/1542742
+            readOnly: false
+      course::1542742::enrollment_type::ta:
+        extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/data101-readwrite
+            subPath: _shared/2025-spring/courses/1542742
+            readOnly: false
+      course::1542742::enrollment_type::student:
+        extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/data101-readonly
+            subPath: _shared/2025-spring/courses/1542742
+            readOnly: true

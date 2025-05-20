@@ -15,9 +15,9 @@ This image is in `images/postgres`. If you update it, you need to
 rebuild and push it.
 
 1. Modify the image in `images/postgres` and make a git commit.
-2. Run `chartpress --push`. This will build and push the image, *but
-   not put anything in YAML*. There is no place we can put this in
-   `values.yaml`, since this is only used for data100.
+2. On a PC Run `chartpress --push`. On a Mac run `chartpress --push --builder docker-buildx --platform linux/amd64`.  
+   This will build and push the image, *but not put anything in YAML*. 
+   There is no place we can put this in `values.yaml`, since this is only used for data100.
 3. Notice the image name + tag from the `chartpress --push` command,
    and put it in the appropriate place (under `extraContainers`) in
    `data100/config/common.yaml`.

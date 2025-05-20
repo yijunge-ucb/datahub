@@ -1,6 +1,6 @@
 images:
   images:
-    - name: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/cee-user-image:09ff7873876d
+    - name: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/cee-user-image:1c505d74e965
 
 cluster:
   provider: gcloud

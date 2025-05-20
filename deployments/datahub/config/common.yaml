@@ -50,6 +50,34 @@ jupyterhub:
           - course::1541622::enrollment_type::teacher
           - course::1541622::enrollment_type::ta
 
+   # Econ 148, Spring 2025, https://github.com/berkeley-dsep-infra/datahub/issues/6766
+      course-staff-1541056:
+      #  description: Enable course staff to view and access servers.
+      #  # this role provides permissions to...
+        scopes:
+          - admin-ui
+          - list:users!group=course::1541056
+          - admin:servers!group=course::1541056
+          - access:servers!group=course::1541056
+      #  # this role will be assigned to...
+        groups:
+          - course::1541056::enrollment_type::teacher
+          - course::1541056::enrollment_type::ta
+
+   # Econ 140, Spring 2025, https://github.com/berkeley-dsep-infra/datahub/issues/6799
+      course-staff-1542035:
+      #  description: Enable course staff to view and access servers.
+      #  # this role provides permissions to...
+        scopes:
+          - admin-ui
+          - list:users!group=course::1542035
+          - admin:servers!group=course::1542035
+          - access:servers!group=course::1542035
+      #  # this role will be assigned to...
+        groups:
+          - course::1542035::enrollment_type::teacher
+          - course::1542035::enrollment_type::ta
+
     nodeSelector:
       hub.jupyter.org/pool-name: core-pool-2024-05-08
     initContainers:
@@ -166,3 +194,29 @@ jupyterhub:
       course::1542976:
         mem_limit: 4096M
         mem_guarantee: 4096M
+
+      # Legal Studies 123, Spring 25, https://github.com/berkeley-dsep-infra/datahub/issues/6828
+      course::1542364:
+        mem_limit: 4096M
+        mem_guarantee: 4096M
+
+
+ # Econ 148, Spring 2025, https://github.com/berkeley-dsep-infra/datahub/issues/6901
+      course::1541056::enrollment_type::teacher:
+        extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/econ148-readwrite
+            subPath: _shared/2025-spring/courses/1541056
+            readOnly: false
+      course::1541056::enrollment_type::ta:
+        extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/econ148-readwrite
+            subPath: _shared/2025-spring/courses/1541056
+            readOnly: false
+      course::1541056::enrollment_type::student:
+        extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/econ148-readonly
+            subPath: _shared/2025-spring/courses/1541056
+            readOnly: true

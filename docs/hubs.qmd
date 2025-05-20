@@ -10,7 +10,6 @@ listing:
     - "hubs/nature.qmd"
     - "hubs/prob140.qmd"
     - "hubs/r.qmd"
-    - "hubs/shiny.qmd"
     - "hubs/stat159.qmd"
     - "hubs/stat20.qmd"
 ---

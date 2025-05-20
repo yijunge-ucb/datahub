@@ -36,6 +36,9 @@ jupyterhub:
           sysctls: null
 
   hub:
+    image:
+      name: gitlab-registry.nrp-nautilus.io/ryanlovett/datahub-nrp-hub-image
+      tag: b04f18a4
     # Nautilus uses rook-ceph-block for hub db storage.
     db:
       type: sqlite-pvc
@@ -43,7 +46,13 @@ jupyterhub:
         accessModes:
           - ReadWriteOnce
         storage: 1Gi
-        storageClassName: rook-ceph-block
+        # https://docs.nrp.ai/userdocs/storage/intro/
+        #storageClassName: rook-ceph-block
+        # https://docs.nrp.ai/userdocs/storage/linstor/
+        storageClassName: linstor-igrok
+    nodeSelector:
+      "topology.kubernetes.io/region": "us-west"
+      "nautilus.io/linstor": "true"
     resources:
       limits:
         cpu: "2"
@@ -56,6 +65,16 @@ jupyterhub:
       enabled: false
       egress: null
     config:
+      OAuthenticator:
+        allow_all: False
+        allowed_groups:
+          # CDSS Discovery 2025 Spring
+          # https://bcourses.berkeley.edu/courses/1543936
+          - "course::1543936"
+          # DataHub staff
+          - "course::1524699::group::all-admins"
+          # People who want to see what the hub can do
+          - "course::1524699::group::cdss-discovery-observers"
     loadRoles:
       # datahub staff
       datahub-staff:
@@ -78,16 +97,15 @@ jupyterhub:
     enabled: true
     annotations:
       kubernetes.io/ingress.class: haproxy
-    #hosts:
-    #  #- "cdss-discovery-staging.nrp-nautilus.io"
-    #  - cdss-discovery-staging.datahub.berkeley.edu
+      cert-manager.io/issuer: letsencrypt
+      cert-manager.io/cluster-issuer: null
     pathSuffix: ''
-    #tls:
-    #  - hosts:
-    #    #- cdss-discovery-staging.nrp-nautilus.io
-    #    - cdss-discovery-staging.datahub.berkeley.edu
 
   singleuser:
+    image:
+      name: gitlab-registry.nrp-nautilus.io/berkeley-cdss/cdss-discovery-user-image
+      tag: latest
+
     # Nautilus-specific configuration
     uid: 0
     fsGid: 100
@@ -95,6 +113,7 @@ jupyterhub:
       GRANT_SUDO: "yes"
       # Unset NotebookApp from hub/values. Necessary for recent lab versions.
       JUPYTERHUB_SINGLEUSER_APP: "jupyter_server.serverapp.ServerApp"
+    defaultUrl: /lab
     extraPodConfig:
       securityContext:
           fsGroupChangePolicy: "OnRootMismatch"
@@ -105,6 +124,24 @@ jupyterhub:
           - 'key': 'topology.kubernetes.io/region'
             'operator': 'In'
             'values': ["us-west"]
+
+          # https://docs.nationalresearchplatform.org/userdocs/running/gpu-pods/
+          - 'key': 'nvidia.com/gpu.product'
+            'operator': 'In'
+            'values': [
+              "NVIDIA-GeForce-RTX-4090",
+              "NVIDIA-L40",
+              "NVIDIA-RTX-A6000",
+              "NVIDIA-GeForce-RTX-3090",
+              "NVIDIA-A40",
+              "NVIDIA-RTX-A5000",
+              "NVIDIA-GeForce-RTX-2080-Ti",
+              "NVIDIA-TITAN-RTX",
+              "NVIDIA-A10",
+              "NVIDIA-RTX-A4000",
+              "NVIDIA-L4",
+              "NVIDIA-GeForce-GTX-1080-Ti"
+            ]
     cloudMetadata:
       blockWithIptables: false
     networkPolicy:
@@ -125,7 +162,7 @@ jupyterhub:
       extraLabels: {}
       extraVolumes: []
       extraVolumeMounts: []
-      capacity: 5Gi
+      capacity: 20Gi
       homeMountPath: /home/jovyan
       dynamic:
         storageClass: rook-ceph-block
@@ -134,14 +171,88 @@ jupyterhub:
         storageAccessModes: [ReadWriteOnce]
     # /Nautilus-specific configuration
 
-    startTimeout: 600
+    startTimeout: 3600
+
+    # Policy on interactive limits
+    # https://docs.nationalresearchplatform.org/userdocs/start/policies/#interactive-use-vs-batch
     cpu:
-      limit: 3
-      guarantee: 3
+      guarantee: 2
+      limit: 10
+      #limit: 16
     memory:
       guarantee: 10G
       limit: 10G
+      #limit: 32G
+    extraResource:
+      # The gpu request must equal the limit
+      guarantees:
+        nvidia.com/gpu: "1"
+      limits:
+        nvidia.com/gpu: "1"
 
+    profileList:
+    - display_name: "CPU instance"
+      description: "Your server will have no GPU, but may launch faster."
+      slug: "cpu-custom-memory"
+      kubespawner_override:
+        mem_limit: "10G"
+        extra_resource_guarantees:
+          nvidia.com/gpu: "0"
+        extra_resource_limits:
+          nvidia.com/gpu: "0"
+        image: gitlab-registry.nrp-nautilus.io/berkeley-cdss/cdss-discovery-cpu-user-image:e5750bf2
+      profile_options:
+        mem_limit:
+          display_name: "CPU RAM Limit"
+          choices:
+            mem_10g:
+              default: true
+              display_name: "10G"
+              kubespawner_override:
+                mem_limit: "10G"
+            mem_16g:
+              display_name: "16G"
+              kubespawner_override:
+                mem_limit: "16G"
+            mem_24g:
+              display_name: "24G"
+              kubespawner_override:
+                mem_limit: "24G"
+            mem_32g:
+              display_name: "32G"
+              kubespawner_override:
+                mem_limit: "32G"
+    - display_name: "GPU instance"
+      description: "Your server will request and wait for a GPU."
+      slug: "gpu-custom-memory"
+      kubespawner_override:
+        mem_limit: "10G"
+        extra_resource_guarantees:
+          nvidia.com/gpu: "1"
+        extra_resource_limits:
+          nvidia.com/gpu: "1"
+        image: gitlab-registry.nrp-nautilus.io/berkeley-cdss/cdss-discovery-user-image:476b008f
+      profile_options:
+        mem_limit:
+          display_name: "CPU RAM Limit"
+          choices:
+            mem_10g:
+              default: true
+              display_name: "10G"
+              kubespawner_override:
+                mem_limit: "10G"
+            mem_16g:
+              display_name: "16G"
+              kubespawner_override:
+                mem_limit: "16G"
+            mem_24g:
+              display_name: "24G"
+              kubespawner_override:
+                mem_limit: "24G"
+            mem_32g:
+              display_name: "32G"
+              kubespawner_override:
+                mem_limit: "32G"
   #custom:
   #  group_profiles:
   #

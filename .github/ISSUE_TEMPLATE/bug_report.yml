@@ -4,7 +4,7 @@ labels: "bug"
 assignees:
 - felder
 - balajialg
-- shaneknapp
+- yijunge-ucb
 body:
   - type: markdown
     attributes:

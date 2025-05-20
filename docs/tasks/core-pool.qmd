@@ -10,7 +10,9 @@ The core node pool is the primary entrypoint for all hubs we host. It
 manages all incoming traffic, and redirects said traffic (via the nginx
 ingress controller) to the proper hub.
 
-It also does other stuff.
+Besides being the entrypoint, it contains the `cert-manager` and 
+`ingress-nginx-controller` deployments.
+
 
 ## Deploy a New Core Node Pool
 
@@ -21,10 +23,10 @@ repo to create the node pool:
 gcloud container node-pools create "core-<YYYY-MM-DD>"  \
   --labels=hub=core,nodepool-deployment=core \
   --node-labels hub.jupyter.org/pool-name=core-pool-<YYYY-MM-DD> \
-  --machine-type "n2-standard-8"  \
+  --machine-type "n2-standard-16"  \
   --num-nodes "1" \
   --enable-autoscaling --min-nodes "1" --max-nodes "3" \
-  --project "ucb-datahub-2018" --cluster "spring-2024" \
+  --project "ucb-datahub-2018" --cluster "<CLUSTER>" \
   --region "us-central1" --node-locations "us-central1-b" \
   --tags hub-cluster \
   --image-type "COS_CONTAINERD" --disk-type "pd-balanced" --disk-size "100"  \
@@ -36,5 +38,6 @@ gcloud container node-pools create "core-<YYYY-MM-DD>"  \
 ```
 
 The `system-config-from-file` argument is important, as we need to tune
-the kernel TCP settings to handle large numbers of concurrent users and
-keep nginx from using up all of the TCP ram.
+the [kernel TCP settings](https://github.com/berkeley-dsep-infra/datahub/blob/staging/vendor/google/gke/node-pool/config/core-pool-sysctl.yaml)
+to handle large numbers of concurrent users and keep nginx from using up all of
+the TCP ram.

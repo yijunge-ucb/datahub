@@ -62,6 +62,8 @@ website:
           - tasks/google-sheets.qmd
           - tasks/cheatsheet.qmd
           - tasks/semester-start-end-tasks.qmd
+          - tasks/gcp-bigquery-sink.qmd
+          - tasks/grouper-sync.qmd
       - section: "Policy"
         contents:
           - policy/create_policy.qmd

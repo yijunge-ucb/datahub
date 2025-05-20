@@ -17,5 +17,5 @@ jupyterhub:
       otter_grade:
         url: http://grader-srv.datahub.berkeley.edu:10101
     image:
-      name: gcr.io/ucb-datahub-2018/jupyterhub-hub
-      tag: '20240731-224556.git.8057.h9643afd4'
+      name: us-central1-docker.pkg.dev/data8x-scratch/core/hub
+      tag: 'edx_prod_working'

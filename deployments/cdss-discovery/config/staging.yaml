@@ -8,9 +8,7 @@ jupyterhub:
   ingress:
     hosts:
       - cdss-discovery-staging.datahub.berkeley.edu
-      #- cdss-discovery-staging.nrp-nautilus.io
     tls:
       - secretName: tls-cert
         hosts:
           - cdss-discovery-staging.datahub.berkeley.edu
-          #- cdss-discovery-staging.nrp-nautilus.io

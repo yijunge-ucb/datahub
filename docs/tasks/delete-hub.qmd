@@ -54,4 +54,13 @@ gcloud filestore instances delete <hubname>-filestore --zone "us-central1-b"
 ```
 12. Delete PV: `kubectl get pv --all-namespaces|grep <hubname>` to get
     the PV names, and then `kubectl delete pv <pv names>`
+
 13. All done.
+
+## Archive User Image
+
+If you delete a hub, consider archiving the git repository associated with its singleuser docker image. This indicates to everyone that the image is not being used, prevents people from creating new issues, and stops any active bots from scanning the repo.
+
+Before you do this, you may want to note this in the repository's README, and close open pull requests and issues.
+
+The repository can always be unarchived later if needed.
