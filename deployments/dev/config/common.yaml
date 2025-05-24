@@ -26,7 +26,76 @@ jupyterhub:
       20-hubHome: |
         # Direct users to named server list
         c.JupyterHub.default_url = '/hub/home'
+      30-canvasOAuthenticatorProfiles: |
+        import urllib.parse
 
+        async def custom_options_form(spawner):
+            # Get courses saved by CanvasOAuthenticator
+            auth_state = await spawner.user.get_auth_state()
+            courses = auth_state.get('courses', [])
+
+            profile_list = []
+
+            for course in courses:
+                course_id = str(course['id'])
+                profile_list.append({
+                    'display_name': course['course_code'],
+                    'description': course['name'],
+                    'slug': course_id,
+                    'init_containers': init_home_subdir(spawner.user.name, course_id),
+                    'kubespawner_override': {
+                        'volume_mounts': [
+                            {
+                                "name": "home",
+                                "mountPath": "/home/jovyan",
+                                "subPath": f"{spawner.user.name}/{course_id}"
+                            },
+                        ],
+                    },
+                })
+            if not profile_list:
+                profile_list.append({
+                    'display_name': 'No Canvas Courses',
+                    'description': 'No courses found in Canvas',
+                    'slug': 'no-courses',
+                })
+            spawner.profile_list = profile_list
+
+            # Examine the form request
+            request = getattr(spawner, 'handler', None)
+            if request:
+                query = urllib.parse.parse_qs(request.request.query)
+                preselect = query.get('profile', [None])[0]
+                if preselect:
+                    for profile in profile_list:
+                        if profile['slug'] == preselect:
+                            profile['default'] = True
+                        else:
+                            profile.pop('default', None)
+            return spawner._options_form_default()
+
+        def init_home_subdir(username, course_id, mount_path="/home", volume_name="home"):
+            """
+            Generate init_containers spec to ensure the per-user, per-course subdirectory exists on the NFS share.
+            """
+            return [
+                {
+                    "name": "init-home-subdir",
+                    "image": "busybox",
+                    "command": [
+                        "sh", "-c",
+                        f"mkdir -p {mount_path}/{username}/{course_id}"
+                    ],
+                    "volumeMounts": [
+                        {
+                            "name": volume_name,
+                            "mountPath": mount_path
+                        }
+                    ]
+                }
+            ]
+
+        c.KubeSpawner.options_form = custom_options_form
     loadRoles:
       # datahub staff
       datahub-staff:
