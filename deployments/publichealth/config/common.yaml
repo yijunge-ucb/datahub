@@ -38,19 +38,20 @@ jupyterhub:
         groups:
           - course::1524699::group::all-admins
 
-      # PHW 142, Spring 2025, #https://github.com/berkeley-dsep-infra/datahub/issues/6685
-      course-staff-1540322:
+      # Template for enabling elevated privileges for course staff. Replace `bcoursesid` with the actual id for the course shared in the GiHub issue
+      # PHW 142, Semester/Year, #https://github.com/berkeley-dsep-infra/datahub/issues/6685
+      # course-staff-bcoursesid:
         # description: Enable course staff to view and access servers.
         # this role provides permissions to...
-        scopes:
-          - admin-ui
-          - list:users!group=course::1540322
-          - admin:servers!group=course::1540322
-          - access:servers!group=course::1540322
+        #scopes:
+         # - admin-ui
+         # - list:users!group=course::bcoursesid
+         # - admin:servers!group=course::bcoursesid
+         # - access:servers!group=course::bcoursesid
         # this role will be assigned to...
-        groups:
-          - course::1540322::enrollment_type::teacher
-          - course::1540322::enrollment_type::ta
+        #groups:
+         # - course::bcoursesid::enrollment_type::teacher
+         # - course::bcoursesid::enrollment_type::ta
 
     extraConfig:
       # Use 1x-<title> in `common.yaml` extraConfig values.
