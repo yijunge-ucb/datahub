@@ -96,28 +96,3 @@ jupyterhub:
       course::1524699::group::all-admins:
         mem_limit: 2048M
         mem_guarantee: 2048M
-
-      # PolSci 191, Spring 2025, https://github.com/berkeley-dsep-infra/datahub/issues/6593
-      course::1541486:
-        mem_limit: 6144M
-        mem_guarantee: 6144M
-
-      # PolSci 191, Spring 2025, https://github.com/berkeley-dsep-infra/datahub/issues/6643
-      course::1541486::enrollment_type::teacher:
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/polsci191-readwrite
-            subPath: _shared/2025-spring/courses/1541486
-            readOnly: false
-      course::1541486::enrollment_type::ta:
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/polsci191-readwrite
-            subPath: _shared/2025-spring/courses/1541486
-            readOnly: false
-      course::1541486::enrollment_type::student:
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/polsci191-readonly
-            subPath: _shared/2025-spring/courses/1541486
-            readOnly: true

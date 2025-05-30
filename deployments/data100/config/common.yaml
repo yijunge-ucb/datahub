@@ -42,7 +42,8 @@ jupyterhub:
         groups:
           - course::1524699::group::all-admins
 
-       #Data 100, Fall 2024, https://github.com/berkeley-dsep-infra/datahub/issues/6458
+# This configuration block is used to enable elevated privileges for teachers and TAs in Data100 hub
+       #Data 100, Semester/Year, https://github.com/berkeley-dsep-infra/datahub/issues/6458
       #course-staff-1537664:
       #  description: Enable course staff to view and access servers.
         # this role provides permissions to...
@@ -88,24 +89,42 @@ jupyterhub:
       limit: 4G
     image: {}
 
-  custom:
-    group_profiles:
-      # Data 100, Spring 2025, https://github.com/berkeley-dsep-infra/datahub/issues/6806
-      course::1541798::enrollment_type::teacher:
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/data100-readwrite
-            subPath: _shared/2025-spring/courses/1541798
-            readOnly: false
-      course::1541798::enrollment_type::ta:
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/data100-readwrite
-            subPath: _shared/2025-spring/courses/1541798
-            readOnly: false
-      course::1541798::enrollment_type::student:
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/data100-readonly
-            subPath: _shared/2025-spring/courses/1541798
-            readOnly: true
+# The below section is for adding shared directories in Data100 Hub.
+
+# custom:
+#   group_profiles:
+#     # Teacher Configuration
+#     # This configuration sets up directory access for teachers in the course.
+#     course::1541798::enrollment_type::teacher:
+#       extraVolumeMounts:
+#         - name: home
+#           # Path where teachers have read/write access.
+#           mountPath: /home/jovyan/_shared/data100-readwrite
+#           # Sub-path within filesystem for teacher access.
+#           subPath: _shared/2025-spring/courses/1541798
+#           # Set to false to enable write access for teachers.
+#           readOnly: false
+
+#     # Teaching Assistant (TA) Configuration
+#     # This configuration sets up directory access for TAs in the course.
+#     course::1541798::enrollment_type::ta:
+#       extraVolumeMounts:
+#         - name: home
+#           # Path where TAs have read/write access.
+#           mountPath: /home/jovyan/_shared/data100-readwrite
+#           # Sub-path within filesystem for TA access.
+#           subPath: _shared/2025-spring/courses/1541798
+#           # Set to false to enable write access for TAs.
+#           readOnly: false
+
+#     # Student Configuration
+#     # This configuration sets up directory access for students in the course.
+#     course::1541798::enrollment_type::student:
+#       extraVolumeMounts:
+#         - name: home
+#           # Path where students have read-only access.
+#           mountPath: /home/jovyan/_shared/data100-readonly
+#           # Sub-path within filesystem for student access.
+#           subPath: _shared/2025-spring/courses/1541798
+#           # Set to true to restrict write access for students.
+#           readOnly: true

@@ -36,7 +36,7 @@ jupyterhub:
         groups:
           - course::1524699::group::all-admins
 
-   # Linguistics 243, Spring 2025, https://github.com/berkeley-dsep-infra/datahub/issues/6604
+   # Linguistics 243, Configs required till July 1, 2026, https://github.com/berkeley-dsep-infra/datahub/issues/6604
       course-staff-1541622:
       #  description: Enable course staff to view and access servers.
       #  # this role provides permissions to...
@@ -50,33 +50,6 @@ jupyterhub:
           - course::1541622::enrollment_type::teacher
           - course::1541622::enrollment_type::ta
 
-   # Econ 148, Spring 2025, https://github.com/berkeley-dsep-infra/datahub/issues/6766
-      course-staff-1541056:
-      #  description: Enable course staff to view and access servers.
-      #  # this role provides permissions to...
-        scopes:
-          - admin-ui
-          - list:users!group=course::1541056
-          - admin:servers!group=course::1541056
-          - access:servers!group=course::1541056
-      #  # this role will be assigned to...
-        groups:
-          - course::1541056::enrollment_type::teacher
-          - course::1541056::enrollment_type::ta
-
-   # Econ 140, Spring 2025, https://github.com/berkeley-dsep-infra/datahub/issues/6799
-      course-staff-1542035:
-      #  description: Enable course staff to view and access servers.
-      #  # this role provides permissions to...
-        scopes:
-          - admin-ui
-          - list:users!group=course::1542035
-          - admin:servers!group=course::1542035
-          - access:servers!group=course::1542035
-      #  # this role will be assigned to...
-        groups:
-          - course::1542035::enrollment_type::teacher
-          - course::1542035::enrollment_type::ta
 
     nodeSelector:
       hub.jupyter.org/pool-name: core-pool-2024-05-08
@@ -180,43 +153,42 @@ jupyterhub:
         mem_limit: 4096M
         mem_guarantee: 4096M
 
-      # ENVECON 153, Spring 25, https://github.com/berkeley-dsep-infra/datahub/issues/6575
-      course::1541477:
-        mem_limit: 4096M
-        mem_guarantee: 4096M
+# This is a template for configuring shared directories in DataHub.
+# Replace placeholders with actual values applicable to the course.
+# Reference: https://github.com/berkeley-dsep-infra/datahub/issues/6901
 
-      # ECON 148, Spring 25, https://github.com/berkeley-dsep-infra/datahub/issues/6576
-      course::1541056:
-        mem_limit: 4096M
-        mem_guarantee: 4096M
+# --- Teacher Configuration ---
+# This section configures settings for teachers enrolled in the course.
+# course::<course_id>::enrollment_type::teacher:
+#   extraVolumeMounts:
+#     - name: home
+#       # Mount path where teachers can have read/write access.
+#       mountPath: /home/jovyan/_shared/<your-course>-readwrite
+#       # Sub-path within the filesystem for the course.
+#       subPath: _shared/<year-semester>/courses/<course_id>
+#       # Set readOnly to false to allow write permissions for teachers.
+#       readOnly: false
 
-      # Demog 175, Spring 25, https://github.com/berkeley-dsep-infra/datahub/issues/6725
-      course::1542976:
-        mem_limit: 4096M
-        mem_guarantee: 4096M
+# --- Teaching Assistant (TA) Configuration ---
+# This section configures settings for TAs enrolled in the course.
+# course::<course_id>::enrollment_type::ta:
+#   extraVolumeMounts:
+#     - name: home
+#       # Mount path where TAs can have read/write access.
+#       mountPath: /home/jovyan/_shared/<your-course>-readwrite
+#       # Sub-path within the filesystem for the course.
+#       subPath: _shared/<year-semester>/courses/<course_id>
+#       # Set readOnly to false to allow write permissions for TAs.
+#       readOnly: false
 
-      # Legal Studies 123, Spring 25, https://github.com/berkeley-dsep-infra/datahub/issues/6828
-      course::1542364:
-        mem_limit: 4096M
-        mem_guarantee: 4096M
-
-
- # Econ 148, Spring 2025, https://github.com/berkeley-dsep-infra/datahub/issues/6901
-      course::1541056::enrollment_type::teacher:
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/econ148-readwrite
-            subPath: _shared/2025-spring/courses/1541056
-            readOnly: false
-      course::1541056::enrollment_type::ta:
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/econ148-readwrite
-            subPath: _shared/2025-spring/courses/1541056
-            readOnly: false
-      course::1541056::enrollment_type::student:
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/econ148-readonly
-            subPath: _shared/2025-spring/courses/1541056
-            readOnly: true
+# --- Student Configuration ---
+# This section configures settings for students enrolled in the course.
+# course::<course_id>::enrollment_type::student:
+#   extraVolumeMounts:
+#     - name: home
+#       # Mount path where students have read-only access.
+#       mountPath: /home/jovyan/_shared/<your-course>-readonly
+#       # Sub-path within the filesystem for the course.
+#       subPath: _shared/<year-semester>/courses/<course_id>
+#       # Set readOnly to true to restrict write permissions for students.
+#       readOnly: true
