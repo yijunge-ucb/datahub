@@ -34,21 +34,28 @@ gcloud filestore backups create <hubname>-backup-YYYY-MM-DD --file-share=shares 
 6.  Comment out GitHub label action for this hub in
     `.github/labeler.yml`
 7.  Comment hub entries out of `datahub/node-placeholder/values.yaml`
-8.  Delete k8s namespace:
+8. Disable gcloud alerts for the hub. 
+
+```
+python3 create_alerts.py --disable_alerts --namespaces <namespace>
+
+```
+9.  Delete k8s namespace:
 ```bash
 kubectl delete namespace <hubname>-staging <hubname>-prod
 ```
-9.  Delete k8s node pool:
+10.  Delete k8s node pool:
 ```bash
 gcloud container node-pools delete <hubname> --project "ucb-datahub-2018" --cluster "spring-2024" --region "us-central1"
 ```
-10. Delete filestore
+11. Delete filestore
 ```bash
 gcloud filestore instances delete <hubname>-filestore --zone "us-central1-b"
 ```
-11. Delete PV: `kubectl get pv --all-namespaces|grep <hubname>` to get
+12. Delete PV: `kubectl get pv --all-namespaces|grep <hubname>` to get
     the PV names, and then `kubectl delete pv <pv names>`
-12. All done.
+
+13. All done.
 
 ## Archive User Image
 
