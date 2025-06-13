@@ -38,6 +38,16 @@ jupyterhub:
     nodeSelector:
       hub.jupyter.org/pool-name: core-pool-2024-05-08
     config:
+      OAuthenticator:
+        allow_all: False
+        allowed_groups:
+          # Data 8, 2025 Spring
+          # https://bcourses.berkeley.edu/courses/1542000
+          - "course::1542000"
+          # Data 8, 2025 Summer
+          # https://bcourses.berkeley.edu/courses/1544818
+          # DataHub staff
+          #- "course::1524699::group::all-admins"
     loadRoles:
       # datahub staff
       datahub-staff:
