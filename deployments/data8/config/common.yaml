@@ -45,8 +45,9 @@ jupyterhub:
           # https://bcourses.berkeley.edu/courses/1542000
           - "course::1542000"
           # Data 8, 2025 Summer
+          - "course::1544818"
           # https://bcourses.berkeley.edu/courses/1544818
-          # DataHub staff
+          # DataHub staff (Commented for testing purposes)
           #- "course::1524699::group::all-admins"
     loadRoles:
       # datahub staff
