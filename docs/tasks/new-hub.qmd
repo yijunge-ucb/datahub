@@ -415,3 +415,12 @@ PR is merged, it'll deploy the production hub. It might take a few
 minutes for HTTPS to work, but after that you can log into it at
 <https://>\<hub_name\>.datahub.berkeley.edu. Test it out and make
 sure things work as you think they should.
+
+### Create gcloud uptime alerts for the new hub
+
+Run the create_alerts.py script in https://github.com/berkeley-dsep-infra/datahub/tree/staging/scripts/hub_alerts
+
+```
+python3 create_alerts.py --create --namespaces <namespace>
+
+```
