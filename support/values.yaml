@@ -111,6 +111,7 @@ prometheus:
       type: ClusterIP
 
 grafana:
+  assertNoLeakedSecrets: false
   nodeSelector:
     hub.jupyter.org/pool-name: support-pool
   deploymentStrategy:
@@ -140,7 +141,6 @@ grafana:
       searchNamespace: ALL
       watchMethod: WATCH
 
-
   service:
     type: ClusterIP
 
@@ -162,7 +162,7 @@ grafana:
     - hosts:
       - grafana.datahub.berkeley.edu
       secretName: grafana-https-auto-tls
-
+  
   grafana.ini:
     # dataproxy is used to make requests to prometheuses via the backend.
     # This allows authless access to prometheus server in the same namespace.
