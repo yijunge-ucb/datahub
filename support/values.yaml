@@ -115,10 +115,31 @@ grafana:
     hub.jupyter.org/pool-name: support-pool
   deploymentStrategy:
     type: Recreate
-
+  
   persistence:
     enabled: true
     storageClassName: standard
+    size: 10Gi ## We can change this if we need more space
+  
+  sidecar:
+    dashboards:
+      enabled: true  # Enable the sidecar for dashboards
+      SCProvider: true
+      folder: /var/lib/grafana/dashboards  # Set the folder to match the Grafana data folder
+      label: grafana_dashboard
+      folderAnnotation: grafana_folder
+      provider:
+        name: sidecarProvider
+        orgid: 1
+        type: file
+        disableDelete: false
+        allowUiUpdates: false
+        folder: ""
+        foldersFromFilesStructure: true  # Enable folder structure
+      reloadURL: http://localhost:3000/api/admin/provisioning/dashboards/reload
+      searchNamespace: ALL
+      watchMethod: WATCH
+
 
   service:
     type: ClusterIP
