@@ -45,3 +45,35 @@ data:
   {{ $key }}: |
 {{ $file | toString | indent 4 }}
 {{- end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-dashboards
+  labels:
+    grafana_dashboard: "1"
+  annotations:
+    grafana_folder: "Nginx-Dashboards"
+data:
+{{- $files := .Files.Glob "dashboards/Nginx/*.json" }}  # Match all JSON files in any subdirectory
+{{- range $path, $file := $files }}
+  {{- $key := (printf "%s" $path) | replace "/" "-" | replace " " "_" | quote }}  # Replace slashes with hyphens
+  {{ $key }}: |
+{{ $file | toString | indent 4 }}
+{{- end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dev-dashboards
+  labels:
+    grafana_dashboard: "1"
+  annotations:
+    grafana_folder: "Dev-Dashboards"
+data:
+{{- $files := .Files.Glob "dashboards/Dev/*.json" }}  # Match all JSON files in any subdirectory
+{{- range $path, $file := $files }}
+  {{- $key := (printf "%s" $path) | replace "/" "-" | replace " " "_" | quote }}  # Replace slashes with hyphens
+  {{ $key }}: |
+{{ $file | toString | indent 4 }}
+{{- end }}
