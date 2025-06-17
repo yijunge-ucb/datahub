@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jupyterhub-dashboards
+  labels:
+    grafana_dashboard: "1"
+  annotations:
+    grafana_folder: "JupyterHub-Dashboards"
+data:
+{{- $files := .Files.Glob "dashboards/JupyterHub/*.json" }}  # Match all JSON files in any subdirectory
+{{- range $path, $file := $files }}
+  {{- $key := (printf "%s" $path) | replace "/" "-" | replace " " "_" | quote }}  # Replace slashes with hyphens
+  {{ $key }}: |
+{{ $file | toString | indent 4 }}
+{{- end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-dashboards
+  labels:
+    grafana_dashboard: "1"
+  annotations:
+    grafana_folder: "Cluster-Dashboards"
+data:
+{{- $files := .Files.Glob "dashboards/Cluster/*.json" }}  # Match all JSON files in any subdirectory
+{{- range $path, $file := $files }}
+  {{- $key := (printf "%s" $path) | replace "/" "-" | replace " " "_" | quote }}  # Replace slashes with hyphens
+  {{ $key }}: |
+{{ $file | toString | indent 4 }}
+{{- end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nfs-support-dashboards
+  labels:
+    grafana_dashboard: "1"
+  annotations:
+    grafana_folder: "NFS-Support-Dashboards"
+data:
+{{- $files := .Files.Glob "dashboards/NFS-Support/*.json" }}  # Match all JSON files in any subdirectory
+{{- range $path, $file := $files }}
+  {{- $key := (printf "%s" $path) | replace "/" "-" | replace " " "_" | quote }}  # Replace slashes with hyphens
+  {{ $key }}: |
+{{ $file | toString | indent 4 }}
+{{- end }}
