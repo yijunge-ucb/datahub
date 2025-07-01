@@ -6,6 +6,12 @@ on:
       issue_number:
         required: true
         type: number
+      app_id:
+        required: true
+        type: string
+    secrets:
+      PRIVATE_KEY_SECRET:
+        required: true
        
 permissions:
   contents: write
