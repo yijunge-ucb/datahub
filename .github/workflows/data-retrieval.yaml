@@ -1,10 +1,16 @@
 name: Issue Created and Label Found
 
 on:
-  issues:
-    types: 
-      - opened  # Trigger when an issue is opened
-      - reopened
+  workflow_call:
+    inputs:
+      issue_number:
+        required: true
+        type: number
+    secrets:
+      DATA_RETRIEVAL_SA:
+        required: true
+      TOKEN_PICKLE: 
+        required: true
   
 
 jobs:
