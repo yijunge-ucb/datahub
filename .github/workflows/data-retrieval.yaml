@@ -1,11 +1,11 @@
-name: Issue Created and Label Found
+name: Data Retrieval Request Workflow
 
 on:
-  issues:
-    types: 
-      - opened  # Trigger when an issue is opened
-      - reopened
-  
+  workflow_call:
+    inputs:
+      issue_number:
+        required: true
+        type: number
 
 jobs:
   label_check:

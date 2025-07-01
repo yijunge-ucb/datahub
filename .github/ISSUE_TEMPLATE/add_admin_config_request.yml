@@ -1,0 +1,77 @@
+name: Request Elevated Privileges for Course Staff
+description: Enable course staff to manage student servers
+title: "Request Elevated Privileges for Course Staff"
+labels: ["support", "add admin config"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Course staff may be assigned elevated privileges on a hub to view and manage student servers. Please follow the sections in the template below and share the required information. If you are curious to understand the process through which we assign privileges, please refer to [our documentation](https://docs.datahub.berkeley.edu/en/latest/admins/howto/course-config.html#defining-group-profiles).
+  - type: input
+    attributes:
+      label: Your Name
+      description:
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Affiliated Course Name
+      description: Name of the course for which you are part of the teaching team
+    validations:
+      required: true
+  - type: input
+    id: courses_id
+    attributes:
+      label: bCourses ID(s)
+      description: bCourses ID for the course you are teaching. You can find that in the URL to your course -- it is a seven digit number. The course needs to be set to Published in bCourses, otherwise the hub will not be able to assign extra privileges. If you have multiple courses in the same hub, please separate the IDs with commas (e.g., 1234567, 2345678).
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Role
+      description: Your role as part of the teaching team
+    validations:
+      required: true
+  - type: dropdown
+    id: hub_url
+    attributes:
+      label: Hub URL
+      description: Hub that you are currently using for teaching/research
+      options:
+        - datahub.berkeley.edu
+        - r.datahub.berkeley.edu
+        - a11y.datahub.berkeley.edu
+        - astro.datahub.berkeley.edu
+        - biology.datahub.berkeley.edu
+        - cee.datahub.berkeley.edu
+        - data100.datahub.berkeley.edu
+        - data101.datahub.berkeley.edu
+        - data102.datahub.berkeley.edu
+        - data8.datahub.berkeley.edu
+        - dlab.datahub.berkeley.edu
+        - eecs.datahub.berkeley.edu
+        - ischool.datahub.berkeley.edu
+        - julia.datahub.berkeley.edu
+        - prob140.datahub.berkeley.edu
+        - publichealth.datahub.berkeley.edu
+        - stat159.datahub.berkeley.edu
+        - stat20.datahub.berkeley.edu
+    validations:
+      required: true
+  - type: input
+    id: end_date
+    attributes:
+      label: End Date
+      description: When should elevated privileges for course staff get removed? Please enter a date in MM/DD/YYYY format (e.g., 08/15/2025).
+      placeholder: MM/DD/YYYY
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Request Deadline
+      description: By when do you need this request to be completed?
+      placeholder: MM/DD/YYYY
+    validations:
+      required: true

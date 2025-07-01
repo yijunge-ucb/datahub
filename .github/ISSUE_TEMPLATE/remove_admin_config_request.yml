@@ -1,0 +1,50 @@
+name: Remove Elevated Privileges for Course Staff at the End of the Course (Intended for DataHub Admins only)
+description: Remove Elevated Privileges for Course Staff at the End of the Course (Intended for DataHub Admins only)
+title: "Remove Elevated Privileges for Course Staff at the End of the Course (Intended for DataHub Admins only)"
+labels: ["datahub admin only", "remove admin config"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This template is intended for DataHub admins to remove elevated privileges for course staff at the end of the course. 
+  - type: input
+    attributes:
+      label: Course Name(s)
+      description: Name(s) of the course(s) to remove elevated privileges for course staff.
+    validations:
+      required: true
+  - type: input
+    id: courses_id
+    attributes:
+      label: bCourses ID(s)
+      description: bCourses ID(s) in a given hub. If you want to remove configs for multiple courses in a given hub, please separate the IDs with commas (e.g., 1234567, 2345678). 
+    validations:
+      required: true
+  - type: dropdown
+    id: hub_url
+    attributes:
+      label: Hub URL
+      description: Hub that you want to remove elevated privileges for course staff.
+      options:
+        - datahub.berkeley.edu
+        - r.datahub.berkeley.edu
+        - a11y.datahub.berkeley.edu
+        - astro.datahub.berkeley.edu
+        - biology.datahub.berkeley.edu
+        - cee.datahub.berkeley.edu
+        - data100.datahub.berkeley.edu
+        - data101.datahub.berkeley.edu
+        - data102.datahub.berkeley.edu
+        - data8.datahub.berkeley.edu
+        - dlab.datahub.berkeley.edu
+        - eecs.datahub.berkeley.edu
+        - ischool.datahub.berkeley.edu
+        - julia.datahub.berkeley.edu
+        - prob140.datahub.berkeley.edu
+        - publichealth.datahub.berkeley.edu
+        - stat159.datahub.berkeley.edu
+        - stat20.datahub.berkeley.edu
+    validations:
+      required: true
