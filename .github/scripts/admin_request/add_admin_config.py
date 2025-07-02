@@ -101,7 +101,8 @@ def insert_role(yaml_path: Path, course_id: str, issue_number: str, end_date: st
         " " * (subentry_indent + 2) + f"- admin:servers!group=course::{course_id}\n",
         " " * (subentry_indent + 2) + f"- access:servers!group=course::{course_id}\n",
         " " * subentry_indent + "groups:\n",
-        " " * (subentry_indent + 2) + f"- course::{course_id}::group::Admins\n",
+        " " * (subentry_indent + 2) + f"- course::{course_id}::enrollment_type::teacher\n",
+        " " * (subentry_indent + 2) + f"- course::{course_id}::enrollment_type::ta\n",
     ]
 
     # Insert the new role at the end of the loadRoles block
