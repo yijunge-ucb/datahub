@@ -45,6 +45,18 @@ jupyterhub:
         # this role will be assigned to...
         groups:
           - course::1524699::group::all-admins
+      course-staff-1545303:
+        ## Course: Stat20 Bcourses ID: 1545303 End Date: 08/15/2025 
+        ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7264 for more details.
+        description: Enable course staff to view and access servers.
+        scopes:
+          - admin-ui
+          - list:users!group=course::1545303
+          - admin:servers!group=course::1545303
+          - access:servers!group=course::1545303
+        groups:
+          - course::1545303::enrollment_type::teacher
+          - course::1545303::enrollment_type::ta
 
   singleuser:
     extraFiles:
