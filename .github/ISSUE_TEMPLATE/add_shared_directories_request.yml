@@ -1,8 +1,9 @@
 name: Setup shared directories
 description: To store large datasets that can be read by student notebooks
-labels: "support"
-assignees:
-- balajialg
+title: "Setup Shared Directories for Course"
+labels: ["support", "add shared directories"]
+assignees: []
+
 body:
   - type: markdown
     attributes:
@@ -26,9 +27,10 @@ body:
     validations:
       required: true
   - type: input
+    id: courses_id
     attributes:
-      label: bCourses ID
-      description: bCourses ID for the course you are teaching. You can find that in the URL to your course -- it is a seven digit number. The course needs to be set to Published in bCourses, otherwise the hub will not be able to assign extra privileges.
+      label: bCourses ID(s)
+      description: bCourses ID for the course you are teaching. You can find that in the URL to your course -- it is a seven digit number. The course needs to be set to Published in bCourses, otherwise the hub will not be able to assign extra privileges. If you have multiple courses in the same hub, please separate the IDs with commas (e.g., 1234567, 2345678).
     validations:
       required: true
   - type: input
@@ -38,6 +40,7 @@ body:
     validations:
       required: true
   - type: dropdown
+    id: hub_url
     attributes:
       label: Hub URL
       description: Hub that you are currently using for teaching/research
@@ -60,22 +63,20 @@ body:
         - publichealth.datahub.berkeley.edu
         - stat159.datahub.berkeley.edu
         - stat20.datahub.berkeley.edu
-        - other
     validations:
       required: true
-  - type: textarea
+  - type: input
+    id: end_date
     attributes:
       label: End Date
       description: When should the shared directories be de-provisioned?
-      value: |
-        - <!-- MM/DD/YY -->
+      placeholder: MM/DD/YYYY
     validations:
       required: true
-  - type: textarea
+  - type: input
     attributes:
       label: Request Deadline
       description: By when do you need the shared directories to be set up in the hub
-      value: |
-        <!-- Any specific date(s) (MM/DD) to prioritize this request at our end? -->
+      placeholder: MM/DD/YYYY
     validations:
       required: true

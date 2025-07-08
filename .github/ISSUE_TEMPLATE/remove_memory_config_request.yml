@@ -1,0 +1,53 @@
+name: Decrease RAM Request (Intended for Datahub admins only)
+description: Fill out this template to remove additional RAM at the end of the course (Intended for Datahub admins only)
+title: Remove RAM Increase (Intended for Datahub admins only)
+labels: ["datahub admin only", "remove memory config"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: "# RAM Decrease Request Form (Intended for Datahub admins only)"
+
+  - type: dropdown
+    id: hub_url
+    attributes:
+      label: Hub URL
+      description: Hub that you are currently using for teaching/research
+      options:
+        - datahub.berkeley.edu
+        - r.datahub.berkeley.edu
+        - a11y.datahub.berkeley.edu
+        - astro.datahub.berkeley.edu
+        - biology.datahub.berkeley.edu
+        - cee.datahub.berkeley.edu
+        - data100.datahub.berkeley.edu
+        - data101.datahub.berkeley.edu
+        - data102.datahub.berkeley.edu
+        - data8.datahub.berkeley.edu
+        - dlab.datahub.berkeley.edu
+        - eecs.datahub.berkeley.edu
+        - ischool.datahub.berkeley.edu
+        - julia.datahub.berkeley.edu
+        - prob140.datahub.berkeley.edu
+        - publichealth.datahub.berkeley.edu
+        - stat159.datahub.berkeley.edu
+        - stat20.datahub.berkeley.edu
+    validations:
+      required: true
+
+  - type: input
+    id: class-info
+    attributes:
+      label: "Which class is this request for?"
+      description: "For example, \"2025 Spring, Robot Studies 101\"."
+    validations:
+      required: true
+
+  - type: input
+    id: courses_id
+    attributes:
+      label: bCourses ID(s)
+      description: bCourses ID. If you have multiple courses in the same hub, please separate the IDs with commas (e.g., 1234567, 2345678).
+    validations:
+      required: true

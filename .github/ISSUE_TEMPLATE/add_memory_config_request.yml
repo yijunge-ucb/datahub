@@ -1,0 +1,116 @@
+name: Increase RAM Request
+description: Fill out this template to request additional RAM for your course
+title: Request more RAM for class X
+labels: ["support", "add memory config"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: "# RAM Increase Request Form"
+
+  - type: dropdown
+    id: hub_url
+    attributes:
+      label: Hub URL
+      description: Hub that you are currently using for teaching/research
+      options:
+        - datahub.berkeley.edu
+        - r.datahub.berkeley.edu
+        - a11y.datahub.berkeley.edu
+        - astro.datahub.berkeley.edu
+        - biology.datahub.berkeley.edu
+        - cee.datahub.berkeley.edu
+        - data100.datahub.berkeley.edu
+        - data101.datahub.berkeley.edu
+        - data102.datahub.berkeley.edu
+        - data8.datahub.berkeley.edu
+        - dlab.datahub.berkeley.edu
+        - eecs.datahub.berkeley.edu
+        - ischool.datahub.berkeley.edu
+        - julia.datahub.berkeley.edu
+        - prob140.datahub.berkeley.edu
+        - publichealth.datahub.berkeley.edu
+        - stat159.datahub.berkeley.edu
+        - stat20.datahub.berkeley.edu
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: Affiliated Course Name
+      description: Name of the course for which you are part of the teaching team
+    validations:
+      required: true
+
+  - type: input
+    id: academic-guide
+    attributes:
+      label: "What is the Academic Guide URL for this class?"
+      description: "For example, https://classes.berkeley.edu/content/2025-spring-robot-101-001-lec-001"
+    validations:
+      required: true
+
+  - type: input
+    id: courses_id
+    attributes:
+      label: bCourses ID(s)
+      description: bCourses ID for the course you are teaching. You can find that in the URL to your course -- it is a seven digit number. The course needs to be set to Published in bCourses, otherwise the hub will not be able to assign extra privileges. If you have multiple courses in the same hub, please separate the IDs with commas (e.g., 1234567, 2345678).
+    validations:
+      required: true
+
+  - type: input
+    id: student-count
+    attributes:
+      label: "How many students do you expect in this class?"
+      description: "An approximate number would do."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: ram-needed
+    attributes:
+      label: "How much RAM per user is needed?"
+      description: "The default is 1 GB (One GB) of RAM per student."
+      options:
+        - "1 GB"
+        - "2 GB"
+        - "3 GB"
+        - "4 GB"
+        - "5 GB"
+        - "6 GB"
+        - "7 GB"
+        - "8 GB"
+    validations:
+      required: true
+
+  - type: textarea
+    id: justification
+    attributes:
+      label: "Why does this class need this much RAM?"
+      description: "A short justification for this resource request."
+    validations:
+      required: true
+
+  - type: input
+    id: fulfillment-date
+    attributes:
+      label: "By what date (MM/DD/YYYY) do you want this request to be fulfilled?"
+      description: "This will help us with the prioritization of this request."
+    validations:
+      required: true
+
+  - type: input
+    id: end_date
+    attributes:
+      label: End Date
+      description: "Until when (MM/DD/YYYY) do you require the additional RAM? This will help us scale down resources when the RAM increase is no longer required"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-info
+    attributes:
+      label: "Any additional information we should know about?"
+    validations:
+      required: false

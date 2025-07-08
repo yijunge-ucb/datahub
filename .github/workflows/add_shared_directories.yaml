@@ -1,0 +1,131 @@
+name: Add Shared Directories Configurations Based on the Instructor/TA Request and Create a PR
+
+on:
+  workflow_call:
+    inputs:
+      issue_number:
+        required: true
+        type: number
+      app_id:
+        required: true
+        type: string
+    secrets:
+      PRIVATE_KEY_SECRET:
+        required: true
+       
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  label_check:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write 
+    outputs:
+      label_found: ${{ steps.check_label.outputs.label_found }}
+
+    steps:
+      - name: Check if "add shared directories" label is present
+        id: check_label
+        run: |
+          echo "Labels: ${{ toJson(github.event.issue.labels) }}"
+    
+          if [[ "${{ contains(github.event.issue.labels.*.name, 'add shared directories') }}" == "true" ]]; then
+            echo "Label 'add shared directories' found. Proceeding..."
+            echo "label_found=true" >> $GITHUB_ENV
+            echo "label_found=true" >> $GITHUB_OUTPUT
+          else
+            echo "Label 'add shared directories' not found. Exiting..."
+            echo "label_found=false" >> $GITHUB_ENV
+            echo "label_found=false" >> $GITHUB_OUTPUT
+          fi
+
+  handle-issue:
+    needs: label_check
+    if: needs.label_check.outputs.label_found == 'true'  # Run only if label admin_request is found
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        ref: staging
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Write issue body to file
+      run: echo "${{ github.event.issue.body }}" > issue_body.txt
+
+    - name: Extract data from issue
+      id: extract_course_info
+      run: |
+        python3 .github/scripts/extract_course_info.py  issue_body.txt
+      env:
+        ISSUE_NUMBER: ${{ github.event.issue.number }}
+
+    - name: Set environment variables
+      uses: actions/create-github-app-token@v1
+      id: app-token
+      with:
+        app-id: ${{ vars.APP_ID }}
+        private-key: ${{ secrets.PRIVATE_KEY_SECRET}}
+        owner: ${{ github.repository_owner }}
+          
+    - name: Create new branch and modify config
+      id: modify-config
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+        git checkout -b "${{ steps.extract_course_info.outputs.new_branch }}"
+
+        python3 .github/scripts/shared_directories/add_shared_directories.py 
+        FILE_PATH="deployments/${{ steps.extract_course_info.outputs.hub_name }}/config/common.yaml"
+
+        if ! git diff --quiet "$FILE_PATH"; then
+          echo "Changes detected in $FILE_PATH. Committing..."
+          git add "$FILE_PATH"
+          git commit -m "Add shared directories config for Bcourses ID:  ${{ steps.extract_course_info.outputs.course_id }} "
+          git push origin "${{ steps.extract_course_info.outputs.new_branch }}"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "No changes detected in $FILE_PATH. Skipping commit and push."
+          echo "changed=false" >> "$GITHUB_OUTPUT"
+        fi
+      env:
+        hub_name: ${{ steps.extract_course_info.outputs.hub_name }}
+        course_id: ${{ steps.extract_course_info.outputs.course_id }}
+        course_name: ${{ steps.extract_course_info.outputs.course_name }}
+        ISSUE_NUMBER: ${{ github.event.issue.number }}
+        end_date: ${{ steps.extract_course_info.outputs.end_date }}
+
+    - name: Create Pull Request
+      if: steps.modify-config.outputs.changed == 'true'
+      env:
+        BRANCH_NAME: ${{ steps.extract_course_info.outputs.new_branch }}
+        ISSUE_NUMBER: ${{ github.event.issue.number }}
+        GH_TOKEN: ${{ steps.app-token.outputs.token }}
+      run: |
+        # Set reviewers (GitHub usernames)
+        REVIEWERS="balajialg"
+        LABELS="add shared directories,support,hub: ${{ steps.extract_course_info.outputs.hub_name }}"
+
+        # Check if PR already exists
+        if gh pr list --base staging --head "$BRANCH_NAME" --json number | grep -q '"number":'; then
+          echo "PR already exists. Skipping."
+        else
+          PR_BODY=$(printf "Automatic PR created: merge from %s to staging\n\nRelated to #%s" "$BRANCH_NAME" "$ISSUE_NUMBER")
+          PR_URL=$(gh pr create \
+            --base staging \
+            --head "$BRANCH_NAME" \
+            --title "Automatic PR created: merge from $BRANCH_NAME to staging" \
+            --body "$PR_BODY" \
+            --reviewer "$REVIEWERS" \
+            --label "$LABELS")
+        fi
+
+
+    
