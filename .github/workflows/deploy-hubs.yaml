@@ -79,12 +79,94 @@ jobs:
           ${{ secrets.SOPS_KEY }}
           EOF
           echo "GOOGLE_APPLICATION_CREDENTIALS=${HOME}/sops.key" >> $GITHUB_ENV
+      
+      - name: Check for 'add shared directories' label
+        id: check-add-shared-label
+        run: |    
+          # Check for 'add shared directories'
+          if echo "${{ steps.pr-labels.outputs.labels }}" | grep -q "add shared directories"; then
+            echo "Label 'add shared directories' is present."
+            echo "add_shared_directories=true" >> $GITHUB_OUTPUT
+          else
+            echo "Label 'add shared directories' is NOT present."
+            echo "add_shared_directories=false" >> $GITHUB_OUTPUT
+          fi
 
-      - name: Install Helm
+          # Extract 'hub: {{hub_name}}'
+          HUB_LABEL=$(echo "$LABELS" | tr ',' '\n' | grep '^hub: ' || true)
+          if [ -n "$HUB_LABEL" ]; then
+            HUB_NAME=$(echo "$HUB_LABEL" | sed 's/^hub: //')
+            echo "Extracted hub name: $HUB_NAME"
+            echo "hub_name=$HUB_NAME" >> $GITHUB_OUTPUT
+          else
+            echo "No 'hub: ...' label found."
+            echo "hub_name=" >> $GITHUB_OUTPUT
+          fi
+
+          # Extract 'Bcourses ID: {{course_id}}'
+          COURSE_LABEL=$(echo "$LABELS" | tr ',' '\n' | grep '^Bcourses ID: ' || true)
+          if [ -n "$COURSE_LABEL" ]; then
+            COURSE_ID=$(echo "$COURSE_LABEL" | sed 's/^Bcourses ID: //')
+            echo "Extracted Bcourses ID: $COURSE_ID"
+            echo "bcourses_id=$COURSE_ID" >> $GITHUB_OUTPUT
+          else
+            echo "No 'Bcourses ID: ...' label found."
+            echo "bcourses_id=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Get shared directories paths
+        if: ${{ env.DEPLOY && steps.check-add-shared-label.outputs.add_shared_directories == 'true' }}
+        id: create-shared-dirs
+        env:
+          STAGING_OR_PROD: prod
+          HUB_NAME: ${{ steps.check-add-shared-label.outputs.hub_name }}
+          BCOURSES_ID: ${{ steps.check-add-shared-label.outputs.bcourses_id }}
+        run: |
+          python3 .github/scripts/shared_directories/get_shared_directories.py
+
+      - name: Create shared directories on the NFS server
+        if: ${{ env.DEPLOY && steps.check-add-shared-label.outputs.add_shared_directories == 'true' }}
+        env:
+          SHARED_DIRS: ${{ steps.create-shared-dirs.outputs.shared_dir_paths }}
+          GCP_SA_KEY: ${{ secrets.NFS_SA_KEY }}
+          NFS_SERVER_NAME: ${{ secrets.NFS_INSTANCE_NAME }}
+          GCP_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
+          GCP_ZONE: ${{secrets.GCP_ZONE}}   
+          run: |
+            set -e
+
+            echo "$GCP_SA_KEY" > $HOME/gcloud-key.json
+
+            echo "Installing gcloud CLI and components..."
+            sudo apt-get update
+            sudo apt-get install -y google-cloud-sdk
+
+            echo "Authenticating to Google Cloud..."
+            gcloud auth activate-service-account --key-file=$HOME/gcloud-key.json
+            gcloud config set project $GCP_PROJECT
+            gcloud config set compute/zone $GCP_ZONE
+
+            echo "Installing IAP SSH component..."
+            gcloud components install --quiet beta
+
+            echo "Starting SSH tunnel to $NFS_SERVER_NAME..."
+
+            REMOTE_CMD='for dir in '"$SHARED_DIRS"'; do \
+              mkdir -p "$dir" && \
+              chown ubuntu:ubuntu "$dir" && \
+              chmod 755 "$dir"; \
+            done'
+
+            echo "Creating shared directories on the NFS server..."
+            # Use gcloud compute ssh to run the command on the NFS server
+            gcloud compute ssh "$NFS_SERVER_NAME" \
+              --zone="$GCP_ZONE" \
+              --tunnel-through-iap \
+              --command="sudo su - ubuntu -c '$REMOTE_CMD'"
+
+      - name: Install Helm Chart
         if: ${{ env.DEPLOY }}
         run: |
-            curl -L https://get.helm.sh/helm-v3.13.3-linux-amd64.tar.gz | tar -xzf -
-            mv linux-amd64/helm /usr/local/bin
             helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
             helm repo update
 
@@ -170,8 +252,6 @@ jobs:
       - name: Install Helm
         if: ${{ env.DEPLOY }}
         run: |
-            curl -L https://get.helm.sh/helm-v3.13.3-linux-amd64.tar.gz | tar -xzf -
-            mv linux-amd64/helm /usr/local/bin
             helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
             helm repo update
 

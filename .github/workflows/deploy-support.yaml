@@ -63,8 +63,6 @@ jobs:
       - name: Install Helm
         if: ${{ env.DEPLOY }}
         run: |
-          curl -L https://get.helm.sh/helm-v3.13.3-linux-amd64.tar.gz | tar -xzf -
-          mv linux-amd64/helm /usr/local/bin
           helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
           helm repo update
 
