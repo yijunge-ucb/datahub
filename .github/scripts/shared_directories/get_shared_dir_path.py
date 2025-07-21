@@ -90,5 +90,5 @@ def main():
             for key, value in outputs.items():
                 f.write(f"{key}={value}\n")
 
-if __name__ == 'main':
+if __name__ == "__main__":
     main()
