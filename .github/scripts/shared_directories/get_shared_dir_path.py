@@ -79,7 +79,7 @@ def main():
             print(f"COURSE_ID: {c_id}")
             print(f"Shared directory path: {shared_dir_path}")
             shared_dir_paths.append(shared_dir_path)
-
+    print(f"shared_dir_paths: {shared_dir_paths}")
     outputs = {
         "shared_dir_paths": " ".join(shared_dir_paths),
     }
