@@ -80,39 +80,40 @@ jobs:
           EOF
           echo "GOOGLE_APPLICATION_CREDENTIALS=${HOME}/sops.key" >> $GITHUB_ENV
       
-      - name: Check for 'add shared directories' label
+      - name: Check for 'add shared directories' label and extract info
         id: check-add-shared-label
-        run: |    
+        run: |
+          LABELS="${{ steps.pr-labels.outputs.labels }}"
+      
           # Check for 'add shared directories'
-          if echo "${{ steps.pr-labels.outputs.labels }}" | grep -q "add-shared-directories"; then
+          if echo "$LABELS" | grep -qw "add-shared-directories"; then
             echo "Label 'add shared directories' is present."
             echo "add_shared_directories=true" >> $GITHUB_OUTPUT
+      
+            # Extract all 'hub-<name>' labels
+            HUB_NAME=$(for label in $LABELS; do
+              [[ "$label" == hub-* ]] && echo "${label#hub-}"
+            done | xargs)
+      
+            if [ -n "$HUB_NAME" ]; then
+              echo "Extracted hub name(s): $HUB_NAME"
+              echo "hub_name=$HUB_NAME" >> $GITHUB_OUTPUT
+            fi
+      
+            # Extract all 'bcourses-id-<id>' labels
+            BCOURSES_ID=$(for label in $LABELS; do
+              [[ "$label" == bcourses-id-* ]] && echo "${label#bcourses-id-}"
+            done | xargs)
+      
+            if [ -n "$BCOURSES_ID" ]; then
+              echo "Extracted Bcourses ID(s): $BCOURSES_ID"
+              echo "bcourses_id=$BCOURSES_ID" >> $GITHUB_OUTPUT
+            fi
           else
             echo "Label 'add shared directories' is NOT present."
             echo "add_shared_directories=false" >> $GITHUB_OUTPUT
           fi
 
-          # Extract 'hub: {{hub_name}}'
-          HUB_LABEL=$(echo "$LABELS" | tr ',' '\n' | grep '^hub-' || true)
-          if [ -n "$HUB_LABEL" ]; then
-            HUB_NAME=$(echo "$HUB_LABEL" | sed 's/^hub-//')
-            echo "Extracted hub name: $HUB_NAME"
-            echo "hub_name=$HUB_NAME" >> $GITHUB_OUTPUT
-          else
-            echo "No 'hub: ...' label found."
-            echo "hub_name=" >> $GITHUB_OUTPUT
-          fi
-
-          # Extract 'Bcourses ID: {{course_id}}'
-          COURSE_LABEL=$(echo "$LABELS" | tr ',' '\n' | grep '^bcourses-id-' || true)
-          if [ -n "$COURSE_LABEL" ]; then
-            COURSE_ID=$(echo "$COURSE_LABEL" | sed 's/^bcourses-id-//')
-            echo "Extracted Bcourses ID: $COURSE_ID"
-            echo "bcourses_id=$COURSE_ID" >> $GITHUB_OUTPUT
-          else
-            echo "No 'Bcourses ID: ...' label found."
-            echo "bcourses_id=" >> $GITHUB_OUTPUT
-          fi
 
       - name: Get shared directories paths
         if: ${{ env.DEPLOY && steps.check-add-shared-label.outputs.add_shared_directories == 'true' }}
@@ -122,7 +123,7 @@ jobs:
           HUB_NAME: ${{ steps.check-add-shared-label.outputs.hub_name }}
           BCOURSES_ID: ${{ steps.check-add-shared-label.outputs.bcourses_id }}
         run: |
-          python3 .github/scripts/shared_directories/get_shared_directories.py
+          python3 .github/scripts/shared_directories/get_shared_dir_path.py
 
       - name: Create shared directories on the NFS server
         if: ${{ env.DEPLOY && steps.check-add-shared-label.outputs.add_shared_directories == 'true' }}
