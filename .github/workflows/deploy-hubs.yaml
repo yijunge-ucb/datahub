@@ -84,7 +84,7 @@ jobs:
         id: check-add-shared-label
         run: |    
           # Check for 'add shared directories'
-          if echo "${{ steps.pr-labels.outputs.labels }}" | grep -q "add shared directories"; then
+          if echo "${{ steps.pr-labels.outputs.labels }}" | grep -q "add-shared-directories"; then
             echo "Label 'add shared directories' is present."
             echo "add_shared_directories=true" >> $GITHUB_OUTPUT
           else
@@ -93,9 +93,9 @@ jobs:
           fi
 
           # Extract 'hub: {{hub_name}}'
-          HUB_LABEL=$(echo "$LABELS" | tr ',' '\n' | grep '^hub: ' || true)
+          HUB_LABEL=$(echo "$LABELS" | tr ',' '\n' | grep '^hub-' || true)
           if [ -n "$HUB_LABEL" ]; then
-            HUB_NAME=$(echo "$HUB_LABEL" | sed 's/^hub: //')
+            HUB_NAME=$(echo "$HUB_LABEL" | sed 's/^hub-//')
             echo "Extracted hub name: $HUB_NAME"
             echo "hub_name=$HUB_NAME" >> $GITHUB_OUTPUT
           else
@@ -104,9 +104,9 @@ jobs:
           fi
 
           # Extract 'Bcourses ID: {{course_id}}'
-          COURSE_LABEL=$(echo "$LABELS" | tr ',' '\n' | grep '^Bcourses ID: ' || true)
+          COURSE_LABEL=$(echo "$LABELS" | tr ',' '\n' | grep '^bcourses-id-' || true)
           if [ -n "$COURSE_LABEL" ]; then
-            COURSE_ID=$(echo "$COURSE_LABEL" | sed 's/^Bcourses ID: //')
+            COURSE_ID=$(echo "$COURSE_LABEL" | sed 's/^bcourses-id-//')
             echo "Extracted Bcourses ID: $COURSE_ID"
             echo "bcourses_id=$COURSE_ID" >> $GITHUB_OUTPUT
           else
