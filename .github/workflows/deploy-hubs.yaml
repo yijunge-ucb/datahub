@@ -136,35 +136,29 @@ jobs:
         run: |
           set -e
 
-          echo "$GCP_SA_KEY" > $HOME/gcloud-key.json
-
           echo "Installing gcloud CLI and components..."
           sudo apt-get update
-          sudo apt-get install -y google-cloud-sdk
-
+          sudo apt-get install -y google-cloud-cli
+          
           echo "Authenticating to Google Cloud..."
           gcloud auth activate-service-account --key-file=$HOME/gcloud-key.json
-          gcloud config set project $GCP_PROJECT
-          gcloud config set compute/zone $GCP_ZONE
-
-          echo "Installing IAP SSH component..."
-          gcloud components install --quiet beta
-
+          gcloud config set project "$GCP_PROJECT"
+          gcloud config set compute/zone "$GCP_ZONE"
+          
           echo "Starting SSH tunnel to $NFS_SERVER_NAME..."
-
-          REMOTE_CMD='for dir in '"$SHARED_DIRS"'; do \
-            mkdir -p "$dir" && \
-            chown ubuntu:ubuntu "$dir" && \
-            chmod 755 "$dir"; \
-          done'
-
+          
+          REMOTE_CMD=$(for dir in $SHARED_DIRS; do
+            echo "mkdir -p \"$dir\" && chown ubuntu:ubuntu \"$dir\" && chmod 755 \"$dir\";"
+          done)
+          
           echo "Creating shared directories on the NFS server..."
-          # Use gcloud compute ssh to run the command on the NFS server
           gcloud compute ssh "$NFS_SERVER_NAME" \
             --zone="$GCP_ZONE" \
             --tunnel-through-iap \
             --command="sudo su - ubuntu -c '$REMOTE_CMD'"
-
+          
+          rm -f $HOME/gcloud-key.json
+          
       - name: Install Helm Chart
         if: ${{ env.DEPLOY }}
         run: |
