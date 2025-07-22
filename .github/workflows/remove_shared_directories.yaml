@@ -117,20 +117,27 @@ jobs:
         CUSTOM_LABEL="Bcourses ID: $COURSE_ID"
         LABELS="$LABEL_BASE,$CUSTOM_LABEL"
 
-        # Create the label if it doesn't exist
-        echo "Checking if label '$CUSTOM_LABEL' exists..."
-        RESPONSE=$(curl -s -H "Authorization: Bearer $GH_TOKEN" https://api.github.com/repos/$REPO/labels)
-        EXISTS=$(echo "$RESPONSE" | jq --arg name "$CUSTOM_LABEL" '.[] | select(.name == $name)')
-
-        if [ -z "$EXISTS" ]; then
-          echo "Label '$CUSTOM_LABEL' does not exist. Creating it..."
-          curl -s -X POST "https://api.github.com/repos/$REPO/labels" \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d "{\"name\":\"$CUSTOM_LABEL\",\"color\":\"5319e7\",\"description\":\"Auto-generated label for course ID\"}"
-        else
-          echo "Label '$CUSTOM_LABEL' already exists."
-        fi
+        # Extract individual IDs, supporting both comma-separated and space-separated formats
+        IDS=$(echo "$CUSTOM_LABEL" | sed -e 's/Bcourses ID: //' -e 's/,/ /g')
+        
+        for ID in $IDS; do
+          INDIVIDUAL_LABEL="Bcourses ID: $ID"
+          LABELS="$LABELS,$INDIVIDUAL_LABEL"
+        
+          echo "Checking if label '$INDIVIDUAL_LABEL' exists..."
+          RESPONSE=$(curl -s -H "Authorization: Bearer $GH_TOKEN" https://api.github.com/repos/$REPO/labels)
+          EXISTS=$(echo "$RESPONSE" | jq --arg name "$INDIVIDUAL_LABEL" '.[] | select(.name == $name)')
+        
+          if [ -z "$EXISTS" ]; then
+            echo "Label '$INDIVIDUAL_LABEL' does not exist. Creating it..."
+            curl -s -X POST "https://api.github.com/repos/$REPO/labels" \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Content-Type: application/json" \
+              -d "{\"name\":\"$INDIVIDUAL_LABEL\",\"color\":\"0e8a16\",\"description\":\"Auto-generated label for course ID\"}"
+          else
+            echo "Label '$INDIVIDUAL_LABEL' already exists."
+          fi
+        done
 
         # Check if PR already exists
         if gh pr list --base staging --head "$BRANCH_NAME" --json number | grep -q '"number":'; then
