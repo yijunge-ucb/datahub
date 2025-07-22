@@ -118,7 +118,7 @@ jobs:
         REVIEWERS="balajialg"
         LABEL_BASE="add shared directories,support,hub: $HUB_NAME"
         CUSTOM_LABEL="Bcourses ID: $COURSE_ID"
-        LABELS="$LABEL_BASE,$CUSTOM_LABEL"
+        LABELS="$LABEL_BASE"
 
         # Extract individual IDs, supporting both comma-separated and space-separated formats
         IDS=$(echo "$CUSTOM_LABEL" | sed -e 's/Bcourses ID: //' -e 's/,/ /g')
