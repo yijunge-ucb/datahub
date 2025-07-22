@@ -122,7 +122,7 @@ jobs:
         
         for ID in $IDS; do
           INDIVIDUAL_LABEL="Bcourses ID: $ID"
-          LABELS="$LABELS,$INDIVIDUAL_LABEL"
+          LABELS="$LABELS"
         
           echo "Checking if label '$INDIVIDUAL_LABEL' exists..."
           RESPONSE=$(curl -s -H "Authorization: Bearer $GH_TOKEN" https://api.github.com/repos/$REPO/labels)
