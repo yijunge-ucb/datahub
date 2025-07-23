@@ -18,4 +18,3 @@ git@github.com:berkeley-dsep-infra/nature-user-image.git
 git@github.com:berkeley-dsep-infra/publichealth-user-image.git
 git@github.com:berkeley-dsep-infra/stat20-user-image.git
 git@github.com:berkeley-dsep-infra/stat159-user-image.git
-git@github.com:berkeley-dsep-infra/ugr01-user-image.git
