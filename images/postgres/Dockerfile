@@ -1,4 +1,4 @@
-FROM postgres:14.5
+FROM postgres:17.5
 
 # Install python3 language extension from https://wiki.postgresql.org/wiki/Apt
 RUN apt-get update && \
