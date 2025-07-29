@@ -12,7 +12,7 @@ jupyterhub:
     extraImages:
       postgres:
         name: us-central1-docker.pkg.dev/ucb-datahub-2018/core/postgres
-        tag: 20240731-224556.git.9076.h5fdc5d69
+        tag: 20240731-224556.git.9421.ha935e5da
   proxy:
     chp:
       nodeSelector:
