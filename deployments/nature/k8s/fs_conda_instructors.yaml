@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-nature-conda-instr-staging
+spec:
+  capacity:
+    storage: 100G
+  accessModes:
+  - ReadWriteMany
+  claimRef:
+    namespace: nature-staging
+    name: pvc-nature-conda-instr-staging
+  nfs:
+    path: /shares/nature/staging
+    server: 10.185.238.42
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-nature-conda-instr-staging
+  namespace: nature-staging
+spec:
+  accessModes:
+  - ReadWriteMany
+  storageClassName: "" 
+  resources:
+    requests:
+      storage: 100G
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-nature-conda-instr-prod
+spec:
+  capacity:
+    storage: 100G
+  accessModes:
+  - ReadWriteMany
+  claimRef:
+    namespace: nature-prod
+    name: pvc-nature-conda-instr-prod
+  nfs:
+    path: /shares/nature/prod
+    server: 10.185.238.42
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-nature-conda-instr-prod
+  namespace: nature-prod
+spec:
+  accessModes:
+  - ReadWriteMany
+  storageClassName: "" 
+  resources:
+    requests:
+      storage: 100G
