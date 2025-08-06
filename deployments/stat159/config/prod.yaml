@@ -28,3 +28,34 @@ jupyterhub:
           JUPYTERHUB_API_URL: http://localhost:8081/hub/api
           GROUPER_BASE_URL: https://calgroups.berkeley.edu/gws/servicesRest/json/v2_2_100
           GROUPER_ID_PATH: edu:berkeley:app:datahub:datahub-stat159-users
+  
+  singleuser:
+    storage:
+      extraVolumes:
+        - name: conda-shared-instr-prod
+          persistentVolumeClaim:
+            claimName: pvc-stat159-conda-instr-prod
+        - name: conda-shared-stud-prod
+          persistentVolumeClaim:
+            claimName: pvc-stat159-conda-stud-prod
+
+  custom:
+    group_profiles:
+      course::1546508::enrollment_type::ta:
+        extraVolumeMounts:
+          - name: conda-shared-instr-prod
+            mountPath: /srv/conda/envs/shared_conda
+            subPath: conda_shared/1546508
+            readOnly: false
+      course::1546508::enrollment_type::teacher:
+        extraVolumeMounts:
+          - name: conda-shared-instr-prod
+            mountPath: /srv/conda/envs/shared_conda
+            subPath: conda_shared/1546508
+            readOnly: false
+      course::1546508::enrollment_type::ta:
+        extraVolumeMounts:
+          - name: conda-shared-stud-prod
+            mountPath: /srv/conda/envs/shared_conda
+            subPath: conda_shared/1546508
+            readOnly: true

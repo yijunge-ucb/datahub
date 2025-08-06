@@ -74,6 +74,7 @@ jupyterhub:
       DISPLAY: ":1.0"
       # Unset NotebookApp from hub/values. Necessary for recent lab versions.
       JUPYTERHUB_SINGLEUSER_APP: "jupyter_server.serverapp.ServerApp"
+      JUPYTER_PATH: "/srv/conda/envs/shared_conda/share/jupyter"
     #cmd:
     #  - jupyterhub-singleuser
     #  - --LabApp.collaborative=true
