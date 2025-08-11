@@ -69,9 +69,16 @@ jupyterhub:
       guarantee: 4G
       limit: 4G
 
-  #custom:
-  #  group_profiles:
-  #
+  custom:
+    group_profiles:
+      # Increase RAM for shared conda env
+      course::1546503::enrollment_type::teacher:
+        mem_limit: 8G
+        mem_guarantee: 4G
+      course::1546503::enrollment_type::ta:
+        mem_limit: 8G
+        mem_guarantee: 4G
+  
   #    # Example: increase memory for everyone affiliated with a course.
   #
   #    # Name of Class 100, Fall '22; requested in #98765
