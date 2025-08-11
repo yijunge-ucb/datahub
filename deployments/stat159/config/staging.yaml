@@ -33,18 +33,18 @@ jupyterhub:
       course::1546508::enrollment_type::ta:
         extraVolumeMounts:
           - name: conda-shared-instr-staging
-            mountPath: /srv/conda/envs/shared_conda
+            mountPath: /srv/conda/envs/shared
             subPath: conda_shared/1546508
             readOnly: false
       course::1546508::enrollment_type::teacher:
         extraVolumeMounts:
           - name: conda-shared-instr-staging
-            mountPath: /srv/conda/envs/shared_conda
+            mountPath: /srv/conda/envs/shared
             subPath: conda_shared/1546508
             readOnly: false
       course::1546508::enrollment_type::ta:
         extraVolumeMounts:
           - name: conda-shared-stud-staging
-            mountPath: /srv/conda/envs/shared_conda
+            mountPath: /srv/conda/envs/shared
             subPath: conda_shared/1546508
             readOnly: true
