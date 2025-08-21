@@ -145,7 +145,7 @@ jupyterhub:
       ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7357 for details.
         extraVolumeMounts:
           - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1545903-readwrite
+            mountPath: /home/rstudio/_shared/bcourses-1545903-readwrite
             subPath: _shared/2025-fall/courses/1545903
             readOnly: false
       course::1545903::enrollment_type::ta:
@@ -153,7 +153,7 @@ jupyterhub:
       ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7357 for details.
         extraVolumeMounts:
           - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1545903-readwrite
+            mountPath: /home/rstudio/_shared/bcourses-1545903-readwrite
             subPath: _shared/2025-fall/courses/1545903
             readOnly: false
       course::1545903::enrollment_type::student:
@@ -161,6 +161,6 @@ jupyterhub:
       ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7357 for details.
         extraVolumeMounts:
           - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1545903-readonly
+            mountPath: /home/rstudio/_shared/bcourses-1545903-readwrite
             subPath: _shared/2025-fall/courses/1545903
             readOnly: true
