@@ -27,6 +27,14 @@ jupyterhub:
           memory: 3Gi
   hub:
     config:
+      OAuthenticator:
+        allow_all: False
+        allowed_groups:
+          # Data 101, Fall 2025
+          # https://bcourses.berkeley.edu/courses/1547305
+          - "course::1547305"
+          # DataHub staff
+          - "course::1524699::group::all-admins"
     loadRoles:
       # datahub staff
       datahub-staff:
