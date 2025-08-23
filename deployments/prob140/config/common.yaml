@@ -45,6 +45,18 @@ jupyterhub:
         # this role will be assigned to...
         groups:
           - course::1524699::group::all-admins
+      course-staff-1547933:
+        ## Course: Data C140: Probability for Data Science Bcourses ID: 1547933 End Date: 12/31/2025 
+        ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7380 for more details.
+        description: Enable course staff to view and access servers.
+        scopes:
+          - admin-ui
+          - list:users!group=course::1547933
+          - admin:servers!group=course::1547933
+          - access:servers!group=course::1547933
+        groups:
+          - course::1547933::enrollment_type::teacher
+          - course::1547933::enrollment_type::ta
 
       ## Template for enabling elevated privileges for course staff,
       # Data 140, Semester/Year, Link to GitHub issue
