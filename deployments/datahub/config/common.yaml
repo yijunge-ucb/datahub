@@ -99,6 +99,9 @@ jupyterhub:
     extraConfig:
       04-custom-theme: |
         c.JupyterHub.template_paths = ['/usr/local/share/jupyterhub/custom_templates/']
+        # following two lines fixes DH-558
+        c.JupyterHub.tornado_settings = {'headers': {'Content-Security-Policy': "frame-ancestors *;"}}
+        c.Spawner.args = ['--NotebookApp.tornado_settings={"headers":{"Content-Security-Policy": "frame-ancestors *;"}}']
 
   proxy:
     chp:
