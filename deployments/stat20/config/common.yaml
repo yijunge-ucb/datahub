@@ -29,6 +29,18 @@ jupyterhub:
     nodeSelector:
       hub.jupyter.org/pool-name: core-pool-2024-05-08
     config:
+      OAuthenticator:
+        allow_all: False
+        allowed_groups:
+          # Stat 20, Spring 2025; https://bcourses.berkeley.edu/courses/1541593
+          - "course::1541593"
+          # Stat 20, Summer 2025; https://bcourses.berkeley.edu/courses/1545303
+          - "course::1545303"
+          # Stat 20, Fall 2025; https://bcourses.berkeley.edu/courses/1548266
+          - "course::1548266"
+          # DataHub staff
+          - "course::1524699::group::all-admins"
+
     loadRoles:
       # datahub staff
       datahub-staff:
@@ -45,18 +57,17 @@ jupyterhub:
         # this role will be assigned to...
         groups:
           - course::1524699::group::all-admins
-      course-staff-1545303:
-        ## Course: Stat20 Bcourses ID: 1545303 End Date: 08/15/2025 
-        ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7264 for more details.
+      course-staff-1548266:
+        ## Course: Stat20 Bcourses ID: 1548266 End Date: 12/15/2025 
         description: Enable course staff to view and access servers.
         scopes:
           - admin-ui
-          - list:users!group=course::1545303
-          - admin:servers!group=course::1545303
-          - access:servers!group=course::1545303
+          - list:users!group=course::1548266
+          - admin:servers!group=course::1548266
+          - access:servers!group=course::1548266
         groups:
-          - course::1545303::enrollment_type::teacher
-          - course::1545303::enrollment_type::ta
+          - course::1548266::enrollment_type::teacher
+          - course::1548266::enrollment_type::ta
 
   singleuser:
     extraFiles:
