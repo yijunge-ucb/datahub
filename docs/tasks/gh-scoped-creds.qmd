@@ -1,0 +1,75 @@
+---
+title: gh-scoped-creds
+---
+
+[gh-scoped-creds](https://github.com/jupyterhub/gh-scoped-creds) is a tool that enables users to securely access github repositories without exposing personal credentials within their DataHub accounts. It works when one provides it with a GitHub app's information, when the GitHub app is installed into a resource owner (such as a github account or organization), and when the app is configured with privileges on the resource owner's git repositories.
+
+The tool walks the user through a browser authentication flow, saves temporary credentials to a path in `/tmp`, and then alters `~/.gitconfig` so that git knows it must use those credentials.
+
+## GitHub Application
+
+We create the GitHub applications within the https://github.com/berkeley-dsep-infra organization. View the list starting at the [organization settings](https://github.com/organizations/berkeley-dsep-infra/settings/profile) > Developer settings > [GitHub Apps](https://github.com/organizations/berkeley-dsep-infra/settings/apps).
+
+Each application, often named of the form *{deployment} Berkeley DataHub access*, has the following parameters:
+
+ - *Client ID*: dynamically generated
+ - *Public link*: dynamically generated
+
+These can be provided as `GH_SCOPED_CREDS_CLIENT_ID` and `GH_SCOPED_CREDS_APP_URL` respectively in the deployment's configuration in `singleuser.extraEnv`. If they are not specified as environment variables, the user must provide them interactively to `gh-scoped-creds`.
+
+Each application also has the following settings:
+
+ - *Homepage URL*: the URL of the datahub instance
+ - *Enable Device Flow*: enabled
+
+## User Workflow
+
+Users can initiate the process within python via
+
+```python
+import gh_scoped_creds
+%ghscopedcreds
+```
+
+Alternatively they can run `gh-scoped-creds` from the command-line.
+
+They will be instructed to visit a github link and provide a code. They will then be prompted to give the GitHub application access to one or more repositories in the user's own account or in an organization.
+
+## Considerations
+
+While the tool's modifications are preserved in `~/.gitconfig`, the temporary credentials are written to `/tmp/`. As a result, the user must perform the workflow after each time they start a new server. They do not need to modify the repository access each time however.
+
+## Troubleshooting
+
+ - "No code shown / device flow failed"
+   Confirm the GitHub App has "Device flow" enabled in its settings and that the Client ID provided to users (or set in `singleuser.extraEnv`) matches the app.
+
+ - "Git still asks for password"
+   Verify ~/.gitconfig was updated and the credential helper path points to the temporary credentials file.
+
+ - "Permission denied for repo" —
+   Confirm the GitHub App was installed on the target account/org and granted access to the specific repository or organization. Review the app's permissions in GitHub and re-install if needed.
+
+ - "Temporary credentials missing after restart" —
+   Remind users that credentials are written to `/tmp` inside their server pod and are lost when the server is stopped. They must re-run the device flow after a server restart.
+
+ - "Wrong Client ID / App URL provided interactively" —
+   If users enter values manually, ensure they copy the exact Client ID and Public link from the GitHub App settings (avoid adding extra whitespace or quotes).
+
+## Admin checklist
+
+- [ ] A GitHub App exists with:
+	- Homepage URL set to the DataHub instance.
+	- Device Flow enabled.
+	- Installed into the account/org and into the repos that require access.
+- [ ] Record the App's Client ID and Public link (App URL).
+- [ ] Add the values into `singleuser.extraEnv` in the deployment configuration. Example entry:
+
+```yaml
+singleuser:
+	extraEnv:
+		GH_SCOPED_CREDS_CLIENT_ID: "<your-client-id>"
+		GH_SCOPED_CREDS_APP_URL: "https://github.com/apps/<your-app-slug>"
+```
+
+- [ ] Ensure singleuser container images include `git` and `gh-scoped-creds`.
