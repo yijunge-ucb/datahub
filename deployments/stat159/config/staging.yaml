@@ -35,8 +35,13 @@ jupyterhub:
       course::1524699::group::all-admins:
         extraVolumeMounts:
           - name: home
-            mountPath: /home/jovyan/shared-readwrite
+            mountPath: /home/jovyan/_shared/bcourses-1524699-readwrite
             subPath: _shared/2025-fall/courses/1524699
+            readOnly: false
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1524699
+            subPath: _shared/2025-fall/courses/1524699
+            readOnly: true
       course::1546508::enrollment_type::teacher:
       ## Course Name: bcourses-1546508 Bcourses ID: 1546508 End Date: 01/01/2026
       ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7407 for details.
@@ -45,6 +50,10 @@ jupyterhub:
             mountPath: /home/jovyan/_shared/bcourses-1546508-readwrite
             subPath: _shared/2025-fall/courses/1546508
             readOnly: false
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1546508
+            subPath: _shared/2025-fall/courses/1546508
+            readOnly: true
           - name: conda-shared-instr-staging
             mountPath: /srv/conda/envs/shared
             subPath: conda_shared/1546508
@@ -57,6 +66,10 @@ jupyterhub:
             mountPath: /home/jovyan/_shared/bcourses-1546508-readwrite
             subPath: _shared/2025-fall/courses/1546508
             readOnly: false
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1546508
+            subPath: _shared/2025-fall/courses/1546508
+            readOnly: true
           - name: conda-shared-instr-staging
             mountPath: /srv/conda/envs/shared
             subPath: conda_shared/1546508
@@ -66,7 +79,7 @@ jupyterhub:
       ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7407 for details.
         extraVolumeMounts:
           - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1546508-readonly
+            mountPath: /home/jovyan/_shared/bcourses-1546508
             subPath: _shared/2025-fall/courses/1546508
             readOnly: true
           - name: conda-shared-stud-staging
