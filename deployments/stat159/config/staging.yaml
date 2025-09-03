@@ -30,20 +30,45 @@ jupyterhub:
 
   custom:
     group_profiles:
-      course::1546508::enrollment_type::ta:
+      # DataHub Infrastructure staff
+      # https://bcourses.berkeley.edu/courses/1524699/groups#tab-80607
+      course::1524699::group::all-admins:
         extraVolumeMounts:
-          - name: conda-shared-instr-staging
-            mountPath: /srv/conda/envs/shared
-            subPath: conda_shared/1546508
-            readOnly: false
+          - name: home
+            mountPath: /home/jovyan/shared-readwrite
+            subPath: _shared/2025-fall/courses/1524699
       course::1546508::enrollment_type::teacher:
+      ## Course Name: bcourses-1546508 Bcourses ID: 1546508 End Date: 01/01/2026
+      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7407 for details.
         extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1546508-readwrite
+            subPath: _shared/2025-fall/courses/1546508
+            readOnly: false
           - name: conda-shared-instr-staging
             mountPath: /srv/conda/envs/shared
             subPath: conda_shared/1546508
             readOnly: false
       course::1546508::enrollment_type::ta:
+      ## Course Name: bcourses-1546508 Bcourses ID: 1546508 End Date: 01/01/2026
+      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7407 for details.
         extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1546508-readwrite
+            subPath: _shared/2025-fall/courses/1546508
+            readOnly: false
+          - name: conda-shared-instr-staging
+            mountPath: /srv/conda/envs/shared
+            subPath: conda_shared/1546508
+            readOnly: false
+      course::1546508::enrollment_type::student:
+      ## Course Name: bcourses-1546508 Bcourses ID: 1546508 End Date: 01/01/2026
+      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7407 for details.
+        extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1546508-readonly
+            subPath: _shared/2025-fall/courses/1546508
+            readOnly: true
           - name: conda-shared-stud-staging
             mountPath: /srv/conda/envs/shared
             subPath: conda_shared/1546508
