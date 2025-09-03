@@ -122,37 +122,3 @@ jupyterhub:
     memory:
       guarantee: 8G
       limit: 8G
-
-  custom:
-    group_profiles:
-      # DataHub Infrastructure staff
-      # https://bcourses.berkeley.edu/courses/1524699/groups#tab-80607
-      course::1524699::group::all-admins:
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/shared-readwrite
-            subPath: _shared
-      course::1546508::enrollment_type::teacher:
-      ## Course Name: bcourses-1546508 Bcourses ID: 1546508 End Date: 01/01/2026
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7407 for details.
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1546508-readwrite
-            subPath: _shared/2025-fall/courses/1546508
-            readOnly: false
-      course::1546508::enrollment_type::ta:
-      ## Course Name: bcourses-1546508 Bcourses ID: 1546508 End Date: 01/01/2026
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7407 for details.
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1546508-readwrite
-            subPath: _shared/2025-fall/courses/1546508
-            readOnly: false
-      course::1546508::enrollment_type::student:
-      ## Course Name: bcourses-1546508 Bcourses ID: 1546508 End Date: 01/01/2026
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7407 for details.
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1546508-readonly
-            subPath: _shared/2025-fall/courses/1546508
-            readOnly: true

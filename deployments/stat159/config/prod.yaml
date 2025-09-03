@@ -41,20 +41,39 @@ jupyterhub:
 
   custom:
     group_profiles:
+      # DataHub Infrastructure staff
+      # https://bcourses.berkeley.edu/courses/1524699/groups#tab-80607
+      course::1524699::group::all-admins:
+        extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/shared-readwrite
+            subPath: _shared/2025-fall/courses/1524699
       course::1546508::enrollment_type::ta:
         extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1546508-readwrite
+            subPath: _shared/2025-fall/courses/1546508
+            readOnly: false
           - name: conda-shared-instr-prod
             mountPath: /srv/conda/envs/shared
             subPath: conda_shared/1546508
             readOnly: false
       course::1546508::enrollment_type::teacher:
         extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1546508-readwrite
+            subPath: _shared/2025-fall/courses/1546508
+            readOnly: false
           - name: conda-shared-instr-prod
             mountPath: /srv/conda/envs/shared
             subPath: conda_shared/1546508
             readOnly: false
-      course::1546508::enrollment_type::ta:
+      course::1546508::enrollment_type::student:
         extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1546508-readonly
+            subPath: _shared/2025-fall/courses/1546508
+            readOnly: true
           - name: conda-shared-stud-prod
             mountPath: /srv/conda/envs/shared
             subPath: conda_shared/1546508
