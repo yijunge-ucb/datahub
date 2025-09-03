@@ -57,7 +57,7 @@ jupyterhub:
             mountPath: /srv/conda/envs/shared
             subPath: conda_shared/1546503
             readOnly: false
-      course::1546503::enrollment_type::ta:
+      course::1546503::enrollment_type::student:
         extraVolumeMounts:
           - name: conda-shared-stud-prod
             mountPath: /srv/conda/envs/shared
