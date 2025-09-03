@@ -411,6 +411,7 @@ jupyterhub:
               # Apply an override for the full group name, if it exists
               # under group_profiles.
               if group.name in group_profiles:
+                self.log.warning(f'using group profile for {group.name}')
                 self.apply_override(group_profiles.get(group.name))
 
             # custom.admin
