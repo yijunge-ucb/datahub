@@ -47,6 +47,14 @@ jupyterhub:
       ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7407 for details.
         extraVolumeMounts:
           - name: home
+            mountPath: /home/jovyan/shared-readwrite
+            subPath: _shared/2025-fall/courses/1546508
+            readOnly: false
+          - name: home
+            mountPath: /home/jovyan/shared
+            subPath: _shared/2025-fall/courses/1546508
+            readOnly: true
+          - name: home
             mountPath: /home/jovyan/_shared/bcourses-1546508-readwrite
             subPath: _shared/2025-fall/courses/1546508
             readOnly: false
@@ -63,6 +71,14 @@ jupyterhub:
       ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7407 for details.
         extraVolumeMounts:
           - name: home
+            mountPath: /home/jovyan/shared-readwrite
+            subPath: _shared/2025-fall/courses/1546508
+            readOnly: false
+          - name: home
+            mountPath: /home/jovyan/shared
+            subPath: _shared/2025-fall/courses/1546508
+            readOnly: true
+          - name: home
             mountPath: /home/jovyan/_shared/bcourses-1546508-readwrite
             subPath: _shared/2025-fall/courses/1546508
             readOnly: false
@@ -78,6 +94,10 @@ jupyterhub:
       ## Course Name: bcourses-1546508 Bcourses ID: 1546508 End Date: 01/01/2026
       ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7407 for details.
         extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/shared
+            subPath: _shared/2025-fall/courses/1546508
+            readOnly: true
           - name: home
             mountPath: /home/jovyan/_shared/bcourses-1546508
             subPath: _shared/2025-fall/courses/1546508
