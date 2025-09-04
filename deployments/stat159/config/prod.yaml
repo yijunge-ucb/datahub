@@ -53,8 +53,16 @@ jupyterhub:
             mountPath: /home/jovyan/_shared/bcourses-1524699
             subPath: _shared/2025-fall/courses/1524699
             readOnly: true
-      course::1546508::enrollment_type::ta:
+      course::1546508::enrollment_type::teacher:
         extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/shared-readwrite
+            subPath: _shared/2025-fall/courses/1546508
+            readOnly: false
+          - name: home
+            mountPath: /home/jovyan/shared
+            subPath: _shared/2025-fall/courses/1546508
+            readOnly: true
           - name: home
             mountPath: /home/jovyan/_shared/bcourses-1546508-readwrite
             subPath: _shared/2025-fall/courses/1546508
@@ -67,8 +75,16 @@ jupyterhub:
             mountPath: /srv/conda/envs/shared
             subPath: conda_shared/1546508
             readOnly: false
-      course::1546508::enrollment_type::teacher:
+      course::1546508::enrollment_type::ta:
         extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/shared-readwrite
+            subPath: _shared/2025-fall/courses/1546508
+            readOnly: false
+          - name: home
+            mountPath: /home/jovyan/shared
+            subPath: _shared/2025-fall/courses/1546508
+            readOnly: true
           - name: home
             mountPath: /home/jovyan/_shared/bcourses-1546508-readwrite
             subPath: _shared/2025-fall/courses/1546508
@@ -83,6 +99,10 @@ jupyterhub:
             readOnly: false
       course::1546508::enrollment_type::student:
         extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/shared
+            subPath: _shared/2025-fall/courses/1546508
+            readOnly: true
           - name: home
             mountPath: /home/jovyan/_shared/bcourses-1546508
             subPath: _shared/2025-fall/courses/1546508
