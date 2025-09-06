@@ -69,8 +69,9 @@ jupyterhub:
         allow_all: False
         allowed_groups:
           # CDSS Discovery 2025 Spring
-          # https://bcourses.berkeley.edu/courses/1543936
-          - "course::1543936"
+          #- "course::1543936"
+          # CDSS Discovery 2025 Fall
+          - "course::1548579"
           # DataHub staff
           - "course::1524699::group::all-admins"
           # People who want to see what the hub can do
