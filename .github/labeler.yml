@@ -88,6 +88,8 @@ node-placeholder-scaler:
   - 'deployments/astro/**'
 'hub: biology':
   - 'deployments/biology/**'
+'hub: cdss-discovery':
+  - 'deployments/cdss-discovery/**'
 'hub: cee':
   - 'deployments/cee/**'
 'hub: data100':
