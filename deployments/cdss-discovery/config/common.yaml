@@ -71,7 +71,7 @@ jupyterhub:
           # CDSS Discovery 2025 Spring
           #- "course::1543936"
           # CDSS Discovery 2025 Fall
-          - "course::1548579"
+          - "course::1549326"
           # DataHub staff
           - "course::1524699::group::all-admins"
           # People who want to see what the hub can do
