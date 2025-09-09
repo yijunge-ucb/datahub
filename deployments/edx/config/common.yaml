@@ -3,6 +3,10 @@ nfsPVC:
   nfs:
     serverIP: 10.128.0.62
 jupyterhub:
+  ingress:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+
   scheduling:
     userScheduler:
       enabled: true

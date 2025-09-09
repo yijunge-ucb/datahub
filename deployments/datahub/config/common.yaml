@@ -11,6 +11,9 @@ etcGitConfig:
       useHttpPath = true
 
 jupyterhub:
+  ingress:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
   scheduling:
     userScheduler:
       nodeSelector:

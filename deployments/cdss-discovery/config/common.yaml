@@ -11,6 +11,14 @@ node-placholder:
     create: false
 
 jupyterhub:
+  # Nautilus uses haproxy for ingress
+  ingress:
+    enabled: true
+    ingressClassName: haproxy
+    annotations:
+      cert-manager.io/issuer: letsencrypt
+    pathSuffix: ''
+
   scheduling:
     podPriority:
       enabled: false
@@ -68,8 +76,6 @@ jupyterhub:
       OAuthenticator:
         allow_all: False
         allowed_groups:
-          # CDSS Discovery 2025 Spring
-          #- "course::1543936"
           # CDSS Discovery 2025 Fall
           - "course::1549326"
           # CDSS Discovery 2025 Fall Partners
@@ -94,15 +100,6 @@ jupyterhub:
         # this role will be assigned to...
         groups:
           - course::1524699::group::all-admins
-
-  # Nautilus uses haproxy for ingress
-  ingress:
-    enabled: true
-    ingressClassName: haproxy
-    annotations:
-      cert-manager.io/issuer: letsencrypt
-      cert-manager.io/cluster-issuer: null
-    pathSuffix: ''
 
   singleuser:
     image:
@@ -132,18 +129,18 @@ jupyterhub:
           - 'key': 'nvidia.com/gpu.product'
             'operator': 'In'
             'values': [
-              "NVIDIA-GeForce-RTX-4090",
-              "NVIDIA-L40",
-              "NVIDIA-RTX-A6000",
-              "NVIDIA-GeForce-RTX-3090",
-              "NVIDIA-A40",
-              "NVIDIA-RTX-A5000",
-              "NVIDIA-GeForce-RTX-2080-Ti",
-              "NVIDIA-TITAN-RTX",
               "NVIDIA-A10",
-              "NVIDIA-RTX-A4000",
+              "NVIDIA-GeForce-GTX-1080-Ti",
+              "NVIDIA-GeForce-RTX-2080-Ti",
+              "NVIDIA-GeForce-RTX-3090",
+              "NVIDIA-GeForce-RTX-4090",
               "NVIDIA-L4",
-              "NVIDIA-GeForce-GTX-1080-Ti"
+              "NVIDIA-L40",
+              "NVIDIA-RTX-A4000",
+              "NVIDIA-RTX-A5000",
+              "NVIDIA-TITAN-RTX",
+              "Tesla-V100-SXM2-32GB"
+
             ]
     cloudMetadata:
       blockWithIptables: false
