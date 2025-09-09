@@ -99,7 +99,7 @@ jupyterhub:
     ingressClassName: haproxy
     annotations:
       cert-manager.io/issuer: letsencrypt
-      cert-manager.io/cluster-issuer: null
+      cert-manager.io/cluster-issuer: ""
     pathSuffix: ''
 
   singleuser:
