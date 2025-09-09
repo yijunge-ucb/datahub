@@ -14,6 +14,10 @@ jupyterhub:
     timeout: 1800
     # No pods over 12h long, no workshop is gonna be more than that :)
     maxAge: 43200
+  ingress:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+
   scheduling:
     userScheduler:
       nodeSelector:

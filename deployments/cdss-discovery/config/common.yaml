@@ -11,6 +11,14 @@ node-placholder:
     create: false
 
 jupyterhub:
+  # Nautilus uses haproxy for ingress
+  ingress:
+    enabled: true
+    ingressClassName: haproxy
+    annotations:
+      cert-manager.io/issuer: letsencrypt
+    pathSuffix: ''
+
   scheduling:
     podPriority:
       enabled: false
@@ -92,15 +100,6 @@ jupyterhub:
         # this role will be assigned to...
         groups:
           - course::1524699::group::all-admins
-
-  # Nautilus uses haproxy for ingress
-  ingress:
-    enabled: true
-    ingressClassName: haproxy
-    annotations:
-      cert-manager.io/issuer: letsencrypt
-      cert-manager.io/cluster-issuer: ""
-    pathSuffix: ''
 
   singleuser:
     image:
