@@ -13,6 +13,10 @@ jupyterhub:
           - name: home
             mountPath: /srv/homes
 
+  ingress:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+
   scheduling:
     userScheduler:
       nodeSelector:

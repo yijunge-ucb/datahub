@@ -4,6 +4,10 @@ nfsPVC:
     serverIP: 10.240.85.114
 
 jupyterhub:
+  ingress:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+
   scheduling:
     userScheduler:
       nodeSelector:
