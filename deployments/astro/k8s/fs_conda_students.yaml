@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-astro-conda-stud-staging
+spec:
+  capacity:
+    storage: 100G
+  accessModes:
+  - ReadWriteMany
+  claimRef:
+    namespace: astro-staging
+    name: pvc-astro-conda-stud-staging
+  nfs:
+    path: /shares/astro/staging
+    server: 10.185.238.42
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-astro-conda-stud-staging
+  namespace: astro-staging
+spec:
+  accessModes:
+  - ReadWriteMany
+  storageClassName: "" 
+  resources:
+    requests:
+      storage: 100G
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-astro-conda-stud-prod
+spec:
+  capacity:
+    storage: 100G
+  accessModes:
+  - ReadWriteMany
+  claimRef:
+    namespace: astro-prod
+    name: pvc-astro-conda-stud-prod
+  nfs:
+    path: /shares/astro/prod
+    server: 10.185.238.42
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-astro-conda-stud-prod
+  namespace: astro-prod
+spec:
+  accessModes:
+  - ReadWriteMany
+  storageClassName: "" 
+  resources:
+    requests:
+      storage: 100G
