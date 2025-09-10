@@ -17,3 +17,34 @@ jupyterhub:
       - secretName: tls-cert
         hosts:
           - astro-staging.datahub.berkeley.edu
+
+  singleuser:
+    storage:
+      extraVolumes:
+        - name: conda-shared-instr-staging
+          persistentVolumeClaim:
+            claimName: pvc-astro-conda-instr-staging
+        - name: conda-shared-stud-staging
+          persistentVolumeClaim:
+            claimName: pvc-astro-conda-stud-staging
+
+  custom:
+    group_profiles:
+      course::1548766::enrollment_type::teacher:
+        extraVolumeMounts:
+          - name: conda-shared-instr-staging
+            mountPath: /srv/conda/envs/shared
+            subPath: conda_shared/1548766
+            readOnly: false
+      course::1548766::enrollment_type::ta:
+        extraVolumeMounts:
+          - name: conda-shared-instr-staging
+            mountPath: /srv/conda/envs/shared
+            subPath: conda_shared/1548766
+            readOnly: false
+      course::1548766::enrollment_type::student:
+        extraVolumeMounts:
+          - name: conda-shared-stud-staging
+            mountPath: /srv/conda/envs/shared
+            subPath: conda_shared/1548766
+            readOnly: true
