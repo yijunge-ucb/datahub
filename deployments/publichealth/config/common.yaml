@@ -65,6 +65,18 @@ jupyterhub:
         groups:
           - course::1545903::enrollment_type::teacher
           - course::1545903::enrollment_type::ta
+      course-staff-1547200:
+        ## Course: Public Health 142 Bcourses ID: 1547200 End Date: 12/31/2025 
+        ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7512 for more details.
+        description: Enable course staff to view and access servers.
+        scopes:
+          - admin-ui
+          - list:users!group=course::1547200
+          - admin:servers!group=course::1547200
+          - access:servers!group=course::1547200
+        groups:
+          - course::1547200::enrollment_type::teacher
+          - course::1547200::enrollment_type::ta
 
       # Template for enabling elevated privileges for course staff. Replace `bcoursesid` with the actual id for the course shared in the GiHub issue
       # PHW 142, Semester/Year, #https://github.com/berkeley-dsep-infra/datahub/issues/6685
