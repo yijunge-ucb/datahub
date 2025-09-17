@@ -4,6 +4,8 @@ nfsPVC:
     serverIP: 10.185.238.42
 
 jupyterhub:
+  debug:
+    enabled: true
   ingress:
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
@@ -16,8 +18,14 @@ jupyterhub:
     chp:
       nodeSelector:
         hub.jupyter.org/pool-name: core-pool-2024-05-08
+      resources:
+        limits:
+          memory: 4Gi
 
   hub:
+    resources:
+      limits:
+        memory: 4Gi
     nodeSelector:
       hub.jupyter.org/pool-name: core-pool-2024-05-08
     config:
