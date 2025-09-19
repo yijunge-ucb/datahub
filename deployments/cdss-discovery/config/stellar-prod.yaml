@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: 2025-fall-stellar
+  namespace: cdss-discovery-prod
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1126Gi # 1.1T
+  storageClassName: rook-cephfs
