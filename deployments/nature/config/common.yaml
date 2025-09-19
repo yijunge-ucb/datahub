@@ -21,6 +21,10 @@ jupyterhub:
       resources:
         limits:
           memory: 4Gi
+      image:
+        tag: pr598
+      extraEnv:
+        DEBUG: "http-proxy-3:ws-incoming"
 
   hub:
     resources:
