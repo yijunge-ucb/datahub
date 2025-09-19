@@ -22,6 +22,7 @@ jupyterhub:
         limits:
           memory: 4Gi
       image:
+        name: ghcr.io/minrk/configurable-http-proxy
         tag: pr598
       extraEnv:
         DEBUG: "http-proxy-3:ws-incoming"
