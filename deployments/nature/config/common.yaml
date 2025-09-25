@@ -21,9 +21,6 @@ jupyterhub:
       resources:
         limits:
           memory: 4Gi
-      image:
-        name: ghcr.io/minrk/configurable-http-proxy
-        tag: pr598
       extraEnv:
         DEBUG: "http-proxy-3:ws-incoming"
 
@@ -57,8 +54,8 @@ jupyterhub:
         data:
           FileContentsManager:
             always_delete_dir: true
-          YDocExtension:
-            disable_rtc: true
+          #YDocExtension:
+            #disable_rtc: true
       remove-exporters:
         mountPath: /etc/jupyter/jupyter_notebook_config.py
         stringData: |
