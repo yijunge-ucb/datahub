@@ -379,7 +379,7 @@ jupyterhub:
             if override.get('admin', False):
               self.user.admin = override['admin']
           
-          def parse_config_for_bcourses_shared(self):
+          def parse_bcourses_shared(self):
             # custom.bcourses_shared
             # Example:
             ################################################################################
@@ -403,8 +403,10 @@ jupyterhub:
             custom_bcourses_shared = z2jh.get_config("custom.bcourses_shared", {})
             target_readwrite_groups = []
             target_readonly_groups = []
+            bcourse_to_semester_mapping = []
             for semester, courses in custom_bcourses_shared.items():
               for bcourse_id in courses:
+                bcourse_to_semester_mapping[bcourse_id] = semester
                 target_readwrite_groups += [
                   f"course::{bcourse_id}::enrollment_type::teacher:",
                   f"course:{bcourse_id}:1546508::enrollment_type::ta:",
@@ -417,6 +419,7 @@ jupyterhub:
             for group in self.user.groups:
               if group.name in target_readwrite_groups:
                 bcourse_id = group.name.split("::")[1]
+                term = bcourse_to_semester_mapping.get(bcourse_id)
                 self.log.warning(
                   f"adding read-write bCourses shared volume for {bcourse_id}"
                 )
@@ -424,19 +427,20 @@ jupyterhub:
                   {
                     "name": "home",
                     "mountPath": f"/home/jovyan/_shared/bcourses-{bcourse_id}-readwrite",
-                    "subPath": f"_shared/{semester}/courses/{bcourse_id}",
+                    "subPath": f"_shared/{term}/courses/{bcourse_id}",
                     "readOnly": False,
                   },
                   {
                     "name": "home",
                     "mountPath": f"/home/jovyan/_shared/bcourses-{bcourse_id}",
-                    "subPath": f"_shared/{semester}/courses/{bcourse_id}",
+                    "subPath": f"_shared/{term}/courses/{bcourse_id}",
                     "readOnly": True,
                   },
                 ]
 
               if group.name in target_readonly_groups:
                 bcourse_id = group.name.split("::")[1]
+                term = bcourse_to_semester_mapping.get(bcourse_id)
                 self.log.warning(
                   f"adding read-only bCourses shared volume for {bcourse_id}"
                 )
@@ -444,7 +448,7 @@ jupyterhub:
                   {
                     "name": "home",
                     "mountPath": f"/home/jovyan/_shared/bcourses-{bcourse_id}",
-                    "subPath": f"_shared/{semester}/courses/{bcourse_id}",
+                    "subPath": f"_shared/{term}/courses/{bcourse_id}",
                     "readOnly": True,
                   }
                 ]
@@ -480,8 +484,8 @@ jupyterhub:
             custom_conda_shared = z2jh.get_config("custom.conda_shared", [])
             target_conda_readwrite_groups = []
             target_conda_readonly_groups = []
-            target_hubs = {}
-            target_mem = {}
+            bcourse_to_hub_mapping = {}
+            bcourse_to_mem_mapping = {}
             for entry in custom_conda_shared:
               bcourse_id, hub_name, new_mem = [x.strip() for x in entry.split(",")]
               target_conda_readwrite_groups += [
@@ -491,8 +495,9 @@ jupyterhub:
               target_conda_readonly_groups += [
                 f"course::{bcourse_id}::enrollment_type::student:"
               ]
-              target_hubs[bcourse_id] = hub_name
-              target_mem[bcourse_id] = new_mem
+              bcourse_to_hub_mapping[bcourse_id] = hub_name
+              bcourse_to_mem_mapping[bcourse_id] = new_mem
+              
 
             conda_shared_volume_mounts = []
             conda_shared_volumes = []
@@ -501,8 +506,8 @@ jupyterhub:
             for group in self.user.groups:
               if group.name in target_conda_readwrite_groups:
                 bcourse_id = group.name.split("::")[1]
-                hub_name = target_hubs.get(bcourse_id)
-                new_mem = target_mem.get(bcourse_id)
+                hub_name = bcourse_to_hub_mapping.get(bcourse_id)
+                new_mem = bcourse_to_mem_mapping.get(bcourse_id)
                 self.log.warning(f"adding read-write conda shared volume for {bcourse_id}")
                 conda_shared_volume_mounts += [
                   {
@@ -526,7 +531,7 @@ jupyterhub:
 
               if group.name in target_conda_readonly_groups:
                 bcourse_id = group.name.split("::")[1]
-                hub_name = target_hubs.get(bcourse_id)
+                hub_name = bcourse_to_hub_mapping.get(bcourse_id)
                 self.log.warning(f"adding read-only conda shared volume for {bcourse_id}")
                 conda_shared_volume_mounts += [
                   {
@@ -563,7 +568,7 @@ jupyterhub:
                 break
 
             # custom.bcourses_shared
-            self.parse_config_for_bcourses_shared()
+            self.parse_bcourses_shared()
 
             # custom.conda_shared
             self.parse_conda_shared()
