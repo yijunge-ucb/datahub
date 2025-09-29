@@ -378,6 +378,153 @@ jupyterhub:
               self.mem_guarantee = override['mem_guarantee']
             if override.get('admin', False):
               self.user.admin = override['admin']
+          
+          def parse_config_for_bcourses_shared(self):
+            # custom.bcourses_shared
+            # Example:
+            ################################################################################
+            # custom:
+            #   bcourses_shared:
+            #     2025-fall:
+            #       - "1234567"
+            #
+            # This will be translated into extraVolumeMounts like:
+            ################################################################################
+            # extraVolumeMounts:
+            #   - name: home
+            #     mountPath: /home/jovyan/_shared/bcourses-1234567-readwrite
+            #     subPath: _shared/2025-fall/courses/1234567
+            #     readOnly: false
+            #   - name: home
+            #     mountPath: /home/jovyan/_shared/bcourses-1234567
+            #     subPath: _shared/2025-fall/courses/1234567
+            #     readOnly: true
+
+            custom_bcourses_shared = z2jh.get_config('custom.bcourses_shared', {})
+            target_readwrite_groups = []
+            target_readonly_groups = []
+            for semester, courses in custom_bcourses_shared.items():
+              for bcourse_id in courses:
+                target_readwrite_groups += [f'course::{bcourse_id}::enrollment_type::teacher:', f'course:{bcourse_id}:1546508::enrollment_type::ta:']
+                target_readonly_groups += [f'course::{bcourse_id}::enrollment_type::student:']
+            
+            bcourses_shared_volume_mounts = []
+            for group in self.user.groups:
+              if group.name in target_readwrite_groups:
+                bcourse_id = group.name.split('::')[1]
+                self.log.warning(f'adding read-write bCourses shared volume for {bcourse_id}')
+                bcourses_shared_volume_mounts += [{
+                  'name': 'home',
+                  'mountPath': f'/home/jovyan/_shared/bcourses-{bcourse_id}-readwrite',
+                  'subPath': f'_shared/{semester}/courses/{bcourse_id}',
+                  'readOnly': False,
+                }, {
+                  'name': 'home',
+                  'mountPath': f'/home/jovyan/_shared/bcourses-{bcourse_id}',
+                  'subPath': f'_shared/{semester}/courses/{bcourse_id}',
+                  'readOnly': True,
+                }]
+
+
+              if group.name in target_readonly_groups:
+                bcourse_id = group.name.split('::')[1]
+                self.log.warning(f'adding read-only bCourses shared volume for {bcourse_id}')
+                bcourses_shared_volume_mounts += [{
+                  'name': 'home',
+                  'mountPath': f'/home/jovyan/_shared/bcourses-{bcourse_id}',
+                  'subPath': f'_shared/{semester}/courses/{bcourse_id}',
+                  'readOnly': True,
+                }]
+            
+            self.volume_mounts += bcourses_shared_volume_mounts
+
+          
+          def parse_conda_shared(self):
+            # custom.conda_shared
+            # Example:      
+            ################################################################################
+            # custom:
+            #   conda_shared:
+            #     - "1234567, stat159, 8G"
+            #
+            # This will be translated into extraVolumeMounts, mem_limit, mem_guarantee like:
+            ################################################################################
+            # course::1234567::enrollment_type::teacher:
+            #   extraVolumeMounts:
+            #     - name: conda-shared-instr-{prod_or_staging}
+            #       mountPath: /srv/conda/envs/shared
+            #       subPath: conda_shared/1234567
+            #       readOnly: false
+            #   mem_limit: 8G
+            #   mem_guarantee: 8G
+            #
+            # And extraVolumes:
+            ################################################################################
+            # extraVolumes:
+            #   - name: conda-shared-instr-{prod_or_staging}
+            #     persistentVolumeClaim:
+            #       claimName: pvc-stat159-conda-instr-{prod_or_staging}
+            
+            custom_conda_shared = z2jh.get_config('custom.conda_shared', [])
+            target_conda_readwrite_groups = []
+            target_conda_readonly_groups = []
+            target_hubs = {}
+            target_mem = {}
+            for entry in custom_conda_shared:
+              bcourse_id, hub_name, new_mem = [x.strip() for x in entry.split(',')]
+              target_conda_readwrite_groups += [f'course::{bcourse_id}::enrollment_type::teacher:', f'course:{bcourse_id}:1546508::enrollment_type::ta:']
+              target_conda_readonly_groups += [f'course::{bcourse_id}::enrollment_type::student:']
+              target_hubs[bcourse_id] = hub_name
+              target_mem[bcourse_id] = new_mem
+
+            
+            conda_shared_volume_mounts = []
+            conda_shared_volumes = []
+            namepsace = os.environ.get('POD_NAMESPACE')
+            prod_or_staging = namespace.split('-')[-1]
+            for group in self.user.groups:
+              if group.name in target_conda_readwrite_groups:
+                bcourse_id = group.name.split('::')[1]
+                hub_name = target_hubs.get(bcourse_id)
+                new_mem = target_mem.get(bcourse_id)
+                self.log.warning(f'adding read-write conda shared volume for {bcourse_id}')
+                conda_shared_volume_mounts += [{
+                  'name': f'conda-shared-instr-{prod_or_staging}',
+                  'mountPath': f'/srv/conda/envs/shared',
+                  'subPath': f'conda_shared/{bcourse_id}',
+                  'readOnly': False,
+                }]
+                conda_shared_volumes += [{
+                  'name': f'conda-shared-instr-{prod_or_staging}',
+                  'persistentVolumeClaim': {
+                    'claimName': f'pvc-{hub_name}-conda-instr-{prod_or_staging}',
+                  }
+                }]
+                # set mem limits for shared conda
+                if mem_cmp(new_mem, self.mem_limit) == 1:
+                  self.mem_limit = new_mem
+
+
+              if group.name in target_conda_readonly_groups:
+                bcourse_id = group.name.split('::')[1]
+                hub_name = target_hubs.get(bcourse_id)
+                new_mem = target_mem.get(bcourse_id)
+                self.log.warning(f'adding read-only conda shared volume for {bcourse_id}')
+                conda_shared_volume_mounts += [{
+                  'name': f'conda-shared-stud-{prod_or_staging}',
+                  'mountPath': f'/srv/conda/envs/shared',
+                  'subPath': f'conda_shared/{bcourse_id}',
+                  'readOnly': True,
+                }]
+                conda_shared_volumes += [{
+                  'name': f'conda-shared-stud-{prod_or_staging}',
+                  'persistentVolumeClaim': {
+                    'claimName': f'pvc-{hub_name}-conda-stud-{prod_or_staging}',
+                  }
+                }]
+            
+            self.volume_mounts += conda_shared_volume_mounts
+            self.volumes += conda_shared_volumes
 
           async def start(self):
             # delay if testing, see
@@ -392,6 +539,12 @@ jupyterhub:
                 self.mem_limit = attr
                 self.mem_guarantee = attr
                 break
+
+            # custom.bcourses_shared
+            self.parse_config_for_bcourses_shared()
+            
+            # custom.conda_shared
+            self.parse_conda_shared()
 
             # custom.profiles
             # Apply overrides for specific users.
