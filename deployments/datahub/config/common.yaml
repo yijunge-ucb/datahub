@@ -78,6 +78,18 @@ jupyterhub:
         groups:
           - course::1547593::enrollment_type::teacher
           - course::1547593::enrollment_type::ta
+      course-staff-1547654:
+        ## Course: ENERES 131: Data, Environment and Society Bcourses ID: 1547654 End Date: 01/01/2026 
+        ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7605 for more details.
+        description: Enable course staff to view and access servers.
+        scopes:
+          - admin-ui
+          - list:users!group=course::1547654
+          - admin:servers!group=course::1547654
+          - access:servers!group=course::1547654
+        groups:
+          - course::1547654::enrollment_type::teacher
+          - course::1547654::enrollment_type::ta
 
     nodeSelector:
       hub.jupyter.org/pool-name: core-pool-2024-05-08
