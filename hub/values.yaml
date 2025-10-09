@@ -380,26 +380,30 @@ jupyterhub:
               self.user.admin = override['admin']
           
           def parse_bcourses_shared(self):
-            # custom.bcourses_shared
-            # Example:
-            ################################################################################
-            # custom:
-            #   bcourses_shared:
-            #     2025-fall:
-            #       - "course::1234567"
-            #
-            # This will be translated into extraVolumeMounts like:
-            ################################################################################
-            # extraVolumeMounts:
-            #   - name: home
-            #     mountPath: /home/jovyan/_shared/bcourses-1234567-readwrite
-            #     subPath: _shared/2025-fall/courses/1234567
-            #     readOnly: false
-            #   - name: home
-            #     mountPath: /home/jovyan/_shared/bcourses-1234567
-            #     subPath: _shared/2025-fall/courses/1234567
-            #     readOnly: true
-
+            """
+            Parses the custom.bcourses_shared configuration and sets up volume mounts 
+            for shared bCourses directories based on the user's group memberships.
+        
+            This method:
+            - Reads the `custom.bcourses_shared` configuration, which maps academic terms 
+              (e.g., '2025-fall') to lists of bCourses group identifiers (e.g., 'course::1234567').
+            - Builds mappings between course IDs and terms, and determines which groups 
+              should have read-write or read-only access based on enrollment types.
+            - For each group the current user belongs to, adds appropriate volume mounts 
+              to `self.volume_mounts`, either read-write or read-only, depending on their role.
+        
+            Example config (`custom.bcourses_shared`):
+                custom:
+                  bcourses_shared:
+                    2025-fall:
+                      - "course::1234567"
+        
+            Example generated mounts:
+                - RW: /home/jovyan/_shared/bcourses-1234567-readwrite (teacher/TA)
+                - RO: /home/jovyan/_shared/bcourses-1234567 (students)
+        
+            """
+            
             custom_bcourses_shared = z2jh.get_config("custom.bcourses_shared", {})
             target_readwrite_groups = []
             target_readonly_groups = []
@@ -458,33 +462,38 @@ jupyterhub:
   
 
           def parse_conda_shared(self):
-            # custom.conda_shared
-            # Example:
-            ################################################################################
-            # custom:
-            #   conda_shared:
-            #     - bcourse_group: "course::1234567"
-            #       staff_overrides:
-            #         mem_limit: 8G
-            #         mem_guarantee: 8G
-            #
-            # This will be translated into extraVolumeMounts, mem_limit, mem_guarantee like:
-            ################################################################################
-            # course::1234567::enrollment_type::teacher:
-            #   extraVolumeMounts:
-            #     - name: conda-shared-instr-{prod_or_staging}
-            #       mountPath: /srv/conda/envs/shared
-            #       subPath: conda_shared/1234567
-            #       readOnly: false
-            #   mem_limit: 8G
-            #   mem_guarantee: 8G
-            #
-            # And extraVolumes:
-            ################################################################################
-            # extraVolumes:
-            #   - name: conda-shared-instr-{prod_or_staging}
-            #     persistentVolumeClaim:
-            #       claimName: pvc-stat159-conda-instr-{prod_or_staging}
+            """
+            Parses the `custom.conda_shared` configuration to configure shared Conda 
+            environments for courses, assigning appropriate volume mounts and memory 
+            overrides based on user roles (e.g., instructor/TA or student).
+        
+            This method:
+            - Reads a list of course-specific Conda sharing rules from the 
+              `custom.conda_shared` config key.
+            - Determines which user groups (teachers, TAs, students) should receive 
+              read-write or read-only access to a shared Conda environment for a 
+              particular course.
+            - Mounts the appropriate shared Conda volumes for the user, based on their 
+              enrollment role.
+            - Optionally increases the user's memory limits (`mem_limit` and 
+              `mem_guarantee`) if higher overrides are specified for staff in the config.
+        
+            Example config (`custom.conda_shared`):
+                custom:
+                  conda_shared:
+                    - bcourse_group: "course::1234567"
+                      staff_overrides:
+                        mem_limit: 8G
+                        mem_guarantee: 8G
+        
+            Resulting behavior:
+            - Teachers and TAs get read-write access to a course-specific Conda env mounted at:
+                /srv/conda/envs/shared
+              with volumes named like `conda-shared-instr-{env}`
+            - Students get read-only access via volumes named like `conda-shared-stud-{env}`
+            - Memory limits are updated for staff if configured values exceed current values.
+                
+            """
 
             custom_conda_shared = z2jh.get_config("custom.conda_shared", [])
             target_conda_readwrite_groups = []
