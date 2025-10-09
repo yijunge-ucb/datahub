@@ -245,14 +245,17 @@ Instructors often request shared directories for collaboration with TAs and stud
             - "course::1111111"
     ```
 
-  This will generate Mounts 
+  This will generate the following mounts:
+
   for teachers and TAs:
+
   ```yaml
     - /home/jovyan/_shared/bcourses-1234567-readwrite 
     - /home/jovyan/_shared/bcourses-1234567
   ```
 
   for students
+
   ```yaml
     - /home/jovyan/_shared/bcourses-1234567
   ```
@@ -260,13 +263,17 @@ Instructors often request shared directories for collaboration with TAs and stud
 ## Shared Conda Environment Volume Mounts 
 
 Instructors may request shared Conda environments for installing custom packages.
+
 - **Teachers and TAs**: Have **read-write** access to the shared Conda environment.
 - **Students**: Have **read-only** access.
+
+### Configuration steps: 
 
 1.  Edit `deployments/{deployment}/config/common.yaml`.
 2.  Duplicate an existing stanza, or create a new one under
     `jupyterhub.custom.conda_shared` by inserting yaml of the
     form:
+
     ``` yaml  
     jupyterhub:
       custom:
@@ -280,10 +287,14 @@ Instructors may request shared Conda environments for installing custom packages
               mem_limit: 8G
               mem_guarantee: 8G
     ```
-    This will generate mounts 
+
+    This will generate the following mount:
+
     ```yaml
       /srv/conda/envs/shared
     ```
+    In addition, the memory guarantee and limit for teachers and TAs will be 
+    increased to 8 GB, if their current allocation is less than that.
 
 ## Housekeeping
 
