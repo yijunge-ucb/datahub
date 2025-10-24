@@ -87,14 +87,17 @@ jupyterhub:
       # Unset NotebookApp from hub/values. Necessary for recent lab versions.
       JUPYTERHUB_SINGLEUSER_APP: "jupyter_server.serverapp.ServerApp"
       JUPYTER_PATH: "/srv/conda/envs/shared/share/jupyter"
-      # Set BASE_URL for MyST
-      BASE_URL: "/user/{username}/proxy/8000"
     #cmd:
     #  - jupyterhub-singleuser
     #  - --LabApp.collaborative=true
     #  # https://jupyterlab-realtime-collaboration.readthedocs.io/en/latest/configuration.html#configuration
     #  - --YDocExtension.ystore_class=tmpystore.TmpYStore
     extraFiles:
+      base-url:
+        mountPath: /etc/profile.d/00-base-url.sh
+        stringData: |
+          #!/bin/bash
+          export BASE_URL="/user/${JUPYTERHUB_USER}/proxy/8000"
       # DH-216
       remove-exporters:
         mountPath: /etc/jupyter/jupyter_notebook_config.py
