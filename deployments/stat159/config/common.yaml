@@ -88,7 +88,7 @@ jupyterhub:
       JUPYTERHUB_SINGLEUSER_APP: "jupyter_server.serverapp.ServerApp"
       JUPYTER_PATH: "/srv/conda/envs/shared/share/jupyter"
       # For myst development
-      BASE_URL: "/user/{unescaped_username}/proxy/8000"
+      #BASE_URL: "/user/{unescaped_username}/proxy/8000"
     #cmd:
     #  - jupyterhub-singleuser
     #  - --LabApp.collaborative=true
