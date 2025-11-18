@@ -85,6 +85,9 @@ prometheus:
     metricLabelsAllowlist:
       - pods=[app,component,hub.jupyter.org/username,app.kubernetes.io/component]
       - nodes=[*]
+      - services=[app, component]
+    metricAnnotationsAllowList:
+      - pods=[hub.jupyter.org/username]
   server:
     nodeSelector:
       hub.jupyter.org/pool-name: prometheus-pool
