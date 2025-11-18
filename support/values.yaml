@@ -88,6 +88,7 @@ prometheus:
       - services=[app, component]
     metricAnnotationsAllowList:
       - pods=[hub.jupyter.org/username]
+      
   server:
     nodeSelector:
       hub.jupyter.org/pool-name: prometheus-pool
