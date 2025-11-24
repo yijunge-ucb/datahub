@@ -93,7 +93,7 @@ jupyterhub:
         ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7395 for details.
         mem_limit: 5G
         mem_guarantee: 5G
-      course::1549276::enrollment_type::teacher:
+      course::1547008::enrollment_type::teacher:
       ## Course Name: bcourses-1549276 Bcourses ID: 1549276 End Date: 12/20/2025
       ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7665 for details.
         extraVolumeMounts:
@@ -101,7 +101,7 @@ jupyterhub:
             mountPath: /home/jovyan/_shared/bcourses-1549276-readwrite
             subPath: _shared/2025-fall/courses/1549276
             readOnly: false
-      course::1549276::enrollment_type::ta:
+      course::1547008::enrollment_type::ta:
       ## Course Name: bcourses-1549276 Bcourses ID: 1549276 End Date: 12/20/2025
       ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7665 for details.
         extraVolumeMounts:
@@ -109,7 +109,7 @@ jupyterhub:
             mountPath: /home/jovyan/_shared/bcourses-1549276-readwrite
             subPath: _shared/2025-fall/courses/1549276
             readOnly: false
-      course::1549276::enrollment_type::student:
+      course::1547008::enrollment_type::student:
       ## Course Name: bcourses-1549276 Bcourses ID: 1549276 End Date: 12/20/2025
       ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7665 for details.
         extraVolumeMounts:
