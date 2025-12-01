@@ -113,6 +113,15 @@ jupyterhub:
 
   singleuser:
     extraFiles:
+      # DH-596
+      jupyter-lab-overrides:
+        mountPath:  /srv/conda/share/jupyter/lab/settings/overrides.json
+        stringData:  |
+          {
+            "@jupyterlab/notebook-extension:tracker": {
+              "windowingMode": "defer"
+            }
+          }
       # DH-305
       remove-exporters:
         mountPath: /etc/jupyter/jupyter_notebook_config.py
