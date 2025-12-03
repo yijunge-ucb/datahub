@@ -258,4 +258,4 @@ jobs:
             echo "Deploying single-user image and hub config to ${deployment}"
             hubploy --verbose deploy --timeout 30m ${deployment} hub prod
             echo
-          done < <(python .github/scripts/determine-hub-deployments.py --ignore edx)
+          done < <(python .github/scripts/determine-hub-deployments.py --ignore edx cdss-discovery)
