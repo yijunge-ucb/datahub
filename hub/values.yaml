@@ -2,7 +2,9 @@ etcGitConfig:
   enabled: false
 nfsPVC:
   enabled: true
-
+  dirsizeReporter:
+    enabled: true
+    
 jupyterhub:
   prePuller:
     hook:
