@@ -303,27 +303,3 @@ jupyterhub:
         ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7656 for details.
         mem_limit: 4G
         mem_guarantee: 4G
-      course::1547593::enrollment_type::teacher:
-      ## Course Name: bcourses-1547593 Bcourses ID: 1547593 End Date: 12/12/2025
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7686 for details.
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1547593-readwrite
-            subPath: _shared/2025-spring/courses/1547593
-            readOnly: false
-      course::1547593::enrollment_type::ta:
-      ## Course Name: bcourses-1547593 Bcourses ID: 1547593 End Date: 12/12/2025
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7686 for details.
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1547593-readwrite
-            subPath: _shared/2025-spring/courses/1547593
-            readOnly: false
-      course::1547593::enrollment_type::student:
-      ## Course Name: bcourses-1547593 Bcourses ID: 1547593 End Date: 12/12/2025
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7686 for details.
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1547593-readonly
-            subPath: _shared/2025-spring/courses/1547593
-            readOnly: true
