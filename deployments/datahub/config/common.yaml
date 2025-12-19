@@ -275,11 +275,6 @@ jupyterhub:
             mountPath: /home/jovyan/_shared/bcourses-1548934-readonly
             subPath: _shared/2025-fall/courses/1548934
             readOnly: true
-      course::1547380:
-        ## Course Name: DEMOG 180: Social Networks Bcourses ID: 1547380 End Date: 12/20/2025
-        ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7554 for details.
-        mem_limit: 4G
-        mem_guarantee: 4G
       course::1546692:
         ## Course Name: Statistics and Data Science for Engineers Bcourses ID: 1546692 End Date: 12/19/2025
         ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7328 for details.
