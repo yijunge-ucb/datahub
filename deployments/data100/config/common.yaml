@@ -34,6 +34,9 @@ jupyterhub:
           # Data 100, Spring 2025
           # https://bcourses.berkeley.edu/courses/1541798
           - "course::1541798"
+          # Data 100, Summer 2025
+          # https://bcourses.berkeley.edu/courses/1545289
+          - "course::1545289"
           # Data 100, Fall 2025
           # https://bcourses.berkeley.edu/courses/1547854
           - "course::1547854"
