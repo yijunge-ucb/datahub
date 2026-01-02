@@ -168,6 +168,7 @@ def insert_or_update_group_profile(yaml_path: Path, course_id: str, course_name:
     new_block = (
         make_block("teacher", False) +
         make_block("ta", False) +
+        make_block("observer", True) +
         make_block("student", True)
     )
 
