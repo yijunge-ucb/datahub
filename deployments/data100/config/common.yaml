@@ -1,7 +1,7 @@
 nfsPVC:
   enabled: true
   nfs:
-    serverIP: 10.170.213.154
+    serverIP: 10.85.53.250
 
 jupyterhub:
   ingress:
