@@ -511,3 +511,154 @@ jupyterhub:
         c.KubeSpawner.environment.update({
           'PYTHON_POPCONTEST_STATSD_PREFIX': f'python_popcon.namespace.{pod_namespace}'
         })
+
+      05-profile-groups: |
+        # Re-assignes c.KubeSpawner.profile_list to a callable that filters the
+        # initial configuration of profile_list based on the user's github
+        # org/team membership as declared via "allowed_groups" read from
+        # profile_list profiles.
+        #
+        # This only has effect if:
+        #
+        # - GitHubOAuthenticator is used.
+        # - GitHubOAuthenticator.populate_teams_in_auth_state is True, that
+        #   requires Authenticator.enable_auth_state to be True as well.
+        # - The user is a normal user, and not "deployment-service-check".
+        #
+        from copy import deepcopy
+        from functools import partial
+        from textwrap import dedent
+        from tornado import web
+        from oauthenticator.github import GitHubOAuthenticator
+        from z2jh import get_config
+        from jupyterhub.orm import User as ORMUser
+        import urllib.parse
+
+
+        async def profile_list_allowed_groups_filter(original_profile_list, spawner):
+            if spawner.user.name == "deployment-service-check":
+                print("Ignoring allowed_groups check for deployment-service-check")
+                return original_profile_list
+
+            # User groups (case-insensitive)
+            user_groups = {g.name.casefold() for g in spawner.user.groups}
+
+            # Detect impersonation if handler is available (during spawn)
+            is_impersonating = False
+            impersonator_groups = set()
+            if hasattr(spawner, "handler") and getattr(spawner.handler, "current_user", None):
+                actual_username = spawner.handler.current_user.name
+                if actual_username != spawner.user.name:
+                    is_impersonating = True
+                    db = spawner.db
+                    impersonator = db.query(ORMUser).filter(ORMUser.name == actual_username).first()
+                    impersonator_groups = {g.name.casefold() for g in impersonator.groups}
+
+            # GitHub team support (optional)
+            if isinstance(spawner.authenticator, GitHubOAuthenticator):
+                auth_state = await spawner.user.get_auth_state()
+                if auth_state and "teams" in auth_state:
+                    user_groups |= {
+                        f'{team["organization"]["login"]}:{team["slug"]}'.casefold()
+                        for team in auth_state["teams"]
+                    }
+
+            print(f"User: {spawner.user.name}, Groups: {user_groups}")
+            if is_impersonating:
+                print(f"Impersonation detected: {actual_username} -> {spawner.user.name}")
+                print(f"Impersonator's groups: {impersonator_groups}")
+
+            allowed_profiles = []
+
+            for original_profile in original_profile_list:
+                profile = deepcopy(original_profile)
+                slug = profile.get("slug")
+                allowed_groups = {g.casefold() for g in profile.get("allowed_groups", [])}
+
+                # Filter profile_options (choices/unlisted)
+                if "profile_options" in profile:
+                    for _, po in profile["profile_options"].items():
+                        if "unlisted_choice" in po and "allowed_groups" in po["unlisted_choice"]:
+                            uc_groups = {g.casefold() for g in po["unlisted_choice"]["allowed_groups"]}
+                            if not (uc_groups & user_groups):
+                                del po["unlisted_choice"]
+
+                        if "choices" in po:
+                            filtered_choices = {}
+                            for choice_key, choice in po["choices"].items():
+                                if "allowed_groups" not in choice or (
+                                    set(g.casefold() for g in choice["allowed_groups"]) & user_groups
+                                ):
+                                    filtered_choices[choice_key] = choice
+                            po["choices"] = filtered_choices
+
+                # Determine access based on impersonation
+                if not allowed_groups:
+                    allowed_profiles.append(profile)
+                elif is_impersonating:
+                    for group in impersonator_groups:
+                        if group.startswith("course::") and "::enrollment_type::" in group:
+                            parts = group.split("::")
+                            if len(parts) >= 4 and parts[2] == "enrollment_type" and parts[3] in {"ta", "teacher"}:
+                                course_id = parts[1]
+                                student_group = f"course::{course_id}::enrollment_type::student".casefold()
+                                if student_group in allowed_groups:
+                                    allowed_profiles.append(profile)
+                                    break
+                else:
+                    if allowed_groups & user_groups:
+                        allowed_profiles.append(profile)
+
+            if not allowed_profiles:
+                error_msg = dedent(f"""
+                Your JupyterHub group membership is insufficient to launch any server profiles.
+
+                JupyterHub groups you are a member of are: {', '.join(user_groups)}.
+
+                If you are part of additional groups, log out and back in to refresh group membership.
+                """)
+                raise web.HTTPError(403, error_msg)
+            
+            # Handle preselected profile via URL query parameter
+            handler = getattr(spawner, 'handler', None)
+            try:
+                if handler and getattr(handler, 'request', None):
+                    # Parse top-level query params
+                    query = urllib.parse.parse_qs(handler.request.query)
+                    preselect = query.get('profile', [None])[0]
+
+                    # If not found, check inside `next` parameter (nbgitpuller case)
+                    if not preselect and 'next' in query:
+                        next_param = query['next'][0]
+                        # Unquote and parse again
+                        next_query = urllib.parse.urlparse(urllib.parse.unquote(next_param)).query
+                        next_params = urllib.parse.parse_qs(next_query)
+                        preselect = next_params.get('profile', [None])[0]
+
+                    # If we have a profile slug, try to mark it as default
+                    if preselect:
+                        found_match = False
+                        for profile in allowed_profiles:
+                            if profile.get('slug') == preselect:
+                                profile['default'] = True
+                                found_match = True
+                            else:
+                                profile.pop('default', None)
+                        if found_match:
+                            print(f"Preselected profile via ?profile={preselect}")
+                        else:
+                            print(f"No matching profile for ?profile={preselect}")
+
+            except Exception as e:
+                print(f"Error in preselect logic: {e}")
+
+            return allowed_profiles
+
+
+        # Attach the filter function if profile_list is configured
+        if c.KubeSpawner.profile_list:
+            c.KubeSpawner.profile_list = partial(
+                profile_list_allowed_groups_filter,
+                deepcopy(c.KubeSpawner.profile_list)
+            )
+
