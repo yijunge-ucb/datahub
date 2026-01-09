@@ -84,6 +84,198 @@ jupyterhub:
     memory:
       guarantee: 4G
       limit: 4G
+      
+    profileList:
+      - display_name: "Default Profile"
+        description: "This profile is for general users. It uses the default nature single user image, default CPU and memory."
+        default: true
+        slug: "default-profile"        
+        profile_options:
+          interface:
+            display_name: "Launching Interface"
+            description: "Select the interface to launch"
+            choices:
+              lab:
+                display_name: "JupyterLab"
+                kubespawner_override:
+                  default_url: "/lab"
+              notebook:
+                display_name: "Classic Notebook"
+                kubespawner_override:
+                  default_url: "/tree"
+              vscode:
+                display_name: "VSCode"
+                kubespawner_override:
+                  default_url: "/vscode"  
+
+
+      - display_name: "Profile for Course  Instructors and TAs"
+        description: "This profile is for the instructors and TAs in course ."
+        slug: "course- -instructors-tas"
+        allowed_groups:
+          - course:: ::enrollment_type::teacher
+          - course:: ::enrollment_type::ta
+        profile_options:
+          image:
+            display_name: "Docker Image"
+            description: "Select a Docker image (You can also enter a custom image below)"
+            choices:
+              nature:
+                display_name: "Nature Image"
+                kubespawner_override:
+                  image: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/nature-user-image:4efb67ce829b
+            unlisted_choice:
+              enabled: true
+              display_name: "Publicly Accessible Custom Image (e.g. quay.io/my-project/my-image:tag)"
+              display_name_in_choices: "Choose a Custom Image"
+              validation_regex: "^.+:.+$"
+              validation_message: "Must be a publicly available Docker image"
+              kubespawner_override:
+                image: "{value}"
+          memory:
+            display_name: "Memory"
+            description: "Select memory"
+            choices:
+              2G:
+                display_name: "2 GB"
+                kubespawner_override:
+                  mem_limit: 2G
+                  mem_guarantee: 2G
+              4G:
+                display_name: "4 GB"
+                kubespawner_override:
+                  mem_limit: 4G
+                  mem_guarantee: 4G
+              6G:
+                display_name: "6 GB"
+                kubespawner_override:
+                  mem_limit: 6G
+                  mem_guarantee: 6G
+              8G:
+                display_name: "8 GB"
+                kubespawner_override:
+                  mem_limit: 8G
+                  mem_guarantee: 8G
+          interface:
+            display_name: "Launching Interface"
+            description: "Select the interface to launch"
+            choices:
+              lab:
+                display_name: "JupyterLab"
+                kubespawner_override:
+                  default_url: "/lab"
+              notebook:
+                display_name: "Classic Notebook"
+                kubespawner_override:
+                  default_url: "/tree"
+              vscode:
+                display_name: "VSCode"
+                kubespawner_override:
+                  default_url: "/vscode"  
+
+      - display_name: "Profile for Course  Students and Observers"
+        description: "This profile is for the students in course ."
+        slug: "course- -students"
+        allowed_groups:
+          - course:: ::enrollment_type::student
+          - course:: ::enrollment_type::observer
+        profile_options:
+          image:
+            display_name: "Docker Image"
+            description: "Select a Docker image (You can also enter a custom image below)"
+            choices:
+              nature:
+                display_name: "Nature Image"
+                kubespawner_override:
+                  image: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/nature-user-image:4efb67ce829b
+            unlisted_choice:
+              enabled: true
+              display_name: "Publicly Accessible Custom Image (e.g. quay.io/my-project/my-image:tag)"
+              display_name_in_choices: "Choose a Custom Image"
+              validation_regex: "^.+:.+$"
+              validation_message: "Must be a publicly available Docker image"
+              kubespawner_override:
+                image: "{value}"
+
+          interface:
+            display_name: "Launching Interface"
+            description: "Select the interface to launch"
+            choices:
+              lab:
+                display_name: "JupyterLab"
+                kubespawner_override:
+                  default_url: "/lab"
+              notebook:
+                display_name: "Classic Notebook"
+                kubespawner_override:
+                  default_url: "/tree"
+              vscode:
+                display_name: "VSCode"
+                kubespawner_override:
+                  default_url: "/vscode"  
+
+      - display_name: "Profile for DataHub Admins"
+        allowed_groups:
+          - course::1524699
+        description: "This profile is only visible to DataHub Admins."
+        slug: "course-1524699"  
+        profile_options:
+          image:
+            display_name: "Docker Image"
+            description: "Select a Docker image (You can also enter a custom image below)"
+            choices:
+              nature:
+                display_name: "Nature Image"
+                kubespawner_override:
+                  image: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/nature-user-image:4efb67ce829b
+            unlisted_choice:
+              enabled: true
+              display_name: "Publicly Accessible Custom Image (e.g. quay.io/my-project/my-image:tag)"
+              display_name_in_choices: "Choose a Custom Image"
+              validation_regex: "^.+:.+$"
+              validation_message: "Must be a publicly available Docker image"
+              kubespawner_override:
+                image: "{value}"
+          memory:
+            display_name: "Memory"
+            description: "Select memory"
+            choices:
+              2G:
+                display_name: "2 GB"
+                kubespawner_override:
+                  mem_limit: 2G
+                  mem_guarantee: 2G
+              4G:
+                display_name: "4 GB"
+                kubespawner_override:
+                  mem_limit: 4G
+                  mem_guarantee: 4G
+              6G:
+                display_name: "6 GB"
+                kubespawner_override:
+                  mem_limit: 6G
+                  mem_guarantee: 6G
+              8G:
+                display_name: "8 GB"
+                kubespawner_override:
+                  mem_limit: 8G
+                  mem_guarantee: 8G
+          interface:
+            display_name: "Launching Interface"
+            description: "Select the interface to launch"
+            choices:
+              lab:
+                display_name: "JupyterLab"
+                kubespawner_override:
+                  default_url: "/lab"
+              notebook:
+                display_name: "Classic Notebook"
+                kubespawner_override:
+                  default_url: "/tree"
+              vscode:
+                display_name: "VSCode"
+                kubespawner_override:
+                  default_url: "/vscode"  
 
   custom:
     group_profiles:
