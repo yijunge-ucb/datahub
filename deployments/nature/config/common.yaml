@@ -103,11 +103,6 @@ jupyterhub:
                 display_name: "Classic Notebook"
                 kubespawner_override:
                   default_url: "/tree"
-              vscode:
-                display_name: "VSCode"
-                kubespawner_override:
-                  default_url: "/vscode"  
-
 
       - display_name: "Profile for Course 1551740 Instructors and TAs"
         description: "This profile is for the instructors and TAs in course 1551740."
@@ -169,10 +164,7 @@ jupyterhub:
                 display_name: "Classic Notebook"
                 kubespawner_override:
                   default_url: "/tree"
-              vscode:
-                display_name: "VSCode"
-                kubespawner_override:
-                  default_url: "/vscode"  
+ 
 
       - display_name: "Profile for Course 1551740 Students and Observers"
         description: "This profile is for the students in course 1551740."
@@ -211,10 +203,7 @@ jupyterhub:
                 display_name: "Classic Notebook"
                 kubespawner_override:
                   default_url: "/tree"
-              vscode:
-                display_name: "VSCode"
-                kubespawner_override:
-                  default_url: "/vscode"  
+
 
       - display_name: "Profile for Course 1551739 Instructors and TAs"
         description: "This profile is for the instructors and TAs in course 1551739."
@@ -276,10 +265,7 @@ jupyterhub:
                 display_name: "Classic Notebook"
                 kubespawner_override:
                   default_url: "/tree"
-              vscode:
-                display_name: "VSCode"
-                kubespawner_override:
-                  default_url: "/vscode"  
+
 
       - display_name: "Profile for Course 1551739 Students and Observers"
         description: "This profile is for the students in course 1551739."
@@ -318,10 +304,7 @@ jupyterhub:
                 display_name: "Classic Notebook"
                 kubespawner_override:
                   default_url: "/tree"
-              vscode:
-                display_name: "VSCode"
-                kubespawner_override:
-                  default_url: "/vscode"  
+
                   
       - display_name: "Profile for DataHub Admins"
         allowed_groups:
@@ -381,10 +364,7 @@ jupyterhub:
                 display_name: "Classic Notebook"
                 kubespawner_override:
                   default_url: "/tree"
-              vscode:
-                display_name: "VSCode"
-                kubespawner_override:
-                  default_url: "/vscode"  
+
 
   custom:
     group_profiles:
