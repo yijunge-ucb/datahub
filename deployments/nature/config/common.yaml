@@ -115,6 +115,7 @@ jupyterhub:
         allowed_groups:
           - course::1551740::enrollment_type::teacher
           - course::1551740::enrollment_type::ta
+          - course::1524699
         profile_options:
           image:
             display_name: "Docker Image"
@@ -179,6 +180,7 @@ jupyterhub:
         allowed_groups:
           - course::1551740::enrollment_type::student
           - course::1551740::enrollment_type::observer
+          - course::1524699
         profile_options:
           image:
             display_name: "Docker Image"
@@ -220,6 +222,7 @@ jupyterhub:
         allowed_groups:
           - course::1551739::enrollment_type::teacher
           - course::1551739::enrollment_type::ta
+          - course::1524699
         profile_options:
           image:
             display_name: "Docker Image"
@@ -284,6 +287,7 @@ jupyterhub:
         allowed_groups:
           - course::1551739::enrollment_type::student
           - course::1551739::enrollment_type::observer
+          - course::1524699
         profile_options:
           image:
             display_name: "Docker Image"
