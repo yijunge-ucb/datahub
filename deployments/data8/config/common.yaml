@@ -96,6 +96,21 @@ jupyterhub:
         groups:
           - course::1551541::enrollment_type::teacher
           - course::1551541::enrollment_type::ta
+      grouper-sync:
+        name: grouper-sync
+        scopes:
+          - list:users
+          - read:users
+          - admin:auth_state
+        services:
+          - grouper-sync
+    services:
+      grouper-sync:
+        name: grouper-sync
+        environment:
+          JUPYTERHUB_API_URL: http://localhost:8081/hub/api
+          GROUPER_BASE_URL: https://calgroups.berkeley.edu/gws/servicesRest/json/v2_2_100
+          GROUPER_ID_PATH: edu:berkeley:app:datahub:datahub-data8-spring26-users
   singleuser:
     extraFiles:
       # DH-596
