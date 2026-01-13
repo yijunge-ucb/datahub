@@ -512,7 +512,7 @@ jupyterhub:
           'PYTHON_POPCONTEST_STATSD_PREFIX': f'python_popcon.namespace.{pod_namespace}'
         })
 
-      05-profile-groups: |
+      03-profile-groups: |
         # Re-assignes c.KubeSpawner.profile_list to a callable that filters the
         # initial configuration of profile_list based on the user's github
         # org/team membership as declared via "allowed_groups" read from
@@ -662,3 +662,6 @@ jupyterhub:
                 deepcopy(c.KubeSpawner.profile_list)
             )
 
+      04-enable-fancy-profiles: |
+        from jupyterhub_fancy_profiles import setup_ui
+        setup_ui(c)
