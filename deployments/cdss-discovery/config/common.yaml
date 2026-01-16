@@ -76,6 +76,10 @@ jupyterhub:
       OAuthenticator:
         allow_all: False
         allowed_groups:
+          # CDSS Discovery 2026 Spring
+          - "course::1552431"
+          ## CDSS Discovery 2026 Spring Partners
+          #- "course::1549362"
           # CDSS Discovery 2025 Fall
           - "course::1549326"
           # CDSS Discovery 2025 Fall Partners
