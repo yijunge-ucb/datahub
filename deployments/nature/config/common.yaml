@@ -89,12 +89,19 @@ jupyterhub:
       - display_name: "Default Profile"
         description: "This profile is for general users. It uses the default nature single user image, default CPU and memory."
         default: true
-        slug: "default-profile"        
+        slug: "default-profile"   
+        kubespawner_override: {
+          image: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/logodev-user-image:729fb9dc9373            
+        }
         profile_options:
           interface:
             display_name: "Launching Interface"
             description: "Select the interface to launch"
             choices:
+              vscode:
+                display_name: "VSCode"
+                kubespawner_override:
+                  default_url: "/vscode"  
               lab:
                 display_name: "JupyterLab"
                 kubespawner_override:
@@ -104,8 +111,8 @@ jupyterhub:
                 kubespawner_override:
                   default_url: "/tree"
 
-      - display_name: "Profile for Course 1551740 Instructors and TAs"
-        description: "This profile is for the instructors and TAs in course 1551740."
+      - display_name: "Profile for ESPM-288 Instructors and TAs"
+        description: "This profile is for the instructors and TAs in ESPM-288."
         slug: "course-1551740-instructors-tas"
         allowed_groups:
           - course::1551740::enrollment_type::teacher
@@ -156,6 +163,10 @@ jupyterhub:
             display_name: "Launching Interface"
             description: "Select the interface to launch"
             choices:
+              vscode:
+                display_name: "VSCode"
+                kubespawner_override:
+                  default_url: "/vscode"
               lab:
                 display_name: "JupyterLab"
                 kubespawner_override:
@@ -166,8 +177,8 @@ jupyterhub:
                   default_url: "/tree"
  
 
-      - display_name: "Profile for Course 1551740 Students and Observers"
-        description: "This profile is for the students in course 1551740."
+      - display_name: "Profile for ESPM-288 Students and Observers"
+        description: "This profile is for the students in ESPM-288."
         slug: "course-1551740-students"
         allowed_groups:
           - course::1551740::enrollment_type::student
@@ -195,6 +206,10 @@ jupyterhub:
             display_name: "Launching Interface"
             description: "Select the interface to launch"
             choices:
+              vscode:
+                display_name: "VSCode"
+                kubespawner_override:
+                  default_url: "/vscode"
               lab:
                 display_name: "JupyterLab"
                 kubespawner_override:
@@ -205,8 +220,8 @@ jupyterhub:
                   default_url: "/tree"
 
 
-      - display_name: "Profile for Course 1551739 Instructors and TAs"
-        description: "This profile is for the instructors and TAs in course 1551739."
+      - display_name: "Profile for CSOL-208 Instructors and TAs"
+        description: "This profile is for the instructors and TAs in CSOL-208."
         slug: "course-1551739-instructors-tas"
         allowed_groups:
           - course::1551739::enrollment_type::teacher
@@ -257,6 +272,10 @@ jupyterhub:
             display_name: "Launching Interface"
             description: "Select the interface to launch"
             choices:
+              vscode:
+                display_name: "VSCode"
+                kubespawner_override:
+                  default_url: "/vscode"
               lab:
                 display_name: "JupyterLab"
                 kubespawner_override:
@@ -267,8 +286,8 @@ jupyterhub:
                   default_url: "/tree"
 
 
-      - display_name: "Profile for Course 1551739 Students and Observers"
-        description: "This profile is for the students in course 1551739."
+      - display_name: "Profile for CSOL-208 Students and Observers"
+        description: "This profile is for the students in CSOL-208."
         slug: "course-1551739-students"
         allowed_groups:
           - course::1551739::enrollment_type::student
@@ -296,6 +315,10 @@ jupyterhub:
             display_name: "Launching Interface"
             description: "Select the interface to launch"
             choices:
+              vscode:
+                display_name: "VSCode"
+                kubespawner_override:
+                  default_url: "/vscode"
               lab:
                 display_name: "JupyterLab"
                 kubespawner_override:
@@ -356,6 +379,10 @@ jupyterhub:
             display_name: "Launching Interface"
             description: "Select the interface to launch"
             choices:
+              vscode:
+                display_name: "VSCode"
+                kubespawner_override:
+                  default_url: "/vscode"
               lab:
                 display_name: "JupyterLab"
                 kubespawner_override:
