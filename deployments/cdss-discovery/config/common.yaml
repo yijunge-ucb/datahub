@@ -46,7 +46,7 @@ jupyterhub:
   hub:
     image:
       name: gitlab-registry.nrp-nautilus.io/ryanlovett/datahub-nrp-hub-image
-      tag: b04f18a4
+      tag: "69193871"
     # Nautilus uses rook-ceph-block for hub db storage.
     db:
       type: sqlite-pvc
@@ -76,6 +76,10 @@ jupyterhub:
       OAuthenticator:
         allow_all: False
         allowed_groups:
+          # CDSS Discovery 2026 Spring
+          - "course::1552431"
+          ## CDSS Discovery 2026 Spring Partners
+          #- "course::1549362"
           # CDSS Discovery 2025 Fall
           - "course::1549326"
           # CDSS Discovery 2025 Fall Partners
@@ -102,9 +106,9 @@ jupyterhub:
           - course::1524699::group::all-admins
 
   singleuser:
-    image:
-      name: gitlab-registry.nrp-nautilus.io/berkeley-cdss/cdss-discovery-user-image
-      tag: latest
+    #image:
+    #  name: gitlab-registry.nrp-nautilus.io/berkeley-cdss/cdss-discovery-user-image
+    #  tag: latest
 
     # Nautilus-specific configuration
     uid: 0
@@ -200,8 +204,37 @@ jupyterhub:
           nvidia.com/gpu: "0"
         extra_resource_limits:
           nvidia.com/gpu: "0"
-        image: gitlab-registry.nrp-nautilus.io/berkeley-cdss/cdss-discovery-cpu-user-image:e5750bf2
+        #image: gitlab-registry.nrp-nautilus.io/berkeley-cdss/cdss-discovery-cpu-user-image:e5750bf2
+        image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:latest
       profile_options:
+        image:
+            display_name: "Container Image"
+            description: "Select a container image (You can also enter a custom image below)"
+            choices:
+              discovery:
+                display_name: "NRP Python"
+                kubespawner_override:
+                  image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:latest"
+              rstudio:
+                display_name: "NRP RStudio"
+                kubespawner_override:
+                  image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/rstudio:v1.6.0"
+              pytorch:
+                display_name: "NRP PyTorch"
+                kubespawner_override:
+                  image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:fall25_updates"
+              desktop:
+                display_name: "NRP Desktop"
+                kubespawner_override:
+                  image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/desktop/selkies:v1.6.0"
+            unlisted_choice:
+              enabled: true
+              display_name: "Publicly Accessible Container Image (e.g. quay.io/my-project/my-image:tag)"
+              display_name_in_choices: "Choose a Container Image"
+              validation_regex: "^.+:.+$"
+              validation_message: "Must be a publicly available container image"
+              kubespawner_override:
+                image: "{value}"
         mem_limit:
           display_name: "CPU RAM Limit"
           choices:
@@ -231,8 +264,37 @@ jupyterhub:
           nvidia.com/gpu: "1"
         extra_resource_limits:
           nvidia.com/gpu: "1"
-        image: gitlab-registry.nrp-nautilus.io/berkeley-cdss/cdss-discovery-user-image:476b008f
+        #image: gitlab-registry.nrp-nautilus.io/berkeley-cdss/cdss-discovery-user-image:476b008f
+        image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:latest
       profile_options:
+        image:
+            display_name: "Container Image"
+            description: "Select a container image (You can also enter a custom image below)"
+            choices:
+              discovery:
+                display_name: "NRP Python"
+                kubespawner_override:
+                  image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:latest
+              cuda:
+                display_name: "NRP CUDA"
+                kubespawner_override:
+                  image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:cuda-latest"
+              tensorflow:
+                display_name: "NRP Tensorflow"
+                kubespawner_override:
+                  image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:tensorflow-latest"
+              tensorflow_cuda:
+                display_name: "NRP Tensorflow CUDA"
+                kubespawner_override:
+                  image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:tensorflow-cuda-latest"
+            unlisted_choice:
+              enabled: true
+              display_name: "Publicly Accessible Container Image (e.g. quay.io/my-project/my-image:tag)"
+              display_name_in_choices: "Choose a Container Image"
+              validation_regex: "^.+:.+$"
+              validation_message: "Must be a publicly available container image"
+              kubespawner_override:
+                image: "{value}"
         mem_limit:
           display_name: "CPU RAM Limit"
           choices:
@@ -253,45 +315,45 @@ jupyterhub:
               display_name: "32G"
               kubespawner_override:
                 mem_limit: "32G"
-  custom:
-    group_profiles:
-      # CDSS Discovery 2025 Fall, Stellar group
-      course::1549326::group::2025-fall-stellar:
-        extraVolumes:
-          - name: 2025-fall-stellar
-            persistentVolumeClaim:
-              claimName: 2025-fall-stellar
-        extraVolumeMounts:
-          - name: 2025-fall-stellar
-            mountPath: /home/jovyan/_shared/2025-fall-stellar
-            readOnly: true
-      # CDSS Discovery 2025 Fall Partners, Stellar group
-      course::1549362::group::2025-fall-stellar:
-        extraVolumes:
-          - name: 2025-fall-stellar
-            persistentVolumeClaim:
-              claimName: 2025-fall-stellar
-        extraVolumeMounts:
-          - name: 2025-fall-stellar
-            mountPath: /home/jovyan/_shared/2025-fall-stellar
-            readOnly: true
+  #custom:
+  #  group_profiles:
+      ## CDSS Discovery 2025 Fall, Stellar group
+      #course::1549326::group::2025-fall-stellar:
+      #  extraVolumes:
+      #    - name: 2025-fall-stellar
+      #      persistentVolumeClaim:
+      #        claimName: 2025-fall-stellar
+      #  extraVolumeMounts:
+      #    - name: 2025-fall-stellar
+      #      mountPath: /home/jovyan/_shared/2025-fall-stellar
+      #      readOnly: true
+      ## CDSS Discovery 2025 Fall Partners, Stellar group
+      #course::1549362::group::2025-fall-stellar:
+      #  extraVolumes:
+      #    - name: 2025-fall-stellar
+      #      persistentVolumeClaim:
+      #        claimName: 2025-fall-stellar
+      #  extraVolumeMounts:
+      #    - name: 2025-fall-stellar
+      #      mountPath: /home/jovyan/_shared/2025-fall-stellar
+      #      readOnly: true
       # CDSS Discovery 2025 Fall, instructors
-      course::1549326::enrollment_type::teacher:
-        extraVolumes:
-          - name: 2025-fall-stellar
-            persistentVolumeClaim:
-              claimName: 2025-fall-stellar
-        extraVolumeMounts:
-          - name: 2025-fall-stellar
-            mountPath: /home/jovyan/_shared/2025-fall-stellar
-            readOnly: false
-      # DataHub staff
-      course::1524699::group::all-admins:
-        extraVolumes:
-          - name: 2025-fall-stellar
-            persistentVolumeClaim:
-              claimName: 2025-fall-stellar
-        extraVolumeMounts:
-          - name: 2025-fall-stellar
-            mountPath: /home/jovyan/_shared/2025-fall-stellar
-            readOnly: false
+      #course::1549326::enrollment_type::teacher:
+      #  extraVolumes:
+      #    - name: 2025-fall-stellar
+      #      persistentVolumeClaim:
+      #        claimName: 2025-fall-stellar
+      #  extraVolumeMounts:
+      #    - name: 2025-fall-stellar
+      #      mountPath: /home/jovyan/_shared/2025-fall-stellar
+      #      readOnly: false
+      ## DataHub staff
+      #course::1524699::group::all-admins:
+      #  extraVolumes:
+      #    - name: 2025-fall-stellar
+      #      persistentVolumeClaim:
+      #        claimName: 2025-fall-stellar
+      #  extraVolumeMounts:
+      #    - name: 2025-fall-stellar
+      #      mountPath: /home/jovyan/_shared/2025-fall-stellar
+      #      readOnly: false
