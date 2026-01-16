@@ -106,10 +106,7 @@ jupyterhub:
                 display_name: "JupyterLab"
                 kubespawner_override:
                   default_url: "/lab"
-              notebook:
-                display_name: "Classic Notebook"
-                kubespawner_override:
-                  default_url: "/tree"
+
 
       - display_name: "Profile for ESPM-288 Instructors and TAs"
         description: "This profile is for the instructors and TAs in ESPM-288."
@@ -171,10 +168,7 @@ jupyterhub:
                 display_name: "JupyterLab"
                 kubespawner_override:
                   default_url: "/lab"
-              notebook:
-                display_name: "Classic Notebook"
-                kubespawner_override:
-                  default_url: "/tree"
+
  
 
       - display_name: "Profile for ESPM-288 Students and Observers"
@@ -214,10 +208,7 @@ jupyterhub:
                 display_name: "JupyterLab"
                 kubespawner_override:
                   default_url: "/lab"
-              notebook:
-                display_name: "Classic Notebook"
-                kubespawner_override:
-                  default_url: "/tree"
+
 
 
       - display_name: "Profile for CSOL-208 Instructors and TAs"
@@ -280,10 +271,7 @@ jupyterhub:
                 display_name: "JupyterLab"
                 kubespawner_override:
                   default_url: "/lab"
-              notebook:
-                display_name: "Classic Notebook"
-                kubespawner_override:
-                  default_url: "/tree"
+
 
 
       - display_name: "Profile for CSOL-208 Students and Observers"
@@ -323,10 +311,7 @@ jupyterhub:
                 display_name: "JupyterLab"
                 kubespawner_override:
                   default_url: "/lab"
-              notebook:
-                display_name: "Classic Notebook"
-                kubespawner_override:
-                  default_url: "/tree"
+
 
                   
       - display_name: "Profile for DataHub Admins"
@@ -387,10 +372,7 @@ jupyterhub:
                 display_name: "JupyterLab"
                 kubespawner_override:
                   default_url: "/lab"
-              notebook:
-                display_name: "Classic Notebook"
-                kubespawner_override:
-                  default_url: "/tree"
+
 
 
   custom:
