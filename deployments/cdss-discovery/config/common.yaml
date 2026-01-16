@@ -311,45 +311,45 @@ jupyterhub:
               display_name: "32G"
               kubespawner_override:
                 mem_limit: "32G"
-  custom:
-    group_profiles:
-      # CDSS Discovery 2025 Fall, Stellar group
-      course::1549326::group::2025-fall-stellar:
-        extraVolumes:
-          - name: 2025-fall-stellar
-            persistentVolumeClaim:
-              claimName: 2025-fall-stellar
-        extraVolumeMounts:
-          - name: 2025-fall-stellar
-            mountPath: /home/jovyan/_shared/2025-fall-stellar
-            readOnly: true
-      # CDSS Discovery 2025 Fall Partners, Stellar group
-      course::1549362::group::2025-fall-stellar:
-        extraVolumes:
-          - name: 2025-fall-stellar
-            persistentVolumeClaim:
-              claimName: 2025-fall-stellar
-        extraVolumeMounts:
-          - name: 2025-fall-stellar
-            mountPath: /home/jovyan/_shared/2025-fall-stellar
-            readOnly: true
+  #custom:
+  #  group_profiles:
+      ## CDSS Discovery 2025 Fall, Stellar group
+      #course::1549326::group::2025-fall-stellar:
+      #  extraVolumes:
+      #    - name: 2025-fall-stellar
+      #      persistentVolumeClaim:
+      #        claimName: 2025-fall-stellar
+      #  extraVolumeMounts:
+      #    - name: 2025-fall-stellar
+      #      mountPath: /home/jovyan/_shared/2025-fall-stellar
+      #      readOnly: true
+      ## CDSS Discovery 2025 Fall Partners, Stellar group
+      #course::1549362::group::2025-fall-stellar:
+      #  extraVolumes:
+      #    - name: 2025-fall-stellar
+      #      persistentVolumeClaim:
+      #        claimName: 2025-fall-stellar
+      #  extraVolumeMounts:
+      #    - name: 2025-fall-stellar
+      #      mountPath: /home/jovyan/_shared/2025-fall-stellar
+      #      readOnly: true
       # CDSS Discovery 2025 Fall, instructors
-      course::1549326::enrollment_type::teacher:
-        extraVolumes:
-          - name: 2025-fall-stellar
-            persistentVolumeClaim:
-              claimName: 2025-fall-stellar
-        extraVolumeMounts:
-          - name: 2025-fall-stellar
-            mountPath: /home/jovyan/_shared/2025-fall-stellar
-            readOnly: false
-      # DataHub staff
-      course::1524699::group::all-admins:
-        extraVolumes:
-          - name: 2025-fall-stellar
-            persistentVolumeClaim:
-              claimName: 2025-fall-stellar
-        extraVolumeMounts:
-          - name: 2025-fall-stellar
-            mountPath: /home/jovyan/_shared/2025-fall-stellar
-            readOnly: false
+      #course::1549326::enrollment_type::teacher:
+      #  extraVolumes:
+      #    - name: 2025-fall-stellar
+      #      persistentVolumeClaim:
+      #        claimName: 2025-fall-stellar
+      #  extraVolumeMounts:
+      #    - name: 2025-fall-stellar
+      #      mountPath: /home/jovyan/_shared/2025-fall-stellar
+      #      readOnly: false
+      ## DataHub staff
+      #course::1524699::group::all-admins:
+      #  extraVolumes:
+      #    - name: 2025-fall-stellar
+      #      persistentVolumeClaim:
+      #        claimName: 2025-fall-stellar
+      #  extraVolumeMounts:
+      #    - name: 2025-fall-stellar
+      #      mountPath: /home/jovyan/_shared/2025-fall-stellar
+      #      readOnly: false
