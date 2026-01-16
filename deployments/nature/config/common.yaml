@@ -91,7 +91,7 @@ jupyterhub:
         default: true
         slug: "default-profile"   
         kubespawner_override: {
-          image: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/logodev-user-image:729fb9dc9373            
+          image: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/nature-user-image:4efb67ce829b            
         }
         profile_options:
           interface:
