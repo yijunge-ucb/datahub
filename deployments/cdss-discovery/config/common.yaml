@@ -108,7 +108,8 @@ jupyterhub:
           - course::1524699::group::all-admins
 
   singleuser:
-    #image:
+    image:
+      pullPolicy: IfNotPresent
     #  name: gitlab-registry.nrp-nautilus.io/berkeley-cdss/cdss-discovery-user-image
     #  tag: latest
 
