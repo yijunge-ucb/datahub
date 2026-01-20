@@ -88,6 +88,8 @@ jupyterhub:
           - "course::1524699::group::all-admins"
           # People who want to see what the hub can do
           - "course::1524699::group::cdss-discovery-observers"
+      Spawner:
+        spawn_launcher_timer_message: "Server launch is waiting for available resources."
     loadRoles:
       # datahub staff
       datahub-staff:
