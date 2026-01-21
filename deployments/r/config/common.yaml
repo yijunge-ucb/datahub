@@ -116,3 +116,43 @@ jupyterhub:
       course::1524699::group::all-admins:
         mem_limit: 2048M
         mem_guarantee: 2048M
+      course::1552931::enrollment_type::teacher:
+      ## Course Name: bcourses-1552931 Bcourses ID: 1552931 End Date: 05/31/2026
+      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7882 for details.
+        extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1552931-readwrite
+            subPath: _shared/2026-spring/courses/1552931
+            readOnly: false
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1552931-readonly
+            subPath: _shared/2026-spring/courses/1552931
+            readOnly: true
+      course::1552931::enrollment_type::ta:
+      ## Course Name: bcourses-1552931 Bcourses ID: 1552931 End Date: 05/31/2026
+      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7882 for details.
+        extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1552931-readwrite
+            subPath: _shared/2026-spring/courses/1552931
+            readOnly: false
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1552931-readonly
+            subPath: _shared/2026-spring/courses/1552931
+            readOnly: true
+      course::1552931::enrollment_type::observer:
+      ## Course Name: bcourses-1552931 Bcourses ID: 1552931 End Date: 05/31/2026
+      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7882 for details.
+        extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1552931-readonly
+            subPath: _shared/2026-spring/courses/1552931
+            readOnly: true
+      course::1552931::enrollment_type::student:
+      ## Course Name: bcourses-1552931 Bcourses ID: 1552931 End Date: 05/31/2026
+      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7882 for details.
+        extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1552931-readonly
+            subPath: _shared/2026-spring/courses/1552931
+            readOnly: true
