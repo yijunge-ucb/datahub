@@ -78,16 +78,16 @@ jupyterhub:
         allowed_groups:
           # CDSS Discovery 2026 Spring
           - "course::1552431"
-          ## CDSS Discovery 2026 Spring Partners
-          #- "course::1549362"
           # CDSS Discovery 2025 Fall
           - "course::1549326"
-          # CDSS Discovery 2025 Fall Partners
+          ## CDSS Discovery Partners
           - "course::1549362"
           # DataHub staff
           - "course::1524699::group::all-admins"
           # People who want to see what the hub can do
           - "course::1524699::group::cdss-discovery-observers"
+      Spawner:
+        spawn_launcher_timer_message: "Server launch is waiting for available resources."
     loadRoles:
       # datahub staff
       datahub-staff:
@@ -106,7 +106,8 @@ jupyterhub:
           - course::1524699::group::all-admins
 
   singleuser:
-    #image:
+    image:
+      pullPolicy: IfNotPresent
     #  name: gitlab-registry.nrp-nautilus.io/berkeley-cdss/cdss-discovery-user-image
     #  tag: latest
 
@@ -122,30 +123,6 @@ jupyterhub:
       securityContext:
           fsGroupChangePolicy: "OnRootMismatch"
           fsGroup: 100
-    extraNodeAffinity:
-      required:
-        - matchExpressions:
-          - 'key': 'topology.kubernetes.io/region'
-            'operator': 'In'
-            'values': ["us-west"]
-
-          # https://docs.nationalresearchplatform.org/userdocs/running/gpu-pods/
-          - 'key': 'nvidia.com/gpu.product'
-            'operator': 'In'
-            'values': [
-              "NVIDIA-A10",
-              "NVIDIA-GeForce-GTX-1080-Ti",
-              "NVIDIA-GeForce-RTX-2080-Ti",
-              "NVIDIA-GeForce-RTX-3090",
-              "NVIDIA-GeForce-RTX-4090",
-              "NVIDIA-L4",
-              "NVIDIA-L40",
-              "NVIDIA-RTX-A4000",
-              "NVIDIA-RTX-A5000",
-              "NVIDIA-TITAN-RTX",
-              "Tesla-V100-SXM2-32GB"
-
-            ]
     cloudMetadata:
       blockWithIptables: false
     networkPolicy:
@@ -195,48 +172,127 @@ jupyterhub:
         nvidia.com/gpu: "1"
 
     profileList:
-    - display_name: "CPU instance"
-      description: "Your server will have no GPU, but may launch faster."
-      slug: "cpu-custom-memory"
+    # CPU-only profile
+    - display_name: "CPU Server"
+      description: "Choose your region, CPU cores, memory, and container image (no GPU)"
+      slug: "cpu-server"
       kubespawner_override:
         mem_limit: "10G"
+        cpu_guarantee: 1
+        cpu_limit: 1
         extra_resource_guarantees:
           nvidia.com/gpu: "0"
         extra_resource_limits:
           nvidia.com/gpu: "0"
-        #image: gitlab-registry.nrp-nautilus.io/berkeley-cdss/cdss-discovery-cpu-user-image:e5750bf2
         image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:latest
       profile_options:
-        image:
-            display_name: "Container Image"
-            description: "Select a container image (You can also enter a custom image below)"
-            choices:
-              discovery:
-                display_name: "NRP Python"
-                kubespawner_override:
-                  image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:latest"
-              rstudio:
-                display_name: "NRP RStudio"
-                kubespawner_override:
-                  image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/rstudio:v1.6.0"
-              pytorch:
-                display_name: "NRP PyTorch"
-                kubespawner_override:
-                  image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:fall25_updates"
-              desktop:
-                display_name: "NRP Desktop"
-                kubespawner_override:
-                  image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/desktop/selkies:v1.6.0"
-            unlisted_choice:
-              enabled: true
-              display_name: "Publicly Accessible Container Image (e.g. quay.io/my-project/my-image:tag)"
-              display_name_in_choices: "Choose a Container Image"
-              validation_regex: "^.+:.+$"
-              validation_message: "Must be a publicly available container image"
+        region: &region_option
+          display_name: "Region"
+          description: "Note: Storage is located in us-west. Other regions may have slower I/O performance."
+          choices:
+            any:
+              default: true
+              display_name: "Any"
+              kubespawner_override: {}
+            west:
+              display_name: "West"
               kubespawner_override:
-                image: "{value}"
-        mem_limit:
-          display_name: "CPU RAM Limit"
+                node_affinity_required:
+                  - matchExpressions:
+                    - key: topology.kubernetes.io/region
+                      operator: In
+                      values: ["us-west"]
+            mountain:
+              display_name: "Mountain"
+              kubespawner_override:
+                node_affinity_required:
+                  - matchExpressions:
+                    - key: topology.kubernetes.io/region
+                      operator: In
+                      values: ["us-mountain"]
+            central:
+              display_name: "Central"
+              kubespawner_override:
+                node_affinity_required:
+                  - matchExpressions:
+                    - key: topology.kubernetes.io/region
+                      operator: In
+                      values: ["us-central"]
+            east:
+              display_name: "East"
+              kubespawner_override:
+                node_affinity_required:
+                  - matchExpressions:
+                    - key: topology.kubernetes.io/region
+                      operator: In
+                      values: ["us-east"]
+        cpu_cores: &cpu_cores_option
+          display_name: "CPU Cores"
+          choices:
+            cpu_1:
+              default: true
+              display_name: "1"
+              kubespawner_override:
+                cpu_guarantee: 1
+                cpu_limit: 1
+            cpu_2:
+              display_name: "2"
+              kubespawner_override:
+                cpu_guarantee: 2
+                cpu_limit: 2
+            cpu_4:
+              display_name: "4"
+              kubespawner_override:
+                cpu_guarantee: 4
+                cpu_limit: 4
+            cpu_8:
+              display_name: "8"
+              kubespawner_override:
+                cpu_guarantee: 8
+                cpu_limit: 8
+        image: &image_option
+          display_name: "Container Image"
+          description: "Select a container image (You can also enter a custom image below)"
+          choices:
+            discovery:
+              default: true
+              display_name: "NRP Python (CPU + GPU compatible)"
+              kubespawner_override:
+                image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:latest"
+            cuda:
+              display_name: "NRP CUDA (GPU optimized)"
+              kubespawner_override:
+                image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:cuda-latest"
+            tensorflow:
+              display_name: "NRP Tensorflow (GPU optimized)"
+              kubespawner_override:
+                image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:tensorflow-latest"
+            tensorflow_cuda:
+              display_name: "NRP Tensorflow CUDA (GPU optimized)"
+              kubespawner_override:
+                image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:tensorflow-cuda-latest"
+            pytorch:
+              display_name: "NRP PyTorch"
+              kubespawner_override:
+                image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:fall25_updates"
+            rstudio:
+              display_name: "NRP RStudio"
+              kubespawner_override:
+                image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/rstudio:v1.6.0"
+            desktop:
+              display_name: "NRP Desktop"
+              kubespawner_override:
+                image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/desktop/selkies:v1.6.0"
+          unlisted_choice:
+            enabled: true
+            display_name: "Publicly Accessible Container Image (e.g. quay.io/my-project/my-image:tag)"
+            display_name_in_choices: "Custom Image"
+            validation_regex: "^.+:.+$"
+            validation_message: "Must be a publicly available container image"
+            kubespawner_override:
+              image: "{value}"
+        mem_limit: &mem_limit_option
+          display_name: "Memory Limit"
           choices:
             mem_10g:
               default: true
@@ -255,66 +311,71 @@ jupyterhub:
               display_name: "32G"
               kubespawner_override:
                 mem_limit: "32G"
-    - display_name: "GPU instance"
-      description: "Your server will request and wait for a GPU."
-      slug: "gpu-custom-memory"
+    
+    # GPU-enabled profile
+    - display_name: "GPU Server"
+      description: "Choose your region, GPU type, CPU cores, memory, and container image"
+      slug: "gpu-server"
       kubespawner_override:
         mem_limit: "10G"
+        cpu_guarantee: 1
+        cpu_limit: 1
         extra_resource_guarantees:
           nvidia.com/gpu: "1"
         extra_resource_limits:
           nvidia.com/gpu: "1"
-        #image: gitlab-registry.nrp-nautilus.io/berkeley-cdss/cdss-discovery-user-image:476b008f
         image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:latest
       profile_options:
-        image:
-            display_name: "Container Image"
-            description: "Select a container image (You can also enter a custom image below)"
-            choices:
-              discovery:
-                display_name: "NRP Python"
-                kubespawner_override:
-                  image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:latest
-              cuda:
-                display_name: "NRP CUDA"
-                kubespawner_override:
-                  image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:cuda-latest"
-              tensorflow:
-                display_name: "NRP Tensorflow"
-                kubespawner_override:
-                  image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:tensorflow-latest"
-              tensorflow_cuda:
-                display_name: "NRP Tensorflow CUDA"
-                kubespawner_override:
-                  image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:tensorflow-cuda-latest"
-            unlisted_choice:
-              enabled: true
-              display_name: "Publicly Accessible Container Image (e.g. quay.io/my-project/my-image:tag)"
-              display_name_in_choices: "Choose a Container Image"
-              validation_regex: "^.+:.+$"
-              validation_message: "Must be a publicly available container image"
-              kubespawner_override:
-                image: "{value}"
-        mem_limit:
-          display_name: "CPU RAM Limit"
+        region: *region_option
+        gpu_type:
+          display_name: "GPU Type"
           choices:
-            mem_10g:
+            any:
               default: true
-              display_name: "10G"
+              display_name: "Any general"
               kubespawner_override:
-                mem_limit: "10G"
-            mem_16g:
-              display_name: "16G"
+                node_affinity_required:
+                  - matchExpressions:
+                    - key: nvidia.com/gpu.product
+                      operator: NotIn
+                      values:
+                        - "NVIDIA-A40"
+                        - "NVIDIA-RTX-A6000"
+                        - "Quadro-RTX-8000"
+                        # Exclude A100 variants
+                        - "NVIDIA-A100-80GB-PCIe"
+                        - "NVIDIA-A100-PCIE-40GB"
+                        - "NVIDIA-A100-SXM4-80GB"
+            l40:
+              display_name: "NVIDIA L40 (48GB)"
               kubespawner_override:
-                mem_limit: "16G"
-            mem_24g:
-              display_name: "24G"
+                node_affinity_required:
+                  - matchExpressions:
+                    - key: nvidia.com/gpu.product
+                      operator: In
+                      values: ["NVIDIA-L40"]
+            v100:
+              display_name: "NVIDIA V100 (32GB)"
               kubespawner_override:
-                mem_limit: "24G"
-            mem_32g:
-              display_name: "32G"
+                node_affinity_required:
+                  - matchExpressions:
+                    - key: nvidia.com/gpu.product
+                      operator: In
+                      values: ["Tesla-V100-SXM2-32GB"]
+        gpu_count:
+          display_name: "GPU Count"
+          choices:
+            gpu_1:
+              default: true
+              display_name: "1 GPU"
               kubespawner_override:
-                mem_limit: "32G"
+                extra_resource_guarantees:
+                  nvidia.com/gpu: "1"
+                extra_resource_limits:
+                  nvidia.com/gpu: "1"
+        cpu_cores: *cpu_cores_option
+        image: *image_option
+        mem_limit: *mem_limit_option
   #custom:
   #  group_profiles:
       ## CDSS Discovery 2025 Fall, Stellar group
