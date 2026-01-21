@@ -78,8 +78,8 @@ jupyterhub:
         allowed_groups:
           # CDSS Discovery 2026 Spring
           - "course::1552431"
-          ## CDSS Discovery 2026 Spring Partners
-          #- "course::1549362"
+          ## CDSS Discovery Partners
+          - "course::1549362"
           # CDSS Discovery 2025 Fall
           - "course::1549326"
           # CDSS Discovery 2025 Fall Partners
@@ -174,9 +174,10 @@ jupyterhub:
         nvidia.com/gpu: "1"
 
     profileList:
-    - display_name: "Customizable Server"
-      description: "Choose your region, GPU, CPU cores, memory, and container image"
-      slug: "custom-server"
+    # CPU-only profile
+    - display_name: "CPU Server"
+      description: "Choose your region, CPU cores, memory, and container image (no GPU)"
+      slug: "cpu-server"
       kubespawner_override:
         mem_limit: "10G"
         cpu_guarantee: 1
@@ -187,7 +188,7 @@ jupyterhub:
           nvidia.com/gpu: "0"
         image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:latest
       profile_options:
-        region:
+        region: &region_option
           display_name: "Region"
           description: "Note: Storage is located in us-west. Other regions may have slower I/O performance."
           choices:
@@ -227,42 +228,7 @@ jupyterhub:
                     - key: topology.kubernetes.io/region
                       operator: In
                       values: ["us-east"]
-        gpu_type:
-          display_name: "GPU Type"
-          choices:
-            any:
-              default: true
-              display_name: "Any general"
-              kubespawner_override:
-                node_affinity_required:
-                  - matchExpressions:
-                    - key: nvidia.com/gpu.product
-                      operator: NotIn
-                      values:
-                        - "NVIDIA-A40"
-                        - "NVIDIA-RTX-A6000"
-                        - "Quadro-RTX-8000"
-                        # Exclude A100 variants
-                        - "NVIDIA-A100-80GB-PCIe"
-                        - "NVIDIA-A100-PCIE-40GB"
-                        - "NVIDIA-A100-SXM4-80GB"
-            l40:
-              display_name: "NVIDIA L40 (48GB)"
-              kubespawner_override:
-                node_affinity_required:
-                  - matchExpressions:
-                    - key: nvidia.com/gpu.product
-                      operator: In
-                      values: ["NVIDIA-L40"]
-            v100:
-              display_name: "NVIDIA V100 (32GB)"
-              kubespawner_override:
-                node_affinity_required:
-                  - matchExpressions:
-                    - key: nvidia.com/gpu.product
-                      operator: In
-                      values: ["Tesla-V100-SXM2-32GB"]
-        cpu_cores:
+        cpu_cores: &cpu_cores_option
           display_name: "CPU Cores"
           choices:
             cpu_1:
@@ -286,25 +252,7 @@ jupyterhub:
               kubespawner_override:
                 cpu_guarantee: 8
                 cpu_limit: 8
-        gpu_count:
-          display_name: "GPU Count"
-          choices:
-            gpu_0:
-              default: true
-              display_name: "0 (CPU only - faster launch)"
-              kubespawner_override:
-                extra_resource_guarantees:
-                  nvidia.com/gpu: "0"
-                extra_resource_limits:
-                  nvidia.com/gpu: "0"
-            gpu_1:
-              display_name: "1 GPU"
-              kubespawner_override:
-                extra_resource_guarantees:
-                  nvidia.com/gpu: "1"
-                extra_resource_limits:
-                  nvidia.com/gpu: "1"
-        image:
+        image: &image_option
           display_name: "Container Image"
           description: "Select a container image (You can also enter a custom image below)"
           choices:
@@ -345,7 +293,7 @@ jupyterhub:
             validation_message: "Must be a publicly available container image"
             kubespawner_override:
               image: "{value}"
-        mem_limit:
+        mem_limit: &mem_limit_option
           display_name: "Memory Limit"
           choices:
             mem_10g:
@@ -365,6 +313,71 @@ jupyterhub:
               display_name: "32G"
               kubespawner_override:
                 mem_limit: "32G"
+    
+    # GPU-enabled profile
+    - display_name: "GPU Server"
+      description: "Choose your region, GPU type, CPU cores, memory, and container image"
+      slug: "gpu-server"
+      kubespawner_override:
+        mem_limit: "10G"
+        cpu_guarantee: 1
+        cpu_limit: 1
+        extra_resource_guarantees:
+          nvidia.com/gpu: "1"
+        extra_resource_limits:
+          nvidia.com/gpu: "1"
+        image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:latest
+      profile_options:
+        region: *region_option
+        gpu_type:
+          display_name: "GPU Type"
+          choices:
+            any:
+              default: true
+              display_name: "Any general"
+              kubespawner_override:
+                node_affinity_required:
+                  - matchExpressions:
+                    - key: nvidia.com/gpu.product
+                      operator: NotIn
+                      values:
+                        - "NVIDIA-A40"
+                        - "NVIDIA-RTX-A6000"
+                        - "Quadro-RTX-8000"
+                        # Exclude A100 variants
+                        - "NVIDIA-A100-80GB-PCIe"
+                        - "NVIDIA-A100-PCIE-40GB"
+                        - "NVIDIA-A100-SXM4-80GB"
+            l40:
+              display_name: "NVIDIA L40 (48GB)"
+              kubespawner_override:
+                node_affinity_required:
+                  - matchExpressions:
+                    - key: nvidia.com/gpu.product
+                      operator: In
+                      values: ["NVIDIA-L40"]
+            v100:
+              display_name: "NVIDIA V100 (32GB)"
+              kubespawner_override:
+                node_affinity_required:
+                  - matchExpressions:
+                    - key: nvidia.com/gpu.product
+                      operator: In
+                      values: ["Tesla-V100-SXM2-32GB"]
+        gpu_count:
+          display_name: "GPU Count"
+          choices:
+            gpu_1:
+              default: true
+              display_name: "1 GPU"
+              kubespawner_override:
+                extra_resource_guarantees:
+                  nvidia.com/gpu: "1"
+                extra_resource_limits:
+                  nvidia.com/gpu: "1"
+        cpu_cores: *cpu_cores_option
+        image: *image_option
+        mem_limit: *mem_limit_option
   #custom:
   #  group_profiles:
       ## CDSS Discovery 2025 Fall, Stellar group
