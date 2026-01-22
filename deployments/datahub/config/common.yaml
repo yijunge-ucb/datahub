@@ -244,3 +244,8 @@ jupyterhub:
         ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7843 for details.
         mem_limit: 4G
         mem_guarantee: 4G
+      course::1541477:
+        ## Course Name: Envecon 153 Bcourses ID: 1541477 End Date: End of Spring semester
+        ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7898 for details.
+        mem_limit: 4G
+        mem_guarantee: 4G
