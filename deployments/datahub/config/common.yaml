@@ -249,3 +249,8 @@ jupyterhub:
         ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7898 for details.
         mem_limit: 4G
         mem_guarantee: 4G
+      course::1551764:
+        ## Course Name: Econ 148 Bcourses ID: 1551764 End Date: 05/01/2026
+        ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7902 for details.
+        mem_limit: 4G
+        mem_guarantee: 4G
