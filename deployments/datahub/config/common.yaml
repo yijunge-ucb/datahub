@@ -90,6 +90,18 @@ jupyterhub:
         groups:
           - course::1551190::enrollment_type::teacher
           - course::1551190::enrollment_type::ta
+      course-staff-1551764:
+        ## Course: Econ 148 Bcourses ID: 1551764 End Date: 05/15/2026 
+        ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7925 for more details.
+        description: Enable course staff to view and access servers.
+        scopes:
+          - admin-ui
+          - list:users!group=course::1551764
+          - admin:servers!group=course::1551764
+          - access:servers!group=course::1551764
+        groups:
+          - course::1551764::enrollment_type::teacher
+          - course::1551764::enrollment_type::ta
     nodeSelector:
       hub.jupyter.org/pool-name: core-pool-2024-05-08
     initContainers:
