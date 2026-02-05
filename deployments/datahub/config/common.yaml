@@ -306,3 +306,8 @@ jupyterhub:
             mountPath: /home/jovyan/_shared/bcourses-1551764-readonly
             subPath: _shared/2026-spring/courses/1551764
             readOnly: true
+      course::1550885:
+        ## Course Name: DEMOG-130: Demography of Deaths, Diseases, and Disasters Bcourses ID: 1550885 End Date: May/8/2026
+        ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/8001 for details.
+        mem_limit: 2G
+        mem_guarantee: 2G
