@@ -256,7 +256,7 @@ jupyterhub:
           choices:
             discovery:
               default: true
-              display_name: "NRP Python (CPU + GPU compatible)"
+              display_name: "NRP Python"
               kubespawner_override:
                 image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:latest"
             cuda:
@@ -324,7 +324,7 @@ jupyterhub:
           nvidia.com/gpu: "1"
         extra_resource_limits:
           nvidia.com/gpu: "1"
-        image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:latest
+        image: gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:cuda-latest
       profile_options:
         region: *region_option
         gpu_type:
@@ -374,7 +374,47 @@ jupyterhub:
                 extra_resource_limits:
                   nvidia.com/gpu: "1"
         cpu_cores: *cpu_cores_option
-        image: *image_option
+        image:
+          display_name: "Container Image"
+          description: "Select a container image (You can also enter a custom image below)"
+          choices:
+            cuda:
+              default: true
+              display_name: "NRP CUDA (GPU optimized)"
+              kubespawner_override:
+                image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:cuda-latest"
+            discovery:
+              display_name: "NRP Python"
+              kubespawner_override:
+                image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:latest"
+            tensorflow:
+              display_name: "NRP Tensorflow (GPU optimized)"
+              kubespawner_override:
+                image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:tensorflow-latest"
+            tensorflow_cuda:
+              display_name: "NRP Tensorflow CUDA (GPU optimized)"
+              kubespawner_override:
+                image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:tensorflow-cuda-latest"
+            pytorch:
+              display_name: "NRP PyTorch"
+              kubespawner_override:
+                image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/python:fall25_updates"
+            rstudio:
+              display_name: "NRP RStudio"
+              kubespawner_override:
+                image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/rstudio:v1.6.0"
+            desktop:
+              display_name: "NRP Desktop"
+              kubespawner_override:
+                image: "gitlab-registry.nrp-nautilus.io/nrp/scientific-images/desktop/selkies:v1.6.0"
+          unlisted_choice:
+            enabled: true
+            display_name: "Publicly Accessible Container Image (e.g. quay.io/my-project/my-image:tag)"
+            display_name_in_choices: "Custom Image"
+            validation_regex: "^.+:.+$"
+            validation_message: "Must be a publicly available container image"
+            kubespawner_override:
+              image: "{value}"
         mem_limit: *mem_limit_option
   #custom:
   #  group_profiles:
