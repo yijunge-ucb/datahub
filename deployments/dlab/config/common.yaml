@@ -88,4 +88,4 @@ jupyterhub:
     memory:
       guarantee: 4G
       limit: 8G
-    image: {}
+
