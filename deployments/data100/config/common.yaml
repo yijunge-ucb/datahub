@@ -107,7 +107,7 @@ jupyterhub:
     memory:
       guarantee: 2G
       limit: 4G
-    image: {}
+    
 
 # The below section is for adding shared directories in Data100 Hub.
 

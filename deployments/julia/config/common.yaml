@@ -71,4 +71,4 @@ jupyterhub:
       # Needed for Julia
       guarantee: 2G
       limit: 2G
-    image: {}
+

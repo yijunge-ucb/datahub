@@ -110,7 +110,6 @@ jupyterhub:
     memory:
       guarantee: 512M
       limit: 1G
-    image: {}
 
   custom:
     group_profiles:
