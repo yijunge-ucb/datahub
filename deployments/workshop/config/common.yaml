@@ -58,7 +58,6 @@ jupyterhub:
     nodeSelector:
       # Co-locate with datahub, since workshop shares its image
       hub.jupyter.org/pool-name: datahub-pool
-    image: {}
     storage:
       type: static
       static:
