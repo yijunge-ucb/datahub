@@ -50,6 +50,9 @@ jupyterhub:
           - course::1524699::group::all-admins
 
   singleuser:
+    image:
+      name: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/datahub-user-image
+      tag: d50f15e71ad8
     extraFiles:
       # DH-544
       jupyter-lab-overrides:
@@ -107,7 +110,6 @@ jupyterhub:
     memory:
       guarantee: 512M
       limit: 1G
-    image: {}
 
   custom:
     group_profiles:

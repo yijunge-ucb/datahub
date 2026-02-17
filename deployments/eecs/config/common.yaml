@@ -56,6 +56,9 @@ jupyterhub:
           - course::1524699::group::eecs-admins
 
   singleuser:
+    image:
+      name: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/eecs-user-image
+      tag: ce4182069700
     extraEnv:
       # Until https://github.com/betatim/vscode-binder/pull/19 is merged
       CODE_WORKINGDIR: /home/jovyan
@@ -96,7 +99,7 @@ jupyterhub:
     cpu:
       limit: 2
       guarantee: 0.1
-    image: {}
+
 
   custom:
     group_profiles:

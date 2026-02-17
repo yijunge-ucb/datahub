@@ -97,6 +97,9 @@ jupyterhub:
           - course::1551541::enrollment_type::teacher
           - course::1551541::enrollment_type::ta
   singleuser:
+    image:
+      name: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/data8-user-image
+      tag: 98078da69e7c
     extraFiles:
       # DH-596
       jupyter-lab-overrides:

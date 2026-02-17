@@ -65,6 +65,9 @@ jupyterhub:
       hub.jupyter.org/pool-name: core-pool-2024-05-08
 
   singleuser:
+    image:
+      name: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/datahub-user-image
+      tag: d50f15e71ad8
     extraFiles:
       # DH-305
       remove-exporters:
@@ -86,4 +89,4 @@ jupyterhub:
     memory:
       guarantee: 512M
       limit: 1G
-    image: {}
+

@@ -155,6 +155,9 @@ jupyterhub:
           memory: 3Gi
 
   singleuser:
+    image:
+      name: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/datahub-user-image
+      tag: d50f15e71ad8
     extraEnv:
       GH_SCOPED_CREDS_CLIENT_ID: Iv23ct7Qx1mAotaIIYx9
       GH_SCOPED_CREDS_APP_URL: https://github.com/apps/berkeley-datahub-git-access
@@ -197,7 +200,7 @@ jupyterhub:
     memory:
       guarantee: 512M
       limit: 1G
-    image: {}
+
 
   custom:
     group_profiles:
