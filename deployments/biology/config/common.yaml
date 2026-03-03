@@ -80,10 +80,10 @@ jupyterhub:
           c.QtPNGExporter.enabled = False
           c.WebPDFExporter.embed_images = True
       git-credential-helper:
-        mountPath: /srv/conda/envs/notebook/etc/gitconfig
+        mountPath: /srv/conda/env/notebooks/etc/gitconfig
         stringData: |
           [credential "https://github.com"]
-            helper = !git-credential-github-app --app-key-file /srv/conda/envs/notebook/etc/github/github-app-private-key.pem --app-id 229235
+            helper = !git-credential-github-app --app-key-file /srv/conda/env/notebooks/etc/github/github-app-private-key.pem --app-id 229235
             useHttpPath = true
       git-credential-helper-private-key:
         mountPath: /srv/conda/env/notebooks/etc/github/github-app-private-key.pem
