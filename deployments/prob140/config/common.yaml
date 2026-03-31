@@ -25,12 +25,12 @@ jupyterhub:
       OAuthenticator:
         allow_all: False
         allowed_groups:
-          # Data 140, Spring 2025
-          # https://bcourses.berkeley.edu/courses/1541933
-          - "course::1541933"
           # Data 140, Fall 2025
           # https://bcourses.berkeley.edu/courses/1547933
           - "course::1547933"
+          # Data 140, Spring 2026
+          # https://bcourses.berkeley.edu/courses/1552336
+          - "course::1552336"
           # DataHub staff
           - "course::1524699::group::all-admins"
     loadRoles:
@@ -49,38 +49,25 @@ jupyterhub:
         # this role will be assigned to...
         groups:
           - course::1524699::group::all-admins
-      course-staff-1547933:
-        ## Course: Data C140: Probability for Data Science Bcourses ID: 1547933 End Date: 12/31/2025 
-        ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7380 for more details.
+      course-staff-1552336:
+        ## Course: Data 140 Bcourses ID: 1552336 End Date: 5/31/2026 
+        ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7936 for more details.
         description: Enable course staff to view and access servers.
         scopes:
           - admin-ui
-          - list:users!group=course::1547933
-          - admin:servers!group=course::1547933
-          - access:servers!group=course::1547933
+          - list:users!group=course::1552336
+          - admin:servers!group=course::1552336
+          - access:servers!group=course::1552336
         groups:
-          - course::1547933::enrollment_type::teacher
-          - course::1547933::enrollment_type::ta
-
-      ## Template for enabling elevated privileges for course staff,
-      # Data 140, Semester/Year, Link to GitHub issue
-      #course-staff-N:
-      #  description: Enable course staff to view and access servers.
-      #  # this role provides permissions to...
-      #  scopes:
-      #    - admin-ui
-      #    - list:users!group=course::N
-      #    - admin:servers!group=course::N
-      #    - access:servers!group=course::N
-      #  # this role will be assigned to...
-      #  groups:
-      #    - course::N::enrollment_type::teacher
-      #    - course::N::enrollment_type::ta
-
+          - course::1552336::enrollment_type::teacher
+          - course::1552336::enrollment_type::ta
     nodeSelector:
       hub.jupyter.org/pool-name: core-pool-2024-05-08
 
   singleuser:
+    image:
+      name: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/prob140-user-image
+      tag: b885bc2ce21a
     extraFiles:
       # DH-305
       remove-exporters:
@@ -102,4 +89,4 @@ jupyterhub:
     memory:
       guarantee: 512M
       limit: 1G
-    image: {}
+

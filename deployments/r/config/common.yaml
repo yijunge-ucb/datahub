@@ -50,6 +50,9 @@ jupyterhub:
           - course::1524699::group::all-admins
 
   singleuser:
+    image:
+      name: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/datahub-user-image
+      tag: b82c68dd2433
     extraFiles:
       # DH-544
       jupyter-lab-overrides:
@@ -107,7 +110,6 @@ jupyterhub:
     memory:
       guarantee: 512M
       limit: 1G
-    image: {}
 
   custom:
     group_profiles:
@@ -116,27 +118,43 @@ jupyterhub:
       course::1524699::group::all-admins:
         mem_limit: 2048M
         mem_guarantee: 2048M
-      course::1547015::enrollment_type::teacher:
-      ## Course Name: bcourses-1547015 Bcourses ID: 1547015 End Date: 12/31/2025
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7528 for details.
+      course::1552931::enrollment_type::teacher:
+      ## Course Name: bcourses-1552931 Bcourses ID: 1552931 End Date: 05/31/2026
+      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7882 for details.
         extraVolumeMounts:
           - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1547015-readwrite
-            subPath: _shared/2025-fall/courses/1547015
+            mountPath: /home/jovyan/_shared/bcourses-1552931-readwrite
+            subPath: _shared/2026-spring/courses/1552931
             readOnly: false
-      course::1547015::enrollment_type::ta:
-      ## Course Name: bcourses-1547015 Bcourses ID: 1547015 End Date: 12/31/2025
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7528 for details.
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1552931-readonly
+            subPath: _shared/2026-spring/courses/1552931
+            readOnly: true
+      course::1552931::enrollment_type::ta:
+      ## Course Name: bcourses-1552931 Bcourses ID: 1552931 End Date: 05/31/2026
+      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7882 for details.
         extraVolumeMounts:
           - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1547015-readwrite
-            subPath: _shared/2025-fall/courses/1547015
+            mountPath: /home/jovyan/_shared/bcourses-1552931-readwrite
+            subPath: _shared/2026-spring/courses/1552931
             readOnly: false
-      course::1547015::enrollment_type::student:
-      ## Course Name: bcourses-1547015 Bcourses ID: 1547015 End Date: 12/31/2025
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7528 for details.
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1552931-readonly
+            subPath: _shared/2026-spring/courses/1552931
+            readOnly: true
+      course::1552931::enrollment_type::observer:
+      ## Course Name: bcourses-1552931 Bcourses ID: 1552931 End Date: 05/31/2026
+      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7882 for details.
         extraVolumeMounts:
           - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1547015-readonly
-            subPath: _shared/2025-fall/courses/1547015
+            mountPath: /home/jovyan/_shared/bcourses-1552931-readonly
+            subPath: _shared/2026-spring/courses/1552931
+            readOnly: true
+      course::1552931::enrollment_type::student:
+      ## Course Name: bcourses-1552931 Bcourses ID: 1552931 End Date: 05/31/2026
+      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7882 for details.
+        extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1552931-readonly
+            subPath: _shared/2026-spring/courses/1552931
             readOnly: true

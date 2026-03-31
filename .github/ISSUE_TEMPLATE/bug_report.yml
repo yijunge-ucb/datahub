@@ -9,7 +9,10 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to help us improve Datahub! Please follow the sections in the template and provide as much information as possible
+        Thanks for taking the time to help us improve DataHub! Please follow the sections in the template and provide as much information as possible. 
+        
+        > [!NOTE]
+        > **FERPA Compliance:** Please remove or crop out any names, usernames, or email addresses before submitting. If the issue requires sharing specific user details, including their course affiliation, send them to datahub-support@berkeley.edu instead.
   - type: textarea
     attributes:
       label: Bug description

@@ -1,7 +1,7 @@
 nfsPVC:
   enabled: true
   nfs:
-    serverIP: 10.170.213.154
+    serverIP: 10.85.53.250
 
 jupyterhub:
   ingress:
@@ -31,12 +31,15 @@ jupyterhub:
       OAuthenticator:
         allow_all: False
         allowed_groups:
-          # Data 100, Spring 2025
-          # https://bcourses.berkeley.edu/courses/1541798
-          - "course::1541798"
+          # Data 100, Summer 2025
+          # https://bcourses.berkeley.edu/courses/1545289
+          - "course::1545289"
           # Data 100, Fall 2025
           # https://bcourses.berkeley.edu/courses/1547854
           - "course::1547854"
+          # Data 100, Spring 2026
+          # https://bcourses.berkeley.edu/courses/1551658
+          - "course::1551658"
           # DataHub staff
           - "course::1524699::group::all-admins"
     loadRoles:
@@ -55,40 +58,22 @@ jupyterhub:
         # this role will be assigned to...
         groups:
           - course::1524699::group::all-admins
-      course-staff-1547854:
-        ## Course: Data C100 Bcourses ID: 1547854 End Date: 01/01/2026 
-        ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7497 for more details.
+      course-staff-1551658:
+        ## Course: Data C100 Bcourses ID: 1551658 End Date: 05/31/2025 
+        ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7857 for more details.
         description: Enable course staff to view and access servers.
         scopes:
           - admin-ui
-          - list:users!group=course::1547854
-          - admin:servers!group=course::1547854
-          - access:servers!group=course::1547854
+          - list:users!group=course::1551658
+          - admin:servers!group=course::1551658
+          - access:servers!group=course::1551658
         groups:
-          - course::1547854::enrollment_type::teacher
-          - course::1547854::enrollment_type::ta
-
-# This configuration block is used to enable elevated privileges for teachers and TAs in Data100 hub
-       #Data 100, Semester/Year, https://github.com/berkeley-dsep-infra/datahub/issues/6458
-      #course-staff-1537664:
-      #  description: Enable course staff to view and access servers.
-        # this role provides permissions to...
-       # scopes:
-        #  - admin-ui
-        #  - list:users!group=course::1537664
-        #  - admin:servers!group=course::1537664
-        #  - access:servers!group=course::1537664
-        # this role will be assigned to...
-        #groups:
-         # - course::1537664::group::Admins
-
-#  prePuller:
-#    extraImages:
-#      postgres:
-#        name: gcr.io/ucb-datahub-2018/jupyterhub-postgres
-#        tag: 0.0.1-n3657.h4f7f88c
-
+          - course::1551658::enrollment_type::teacher
+          - course::1551658::enrollment_type::ta
   singleuser:
+    image:
+      name: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/data100-user-image
+      tag: 5d19779c38e0
     extraFiles:
       # DH-544
       jupyter-lab-overrides:
@@ -122,7 +107,7 @@ jupyterhub:
     memory:
       guarantee: 2G
       limit: 4G
-    image: {}
+    
 
 # The below section is for adding shared directories in Data100 Hub.
 
@@ -165,35 +150,43 @@ jupyterhub:
 #           readOnly: true
   custom:
     group_profiles:
-      course::1547854::enrollment_type::teacher:
-      ## Course Name: bcourses-1547854 Bcourses ID: 1547854 End Date: 12/19/2025
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7542 for details.
+      course::1551658::enrollment_type::teacher:
+      ## Course Name: bcourses-1551658 Bcourses ID: 1551658 End Date: 08/15/2026
+      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/8054 for details.
         extraVolumeMounts:
           - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1547854-readwrite
-            subPath: _shared/2025-fall/courses/1547854
+            mountPath: /home/jovyan/_shared/bcourses-1551658-readwrite
+            subPath: _shared/2026-spring/courses/1551658
             readOnly: false
           - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1547854-readonly
-            subPath: _shared/2025-fall/courses/1547854
+            mountPath: /home/jovyan/_shared/bcourses-1551658-readonly
+            subPath: _shared/2026-spring/courses/1551658
             readOnly: true
-      course::1547854::enrollment_type::ta:
-      ## Course Name: bcourses-1547854 Bcourses ID: 1547854 End Date: 12/19/2025
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7542 for details.
+      course::1551658::enrollment_type::ta:
+      ## Course Name: bcourses-1551658 Bcourses ID: 1551658 End Date: 08/15/2026
+      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/8054 for details.
         extraVolumeMounts:
           - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1547854-readwrite
-            subPath: _shared/2025-fall/courses/1547854
+            mountPath: /home/jovyan/_shared/bcourses-1551658-readwrite
+            subPath: _shared/2026-spring/courses/1551658
             readOnly: false
           - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1547854-readonly
-            subPath: _shared/2025-fall/courses/1547854
+            mountPath: /home/jovyan/_shared/bcourses-1551658-readonly
+            subPath: _shared/2026-spring/courses/1551658
             readOnly: true
-      course::1547854::enrollment_type::student:
-      ## Course Name: bcourses-1547854 Bcourses ID: 1547854 End Date: 12/19/2025
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7542 for details.
+      course::1551658::enrollment_type::observer:
+      ## Course Name: bcourses-1551658 Bcourses ID: 1551658 End Date: 08/15/2026
+      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/8054 for details.
         extraVolumeMounts:
           - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1547854-readonly
-            subPath: _shared/2025-fall/courses/1547854
+            mountPath: /home/jovyan/_shared/bcourses-1551658-readonly
+            subPath: _shared/2026-spring/courses/1551658
+            readOnly: true
+      course::1551658::enrollment_type::student:
+      ## Course Name: bcourses-1551658 Bcourses ID: 1551658 End Date: 08/15/2026
+      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/8054 for details.
+        extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1551658-readonly
+            subPath: _shared/2026-spring/courses/1551658
             readOnly: true

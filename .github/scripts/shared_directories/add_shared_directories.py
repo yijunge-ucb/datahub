@@ -149,27 +149,44 @@ def insert_or_update_group_profile(yaml_path: Path, course_id: str, course_name:
     group_profiles_end = group_profiles_start + 1 + len(new_group_lines)
 
     # Step 6: Build new block
-    def make_block(role: str, readonly: bool):
+    def make_block(role: str, include_readwrite: bool, include_readonly: bool):
         ei = group_profiles_indent + 2
         si = ei + 2
         ssi = si + 2
-        access = "readonly" if readonly else "readwrite"
-        return [
+    
+        block = [
             " " * ei + f"course::{course_id}::enrollment_type::{role}:\n",
             " " * ei + f"## Course Name: {course_name} Bcourses ID: {course_id} End Date: {end_date}\n",
             " " * ei + f"## See issue https://github.com/berkeley-dsep-infra/datahub/issues/{issue_number} for details.\n",
             " " * si + "extraVolumeMounts:\n",
-            " " * ssi + "- name: home\n",
-            " " * (ssi + 2) + f"mountPath: /home/jovyan/_shared/{course_name}-{access}\n",
-            " " * (ssi + 2) + f"subPath: _shared/{semester}/courses/{course_id}\n",
-            " " * (ssi + 2) + f"readOnly: {'true' if readonly else 'false'}\n"
         ]
+    
+        if include_readwrite:
+            block += [
+                " " * ssi + "- name: home\n",
+                " " * (ssi + 2) + f"mountPath: /home/jovyan/_shared/{course_name}-readwrite\n",
+                " " * (ssi + 2) + f"subPath: _shared/{semester}/courses/{course_id}\n",
+                " " * (ssi + 2) + "readOnly: false\n",
+            ]
+    
+        if include_readonly:
+            block += [
+                " " * ssi + "- name: home\n",
+                " " * (ssi + 2) + f"mountPath: /home/jovyan/_shared/{course_name}-readonly\n",
+                " " * (ssi + 2) + f"subPath: _shared/{semester}/courses/{course_id}\n",
+                " " * (ssi + 2) + "readOnly: true\n",
+            ]
+    
+        return block
 
+    
     new_block = (
-        make_block("teacher", False) +
-        make_block("ta", False) +
-        make_block("student", True)
+        make_block("teacher", include_readwrite=True, include_readonly=True) +
+        make_block("ta", include_readwrite=True, include_readonly=True) +
+        make_block("observer", include_readwrite=False, include_readonly=True) +
+        make_block("student", include_readwrite=False, include_readonly=True)
     )
+
 
     # Step 7: Append new block at end of group_profiles
     lines = lines[:group_profiles_end] + new_block + lines[group_profiles_end:]

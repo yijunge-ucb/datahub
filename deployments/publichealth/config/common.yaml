@@ -53,46 +53,6 @@ jupyterhub:
         groups:
           - course::1544584::enrollment_type::teacher
           - course::1544584::enrollment_type::ta
-      course-staff-1545903:
-        ## Course: PH251Bw 2025 Data Visualization for Public Health Bcourses ID: 1545903 End Date: 12/31/2025 
-        ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7355 for more details.
-        description: Enable course staff to view and access servers.
-        scopes:
-          - admin-ui
-          - list:users!group=course::1545903
-          - admin:servers!group=course::1545903
-          - access:servers!group=course::1545903
-        groups:
-          - course::1545903::enrollment_type::teacher
-          - course::1545903::enrollment_type::ta
-      course-staff-1547200:
-        ## Course: Public Health 142 Bcourses ID: 1547200 End Date: 12/31/2025 
-        ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7512 for more details.
-        description: Enable course staff to view and access servers.
-        scopes:
-          - admin-ui
-          - list:users!group=course::1547200
-          - admin:servers!group=course::1547200
-          - access:servers!group=course::1547200
-        groups:
-          - course::1547200::enrollment_type::teacher
-          - course::1547200::enrollment_type::ta
-
-      # Template for enabling elevated privileges for course staff. Replace `bcoursesid` with the actual id for the course shared in the GiHub issue
-      # PHW 142, Semester/Year, #https://github.com/berkeley-dsep-infra/datahub/issues/6685
-      # course-staff-bcoursesid:
-        # description: Enable course staff to view and access servers.
-        # this role provides permissions to...
-        #scopes:
-         # - admin-ui
-         # - list:users!group=course::bcoursesid
-         # - admin:servers!group=course::bcoursesid
-         # - access:servers!group=course::bcoursesid
-        # this role will be assigned to...
-        #groups:
-         # - course::bcoursesid::enrollment_type::teacher
-         # - course::bcoursesid::enrollment_type::ta
-
     extraConfig:
       # Use 1x-<title> in `common.yaml` extraConfig values.
       # We want these to come *after* the extraConfig values
@@ -109,6 +69,9 @@ jupyterhub:
       hub.jupyter.org/pool-name: core-pool-2024-05-08
 
   singleuser:
+    image:
+      name: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/publichealth-user-image
+      tag: a17015da7a6d
     extraFiles:
       # DH-305
       remove-exporters:
@@ -156,27 +119,3 @@ jupyterhub:
       course::1524699::group::all-admins:
         mem_limit: 2G
         mem_guarantee: 2G
-      course::1545903::enrollment_type::teacher:
-      ## Course Name: bcourses-1545903 Bcourses ID: 1545903 End Date: 12/31/2025
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7357 for details.
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/rstudio/_shared/bcourses-1545903-readwrite
-            subPath: _shared/2025-fall/courses/1545903
-            readOnly: false
-      course::1545903::enrollment_type::ta:
-      ## Course Name: bcourses-1545903 Bcourses ID: 1545903 End Date: 12/31/2025
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7357 for details.
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/rstudio/_shared/bcourses-1545903-readwrite
-            subPath: _shared/2025-fall/courses/1545903
-            readOnly: false
-      course::1545903::enrollment_type::student:
-      ## Course Name: bcourses-1545903 Bcourses ID: 1545903 End Date: 12/31/2025
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7357 for details.
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/rstudio/_shared/bcourses-1545903-readwrite
-            subPath: _shared/2025-fall/courses/1545903
-            readOnly: true

@@ -77,6 +77,9 @@ jupyterhub:
     #        }
     #      )
   singleuser:
+    image:
+      name: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/stat159-user-image
+      tag: 737b83177ecd
     defaultUrl: "/lab"
     extraEnv:
       GH_SCOPED_CREDS_CLIENT_ID: Iv1.28ac6d8f60ed35ac
@@ -87,6 +90,15 @@ jupyterhub:
       # Unset NotebookApp from hub/values. Necessary for recent lab versions.
       JUPYTERHUB_SINGLEUSER_APP: "jupyter_server.serverapp.ServerApp"
       JUPYTER_PATH: "/srv/conda/envs/shared/share/jupyter"
+      # Fernando wants students to have persistent envs, but it is hard
+      # to get each student to write out a ~/.condarc. We set envs instead.
+      # https://github.com/berkeley-dsep-infra/stat159-user-image/issues/28
+      CONDA_ENVS_PATH: "/home/jovyan/.local/share/envs:/srv/conda/envs"
+      # Without the setting below, pkgs would persist in home directories.
+      # https://docs.conda.io/projects/conda/en/stable/user-guide/configuration/settings.html#pkgs-dirs-specify-package-directories
+      CONDA_PKGS_DIRS: "/srv/conda/pkgs"
+      # For myst development
+      #BASE_URL: "/user/{unescaped_username}/proxy/8000"
     #cmd:
     #  - jupyterhub-singleuser
     #  - --LabApp.collaborative=true

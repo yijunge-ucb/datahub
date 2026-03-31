@@ -9,7 +9,10 @@ body:
   - type: markdown
     attributes:
       value: |
-        Please refer to the common causes for the performance issues by referring to this documentation - https://ds-modules.github.io/curriculum-guide/workflow/performance_issue.html. If the above mentioned reasons are not the cause for the performance issues in the hub then or you lack clarity about the issue then  please do raise a request by filling the details below:
+        Please refer to the common causes for the performance issues listed in this documentation - https://curriculum-guide.datahub.berkeley.edu/workflows/performance-issue/. If the above mentioned reasons are not the cause for the performance issues, or you lack clarity about the issue, then please do raise a request by filling in the details below:
+        > [!NOTE]
+        > **FERPA Compliance:** Please remove or crop out any names, usernames, or email addresses before submitting. If the issue requires sharing specific user details, including their course affiliation, send them to datahub-support@berkeley.edu instead.
+
   - type: dropdown
     attributes:
       label: Your Role

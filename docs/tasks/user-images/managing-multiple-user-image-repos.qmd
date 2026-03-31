@@ -44,7 +44,7 @@ python3 -m pip install --no-cache git+https://github.com/berkeley-dsep-infra/man
 ### Installing the `gh` tool
 
 To use the `pr` and `merge` sub-commands, you will also need to install the
-Github CLI tool: https://github.com/cli/cli#installation
+[Github CLI tool](https://github.com/cli/cli#installation).
 
 ## Usage
 
