@@ -204,7 +204,8 @@ jupyterhub:
         mem_limit: 12288M #12 GB RAM should be enough for parsing data and generating dashboards
         mem_guarantee: 12288M
         extraVolumeMounts:
-          - name: home
+          discovery-su24-dataset:
+            name: home
             mountPath: /home/jovyan/discovery-su24-dataset
             subPath: _shared/discovery-su24-dataset
             readOnly: true

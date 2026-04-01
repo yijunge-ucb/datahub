@@ -60,7 +60,8 @@ jupyterhub:
         mem_limit: 4096M
         mem_guarantee: 4096M
         extraVolumeMounts:
-          - name: home
+          shared-readwrite:
+            name: home
             mountPath: /home/jovyan/shared-readwrite
             subPath: _shared
 

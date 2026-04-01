@@ -125,13 +125,16 @@ jupyterhub:
           - name: custom-templates
             mountPath: /srv/repo
     extraVolumes:
-      - name: custom-templates
+      custom-templates:
+        name: custom-templates
         emptyDir: {}
     extraVolumeMounts:
-      - mountPath: /usr/local/share/jupyterhub/custom_templates
+      custom-templates:
+        mountPath: /usr/local/share/jupyterhub/custom_templates
         name: custom-templates
         subPath: "templates"
-      - mountPath: /usr/local/share/jupyterhub/static/extra-assets
+      static-assets:
+        mountPath: /usr/local/share/jupyterhub/static/extra-assets
         name: custom-templates
         subPath: "extra-assets"
     extraConfig:
@@ -171,22 +174,26 @@ jupyterhub:
         pvcName: home-nfs-v3
         subPath: "{username}"
       extraVolumes:
-        - name: etc-gitconfig
+        etc-gitconfig:
+          name: etc-gitconfig
           secret:
             secretName: user-etc-gitconfig
       extraVolumeMounts:
-        - name: etc-gitconfig
+        gitconfig:
+          name: etc-gitconfig
           mountPath: /srv/conda/etc/gitconfig
           subPath: gitconfig
           readOnly: true
-        - name: etc-gitconfig
+        private-key:
+          name: etc-gitconfig
           mountPath: /etc/github/github-app-private-key.pem
           subPath: github-app-private-key.pem
           readOnly: true
         # RStudio can't write session files to anywhere except ~/.rstudio -
         # only way to change that is by setting $HOME. So instead, we just
         # bind mount a fresh directory on top of ~/.rstudio!
-        - name: home
+        rstudio-home:
+          name: home
           mountPath: /home/jovyan/.rstudio
           subPath: '{username}/.datahub-rstudio'
     extraFiles:
@@ -209,46 +216,6 @@ jupyterhub:
       course::1524699::group::all-admins:
         mem_limit: 4096M
         mem_guarantee: 4096M
-
-# This is a template for configuring shared directories in DataHub.
-# Replace placeholders with actual values applicable to the course.
-# Reference: https://github.com/berkeley-dsep-infra/datahub/issues/6901
-
-# --- Teacher Configuration ---
-# This section configures settings for teachers enrolled in the course.
-# course::<course_id>::enrollment_type::teacher:
-#   extraVolumeMounts:
-#     - name: home
-#       # Mount path where teachers can have read/write access.
-#       mountPath: /home/jovyan/_shared/<your-course>-readwrite
-#       # Sub-path within the filesystem for the course.
-#       subPath: _shared/<year-semester>/courses/<course_id>
-#       # Set readOnly to false to allow write permissions for teachers.
-#       readOnly: false
-
-# --- Teaching Assistant (TA) Configuration ---
-# This section configures settings for TAs enrolled in the course.
-# course::<course_id>::enrollment_type::ta:
-#   extraVolumeMounts:
-#     - name: home
-#       # Mount path where TAs can have read/write access.
-#       mountPath: /home/jovyan/_shared/<your-course>-readwrite
-#       # Sub-path within the filesystem for the course.
-#       subPath: _shared/<year-semester>/courses/<course_id>
-#       # Set readOnly to false to allow write permissions for TAs.
-#       readOnly: false
-
-# --- Student Configuration ---
-# This section configures settings for students enrolled in the course.
-# course::<course_id>::enrollment_type::student:
-#   extraVolumeMounts:
-#     - name: home
-#       # Mount path where students have read-only access.
-#       mountPath: /home/jovyan/_shared/<your-course>-readonly
-#       # Sub-path within the filesystem for the course.
-#       subPath: _shared/<year-semester>/courses/<course_id>
-#       # Set readOnly to true to restrict write permissions for students.
-#       readOnly: true
       course::1546002:
         ## Course Name: Data 6 Bcourses ID: 1546002 End Date: 08/14/2025
         ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7305 for details.
@@ -269,48 +236,12 @@ jupyterhub:
         ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7902 for details.
         mem_limit: 4G
         mem_guarantee: 4G
-      course::1551764::enrollment_type::teacher:
-      ## Course Name: bcourses-1551764 Bcourses ID: 1551764 End Date: 05/31/26
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7954 for details.
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1551764-readwrite
-            subPath: _shared/2026-spring/courses/1551764
-            readOnly: false
-          - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1551764-readonly
-            subPath: _shared/2026-spring/courses/1551764
-            readOnly: true
-      course::1551764::enrollment_type::ta:
-      ## Course Name: bcourses-1551764 Bcourses ID: 1551764 End Date: 05/31/26
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7954 for details.
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1551764-readwrite
-            subPath: _shared/2026-spring/courses/1551764
-            readOnly: false
-          - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1551764-readonly
-            subPath: _shared/2026-spring/courses/1551764
-            readOnly: true
-      course::1551764::enrollment_type::observer:
-      ## Course Name: bcourses-1551764 Bcourses ID: 1551764 End Date: 05/31/26
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7954 for details.
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1551764-readonly
-            subPath: _shared/2026-spring/courses/1551764
-            readOnly: true
-      course::1551764::enrollment_type::student:
-      ## Course Name: bcourses-1551764 Bcourses ID: 1551764 End Date: 05/31/26
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7954 for details.
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1551764-readonly
-            subPath: _shared/2026-spring/courses/1551764
-            readOnly: true
       course::1550885:
         ## Course Name: DEMOG-130: Demography of Deaths, Diseases, and Disasters Bcourses ID: 1550885 End Date: May/8/2026
         ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/8001 for details.
         mem_limit: 2G
         mem_guarantee: 2G
+
+    bcourses_shared:
+      2026-spring:
+        - "course::1551764"

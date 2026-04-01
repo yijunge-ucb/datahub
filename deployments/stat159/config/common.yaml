@@ -138,3 +138,15 @@ jupyterhub:
     memory:
       guarantee: 8G
       limit: 8G
+
+  custom:
+    bcourses_shared:
+      2025-fall:
+        - "course::1524699"
+        - "course::1546508"
+    
+    conda_shared:
+      - bcourse_group: "course::1546508"
+        staff_overrides:
+          mem_limit: 8G
+          mem_guarantee: 8G

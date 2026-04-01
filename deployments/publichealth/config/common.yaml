@@ -97,15 +97,18 @@ jupyterhub:
         pvcName: home-nfs-v3
         subPath: "{username}"
       extraVolumes:
-        - name: etc-gitconfig
+        user-etc-gitconfig:
+          name: etc-gitconfig
           secret:
             secretName: user-etc-gitconfig
       extraVolumeMounts:
-        - name: etc-gitconfig
+        gitconfig:
+          ame: etc-gitconfig
           mountPath: /srv/conda/etc/gitconfig
           subPath: gitconfig
           readOnly: true
-        - name: etc-gitconfig
+        private-key:
+          name: etc-gitconfig
           mountPath: /etc/github/github-app-private-key.pem
           subPath: github-app-private-key.pem
           readOnly: true

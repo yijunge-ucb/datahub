@@ -222,19 +222,23 @@ jupyterhub:
         pvcName: home-nfs-v3
         subPath: "{username}"
       extraVolumes:
-        - name: postgres-db
+        postgres-db:
+          name: postgres-db
           persistentVolumeClaim:
             claimName: 'db-{username}'
-        - name: mongodb
+        mongodb:
+          name: mongodb
           persistentVolumeClaim:
             claimName: 'mongo-{username}'
       extraVolumeMounts:
-        - name: postgres-db
+        postgres-db:
+          name: postgres-db
           mountPath: /var/lib/postgresql/data
           # postgres recommends against mounting a volume directly here
           # So we put data in a subpath
           subPath: data
-        - name: mongodb
+        mongodb:
+          name: mongodb
           mountPath: /data/db
     memory:
       guarantee: 3G
@@ -247,41 +251,3 @@ jupyterhub:
       course::1524699::group::all-admins:
         mem_limit: 4G
         mem_guarantee: 2G
-
-# This is a template for configuring shared directories in Data101 Hub.
-
-# --- Teacher Configuration ---
-# This section configures settings for teachers enrolled in the course.
-# course::<course_id>::enrollment_type::teacher:
-#   extraVolumeMounts:
-#     - name: home
-#       # Mount path where teachers can have read/write access.
-#       mountPath: /home/jovyan/_shared/<your-course>-readwrite
-#       # Sub-path within the filesystem for the course.
-#       subPath: _shared/<year-semester>/courses/<course_id>
-#       # Set readOnly to false to allow write permissions for teachers.
-#       readOnly: false
-
-# --- Teaching Assistant (TA) Configuration ---
-# This section configures settings for TAs enrolled in the course.
-# course::<course_id>::enrollment_type::ta:
-#   extraVolumeMounts:
-#     - name: home
-#       # Mount path where TAs can have read/write access.
-#       mountPath: /home/jovyan/_shared/<your-course>-readwrite
-#       # Sub-path within the filesystem for the course.
-#       subPath: _shared/<year-semester>/courses/<course_id>
-#       # Set readOnly to false to allow write permissions for TAs.
-#       readOnly: false
-
-# --- Student Configuration ---
-# This section configures settings for students enrolled in the course.
-# course::<course_id>::enrollment_type::student:
-#   extraVolumeMounts:
-#     - name: home
-#       # Mount path where students have read-only access.
-#       mountPath: /home/jovyan/_shared/<your-course>-readonly
-#       # Sub-path within the filesystem for the course.
-#       subPath: _shared/<year-semester>/courses/<course_id>
-#       # Set readOnly to true to restrict write permissions for students.
-#       readOnly: true
