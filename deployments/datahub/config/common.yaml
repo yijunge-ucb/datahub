@@ -125,12 +125,10 @@ jupyterhub:
           - name: custom-templates
             mountPath: /srv/repo
     extraVolumes:
-      custom-templates:
-        name: custom-templates
+      - name: custom-templates
         emptyDir: {}
     extraVolumeMounts:
-      custom-templates:
-        mountPath: /usr/local/share/jupyterhub/custom_templates
+      - mountPath: /usr/local/share/jupyterhub/custom_templates
         name: custom-templates
         subPath: "templates"
       static-assets:
