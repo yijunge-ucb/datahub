@@ -41,6 +41,7 @@ jupyterhub:
           - balajialwar
           - gmerritt
           - eric_vandusen@berkeley.edu
+          - yijunge
   proxy:
     chp:
       nodeSelector:

@@ -89,7 +89,7 @@ jupyterhub:
       DISPLAY: ":1.0"
       # Unset NotebookApp from hub/values. Necessary for recent lab versions.
       JUPYTERHUB_SINGLEUSER_APP: "jupyter_server.serverapp.ServerApp"
-      JUPYTER_PATH: "/srv/conda/envs/shared/share/jupyter"
+      JUPYTER_PATH: "/srv/conda/envs/shared-1546508/share/jupyter"
       # Fernando wants students to have persistent envs, but it is hard
       # to get each student to write out a ~/.condarc. We set envs instead.
       # https://github.com/berkeley-dsep-infra/stat159-user-image/issues/28
@@ -138,3 +138,15 @@ jupyterhub:
     memory:
       guarantee: 8G
       limit: 8G
+
+  custom:
+    bcourses_shared:
+      2025-fall:
+        - "course::1524699"
+        - "course::1546508"
+    
+    conda_shared:
+      - bcourse_group: "course::1546508"
+        staff_overrides:
+          mem_limit: 8G
+          mem_guarantee: 8G

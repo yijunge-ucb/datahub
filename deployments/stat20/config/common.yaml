@@ -101,7 +101,8 @@ jupyterhub:
         pvcName: home-nfs-v3
         subPath: "{username}"
       extraVolumeMounts:
-        - name: home
+        shared-readonly:
+          name: home
           mountPath: /opt/shared
           subPath: _shared
           readOnly: true
@@ -117,7 +118,8 @@ jupyterhub:
         mem_limit: 12G
       # Shared directory to read logs data from every semester
         extraVolumeMounts:
-          - name: home
+          admins-shared:
+            name: home
             mountPath: /home/jovyan/admins-shared
             subPath: _shared-admins
             readOnly: true

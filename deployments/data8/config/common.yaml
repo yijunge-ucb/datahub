@@ -10,8 +10,11 @@ jupyterhub:
       # https://bcourses.berkeley.edu/courses/1524699/groups#tab-80607
       course::1524699::group::all-admins:
         extraVolumeMounts:
-          - name: home
-            mountPath: /srv/homes
+          shared-readwrite:
+            name: home
+            mountPath: /home/jovyan/shared-readwrite
+            subPath: _shared
+
 
   ingress:
     annotations:
