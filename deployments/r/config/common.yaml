@@ -128,6 +128,46 @@ jupyterhub:
         ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/8150 for details.
         mem_limit: 2G
         mem_guarantee: 2G
+      course::1550624::enrollment_type::teacher:
+      ## Course Name: bcourses-1550624 Bcourses ID: 1550624 End Date: 05/15/2026
+      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/8152 for details.
+        extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1550624-readwrite
+            subPath: _shared/2026-spring/courses/1550624
+            readOnly: false
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1550624-readonly
+            subPath: _shared/2026-spring/courses/1550624
+            readOnly: true
+      course::1550624::enrollment_type::ta:
+      ## Course Name: bcourses-1550624 Bcourses ID: 1550624 End Date: 05/15/2026
+      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/8152 for details.
+        extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1550624-readwrite
+            subPath: _shared/2026-spring/courses/1550624
+            readOnly: false
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1550624-readonly
+            subPath: _shared/2026-spring/courses/1550624
+            readOnly: true
+      course::1550624::enrollment_type::observer:
+      ## Course Name: bcourses-1550624 Bcourses ID: 1550624 End Date: 05/15/2026
+      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/8152 for details.
+        extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1550624-readonly
+            subPath: _shared/2026-spring/courses/1550624
+            readOnly: true
+      course::1550624::enrollment_type::student:
+      ## Course Name: bcourses-1550624 Bcourses ID: 1550624 End Date: 05/15/2026
+      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/8152 for details.
+        extraVolumeMounts:
+          - name: home
+            mountPath: /home/jovyan/_shared/bcourses-1550624-readonly
+            subPath: _shared/2026-spring/courses/1550624
+            readOnly: true
     bcourses_shared:
       2026-spring:
         - "course::1552931"
