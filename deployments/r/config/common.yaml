@@ -122,6 +122,12 @@ jupyterhub:
       course::1524699::group::all-admins:
         mem_limit: 2048M
         mem_guarantee: 2048M
+      
+      course::1550624:
+        ## Course Name: Political Science 3 Bcourses ID: 1550624 End Date: 05/15/2026
+        ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/8150 for details.
+        mem_limit: 2G
+        mem_guarantee: 2G
     
     bcourses_shared:
       2026-spring:
