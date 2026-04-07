@@ -574,7 +574,7 @@ jupyterhub:
               conda_shared_volume_mounts += [
                 {
                   "name": f"conda-shared-instr-{prod_or_staging}",
-                  "mountPath": f"/srv/conda/envs/shared",
+                  "mountPath": f"/srv/conda/envs/shared-{bcourse_id}",
                   "subPath": f"conda_shared/{bcourse_id}",
                   "readOnly": False,
                 }
@@ -599,7 +599,7 @@ jupyterhub:
               conda_shared_volume_mounts += [
                 {
                   "name": f"conda-shared-stud-{prod_or_staging}",
-                  "mountPath": f"/srv/conda/envs/shared",
+                  "mountPath": f"/srv/conda/envs/shared-{bcourse_id}",
                   "subPath": f"conda_shared/{bcourse_id}",
                   "readOnly": True,
                 }
