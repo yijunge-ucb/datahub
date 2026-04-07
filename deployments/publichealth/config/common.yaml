@@ -103,7 +103,7 @@ jupyterhub:
             secretName: user-etc-gitconfig
       extraVolumeMounts:
         gitconfig:
-          ame: etc-gitconfig
+          name: etc-gitconfig
           mountPath: /srv/conda/etc/gitconfig
           subPath: gitconfig
           readOnly: true
