@@ -131,8 +131,7 @@ jupyterhub:
       - mountPath: /usr/local/share/jupyterhub/custom_templates
         name: custom-templates
         subPath: "templates"
-      static-assets:
-        mountPath: /usr/local/share/jupyterhub/static/extra-assets
+      - mountPath: /usr/local/share/jupyterhub/static/extra-assets
         name: custom-templates
         subPath: "extra-assets"
     extraConfig:
