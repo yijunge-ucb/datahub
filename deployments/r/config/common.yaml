@@ -88,22 +88,26 @@ jupyterhub:
         pvcName: home-nfs-v3
         subPath: "{username}"
       extraVolumes:
-        - name: etc-gitconfig
+        user-etc-gitconfig:
+          name: etc-gitconfig
           secret:
             secretName: user-etc-gitconfig
       extraVolumeMounts:
-        - name: etc-gitconfig
+        gitconfig:
+          name: etc-gitconfig
           mountPath: /srv/conda/etc/gitconfig
           subPath: gitconfig
           readOnly: true
-        - name: etc-gitconfig
+        private-key:
+          name: etc-gitconfig
           mountPath: /etc/github/github-app-private-key.pem
           subPath: github-app-private-key.pem
           readOnly: true
         # RStudio can't write session files to anywhere except ~/.rstudio -
         # only way to change that is by setting $HOME. So instead, we just
         # bind mount a fresh directory on top of ~/.rstudio!
-        - name: home
+        rstudio-home:
+          name: home
           mountPath: /home/jovyan/.rstudio
           subPath: '{username}/.r-hub-rstudio'
     defaultUrl: "/rstudio"
@@ -118,43 +122,8 @@ jupyterhub:
       course::1524699::group::all-admins:
         mem_limit: 2048M
         mem_guarantee: 2048M
-      course::1552931::enrollment_type::teacher:
-      ## Course Name: bcourses-1552931 Bcourses ID: 1552931 End Date: 05/31/2026
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7882 for details.
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1552931-readwrite
-            subPath: _shared/2026-spring/courses/1552931
-            readOnly: false
-          - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1552931-readonly
-            subPath: _shared/2026-spring/courses/1552931
-            readOnly: true
-      course::1552931::enrollment_type::ta:
-      ## Course Name: bcourses-1552931 Bcourses ID: 1552931 End Date: 05/31/2026
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7882 for details.
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1552931-readwrite
-            subPath: _shared/2026-spring/courses/1552931
-            readOnly: false
-          - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1552931-readonly
-            subPath: _shared/2026-spring/courses/1552931
-            readOnly: true
-      course::1552931::enrollment_type::observer:
-      ## Course Name: bcourses-1552931 Bcourses ID: 1552931 End Date: 05/31/2026
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7882 for details.
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1552931-readonly
-            subPath: _shared/2026-spring/courses/1552931
-            readOnly: true
-      course::1552931::enrollment_type::student:
-      ## Course Name: bcourses-1552931 Bcourses ID: 1552931 End Date: 05/31/2026
-      ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7882 for details.
-        extraVolumeMounts:
-          - name: home
-            mountPath: /home/jovyan/_shared/bcourses-1552931-readonly
-            subPath: _shared/2026-spring/courses/1552931
-            readOnly: true
+    
+    bcourses_shared:
+      2026-spring:
+        - "course::1552931"
+        - "course::1550624"

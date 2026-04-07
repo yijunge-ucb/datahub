@@ -10,8 +10,11 @@ jupyterhub:
       # https://bcourses.berkeley.edu/courses/1524699/groups#tab-80607
       course::1524699::group::all-admins:
         extraVolumeMounts:
-          - name: home
-            mountPath: /srv/homes
+          shared-readwrite:
+            name: home
+            mountPath: /home/jovyan/shared-readwrite
+            subPath: _shared
+
 
   ingress:
     annotations:
@@ -99,7 +102,7 @@ jupyterhub:
   singleuser:
     image:
       name: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/data8-user-image
-      tag: 24612ccf572e
+      tag: d95eaaa1bfff
     extraFiles:
       # DH-596
       jupyter-lab-overrides:

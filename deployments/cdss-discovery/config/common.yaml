@@ -141,8 +141,8 @@ jupyterhub:
     storage:
       type: dynamic
       extraLabels: {}
-      extraVolumes: []
-      extraVolumeMounts: []
+      extraVolumes: {}
+      extraVolumeMounts: {}
       capacity: 20Gi
       homeMountPath: /home/jovyan
       dynamic:
