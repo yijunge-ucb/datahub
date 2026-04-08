@@ -3,16 +3,49 @@ name: Only allow staging -> prod & !prod -> staging merges
 on:
   pull_request:
     branches:
-    - staging
-    - prod
+      - staging
+      - prod
 
 jobs:
   check-branch:
     runs-on: ubuntu-latest
     steps:
-    - name: Only allow staging -> prod merges
-      run: |
-        # All branches *except* prod can be merged into staging
-        # *Only* staging can be merged into prod
-        echo "Merging ${GITHUB_HEAD_REF} into ${GITHUB_BASE_REF}"
-        python3 -c 'import os, sys; sys.exit(not(os.environ["GITHUB_HEAD_REF"] == "staging" if os.environ["GITHUB_BASE_REF"] == "prod" else os.environ["GITHUB_HEAD_REF"] != "prod"))'
+      - name: Validate branch merge rules with exceptions
+        run: |
+          echo "Actor: ${{ github.actor }}"
+          echo "Merging ${GITHUB_HEAD_REF} into ${GITHUB_BASE_REF}"
+          ALLOWED_USERS=("yijunge-ucb" "balajialg")
+
+          for user in "${ALLOWED_USERS[@]}"; do
+            if [ "$user" = "${{ github.actor }}" ]; then
+              echo "User is allowed to bypass branch restrictions"
+              exit 0
+            fi
+          done
+
+          # Enforce branch rules
+          python3 - <<EOF
+            import os, sys
+            
+            head = os.environ["GITHUB_HEAD_REF"]
+            base = os.environ["GITHUB_BASE_REF"]
+            
+            print(f"Checking merge: {head} -> {base}")
+            
+            # Rule:
+            # - Only staging -> prod allowed
+            # - Any branch except prod -> staging allowed
+            
+            if base == "prod":
+                allowed = (head == "staging")
+            elif base == "staging":
+                allowed = (head != "prod")
+            else:
+                allowed = True
+            
+            if not allowed:
+                print("Merge not allowed by policy")
+                sys.exit(1)
+            else:
+                print("Merge allowed")
+            EOF
