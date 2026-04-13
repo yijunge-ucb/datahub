@@ -26,27 +26,27 @@ jobs:
 
           # Enforce branch rules
           python3 - <<EOF
-            import os, sys
-            
-            head = os.environ["GITHUB_HEAD_REF"]
-            base = os.environ["GITHUB_BASE_REF"]
-            
-            print(f"Checking merge: {head} -> {base}")
-            
-            # Rule:
-            # - Only staging -> prod allowed
-            # - Any branch except prod -> staging allowed
-            
-            if base == "prod":
-                allowed = (head == "staging")
-            elif base == "staging":
-                allowed = (head != "prod")
-            else:
-                allowed = True
-            
-            if not allowed:
-                print("Merge not allowed by policy")
-                sys.exit(1)
-            else:
-                print("Merge allowed")
-            EOF
+          import os, sys
+          
+          head = os.environ["GITHUB_HEAD_REF"]
+          base = os.environ["GITHUB_BASE_REF"]
+          
+          print(f"Checking merge: {head} -> {base}")
+          
+          # Rule:
+          # - Only staging -> prod allowed
+          # - Any branch except prod -> staging allowed
+          
+          if base == "prod":
+              allowed = (head == "staging")
+          elif base == "staging":
+              allowed = (head != "prod")
+          else:
+              allowed = True
+          
+          if not allowed:
+              print("Merge not allowed by policy")
+              sys.exit(1)
+          else:
+              print("Merge allowed")
+          EOF
