@@ -1,3 +1,4 @@
+
 name: Only allow staging -> prod & !prod -> staging merges
 
 on:

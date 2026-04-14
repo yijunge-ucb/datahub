@@ -1,3 +1,4 @@
+
 nfsPVC:
   enabled: true
   nfs:
@@ -217,7 +218,11 @@ jupyterhub:
         ## Course Name: LEGALST 123 Data Prediction & Law Bcourses ID: 1552265 End Date: 05/16/2026
         ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7843 for details.
         mem_limit: 4G
+<<<<<<< staging
         mem_guarantee: 2G
+=======
+        mem_guarantee: 4G
+>>>>>>> prod
       course::1552731:
         ## Course Name: Envecon 153 Bcourses ID: 1552731 End Date: End of Spring semester
         ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7898 for details.
