@@ -242,7 +242,7 @@ jobs:
           script: |
             const issueNumber = context.issue.number;
 
-            const emailRegex = /([a-zA-Z0-9._%+-]+@berkeley\.edu)/g;
+            const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[A-Za-z]{2,})/g;
             const gsLinkRegex = /gs:\/\/[^\s]+\.tar\.gz/g;
 
             function redact(text) {
