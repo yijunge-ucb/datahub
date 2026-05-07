@@ -75,10 +75,9 @@ jobs:
               }
 
               if (folderLinks.length > 0) {
-                console.log(`Found links: ${folderLinks.join(", ")}`);
-                
-                // Store all links as a comma-separated string
-                core.setOutput("folderlink", folderLinks.join(","));  
+                core.setSecret(folderLinks.join(","));
+
+                core.setOutput("folderlink", folderLinks.join(","));
                 core.setOutput("folder_found", "true");  
               } else {
                 console.log("No valid folder link found. Leaving a comment and closing the issue.");
@@ -126,7 +125,7 @@ jobs:
               const emailMatch = issueBody.match(emailPattern);
               if (emailMatch && emailMatch[1]) {
                 email = emailMatch[1].trim();
-                console.log(`Found email: ${email}`);
+                core.setSecret(email);
                 core.setOutput("email", email);
                 core.setOutput("email_found", "true");
               } else {
@@ -236,11 +235,78 @@ jobs:
         run: |
           python3 .github/scripts/sign_url_and_send_emails.py
 
+      - name: Redact sensitive data from issue and comments
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = context.issue.number;
+
+            const emailRegex = /([a-zA-Z0-9._%+-]+@berkeley\.edu)/g;
+            const gsLinkRegex = /gs:\/\/[^\s]+\.tar\.gz/g;
+
+            function redact(text) {
+              if (!text) return text;
+
+              return text
+                .replace(emailRegex, '[REDACTED EMAIL]')
+                .replace(gsLinkRegex, '[REDACTED FOLDER LINK]');
+            }
+            // Redact issue body
+            const issue = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber
+            });
+
+            const originalIssueBody = issue.data.body || '';
+            const redactedIssueBody = redact(originalIssueBody);
+
+            if (originalIssueBody !== redactedIssueBody) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                body: redactedIssueBody
+              });
+
+              console.log('Issue body redacted.');
+            }
+
+            // Redact issue comments
+            const comments = await github.paginate(
+              github.rest.issues.listComments,
+              {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                per_page: 100
+              }
+            );
+
+            for (const comment of comments) {
+              const originalComment = comment.body || '';
+              const redactedComment = redact(originalComment);
+
+              if (originalComment !== redactedComment) {
+                await github.rest.issues.updateComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: comment.id,
+                  body: redactedComment
+                });
+
+                console.log(`Redacted comment ${comment.id}`);
+              }
+            }
+
+            console.log('Sensitive data redaction complete.');
+            
       - name: Post success comment and close the issue
         if: steps.run_send_email_python_script.outcome == 'success' 
         run: |
           # Post a success comment on the issue
-          COMMENT_BODY='The requested resource has been sent to your provided email address. You have 7 days from when the email was received to retrieve your data. If you do not see the email, check for your spam box and look for an email sent from datahub-dataretrieval@berkeley.edu.'
+          COMMENT_BODY='The requested resource has been sent to your provided email address. You have 7 days from when the email was received to retrieve your data. If you do not see the email, check for your spam box and look for an email sent from datahub-dataretrieval@berkeley.edu. Your email has been redacted for FERPA compliance.'
 
           ISSUE_NUMBER=${{ github.event.issue.number }}
           curl -s -X POST \
