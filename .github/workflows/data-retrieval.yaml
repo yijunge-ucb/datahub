@@ -1,4 +1,5 @@
 name: Issue Created and Label Found
+retention-days: 1
 
 on:
   workflow_call:
