@@ -214,11 +214,6 @@ jupyterhub:
       course::1524699::group::all-admins:
         mem_limit: 4096M
         mem_guarantee: 4096M
-      course::1552265:
-        ## Course Name: LEGALST 123 Data Prediction & Law Bcourses ID: 1552265 End Date: 05/16/2026
-        ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7843 for details.
-        mem_limit: 4G
-        mem_guarantee: 2G
       course::1552731:
         ## Course Name: Envecon 153 Bcourses ID: 1552731 End Date: End of Spring semester
         ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7898 for details.
