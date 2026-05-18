@@ -67,18 +67,6 @@ jupyterhub:
         groups:
           - course::1545078::enrollment_type::teacher
           - course::1545078::enrollment_type::ta
-      course-staff-1551226:
-        ## Course: There are two related courses: Computational modeling of language, Computational linguistics Bcourses ID: 1551226 End Date: 06/01/2026 
-        ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7822 for more details.
-        description: Enable course staff to view and access servers.
-        scopes:
-          - admin-ui
-          - list:users!group=course::1551226
-          - admin:servers!group=course::1551226
-          - access:servers!group=course::1551226
-        groups:
-          - course::1551226::enrollment_type::teacher
-          - course::1551226::enrollment_type::ta
       course-staff-1551190:
         ## Course: There are two related courses: Computational modeling of language, Computational linguistics Bcourses ID: 1551190 End Date: 06/01/2026 
         ## See issue https://github.com/berkeley-dsep-infra/datahub/issues/7822 for more details.
