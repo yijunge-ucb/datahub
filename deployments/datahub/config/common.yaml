@@ -143,7 +143,7 @@ jupyterhub:
       extraVolumeMounts:
         gitconfig:
           name: etc-gitconfig
-          mountPath: /srv/conda/etc/gitconfig
+          mountPath: /srv/conda/envs/notebook/etc/gitconfig
           subPath: gitconfig
           readOnly: true
         private-key:
