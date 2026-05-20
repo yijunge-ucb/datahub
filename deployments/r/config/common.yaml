@@ -56,7 +56,7 @@ jupyterhub:
     extraFiles:
       # DH-544
       jupyter-lab-overrides:
-        mountPath:  /srv/conda/share/jupyter/lab/settings/overrides.json
+        mountPath:  /srv/conda/envs/notebook/share/jupyter/lab/settings/overrides.json
         stringData:  |
           {
             "@jupyterlab/notebook-extension:tracker": {
@@ -95,7 +95,7 @@ jupyterhub:
       extraVolumeMounts:
         gitconfig:
           name: etc-gitconfig
-          mountPath: /srv/conda/etc/gitconfig
+          mountPath: /srv/conda/envs/notebook/etc/gitconfig
           subPath: gitconfig
           readOnly: true
         private-key:
