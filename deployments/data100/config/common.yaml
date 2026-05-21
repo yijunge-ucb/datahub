@@ -96,7 +96,7 @@ jupyterhub:
       guarantee: 2G
       limit: 4G
     
-  custom:
-    bcourses_shared:
-      2026-spring:
-        - "course::1551658"
+  # custom:
+    # bcourses_shared:
+      # 2026-spring:
+        # - "course::1551658"

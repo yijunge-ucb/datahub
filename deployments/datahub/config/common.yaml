@@ -177,6 +177,6 @@ jupyterhub:
       course::1524699::group::all-admins:
         mem_limit: 4096M
         mem_guarantee: 4096M
-    bcourses_shared:
-      2026-spring:
-        - "course::1551764"
+    # bcourses_shared:
+      # 2026-spring:
+        # - "course::1551764"
