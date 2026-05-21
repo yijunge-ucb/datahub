@@ -123,7 +123,7 @@ jupyterhub:
         mem_limit: 2048M
         mem_guarantee: 2048M
       
-    bcourses_shared:
-      2026-spring:
-        - "course::1552931"
-        - "course::1550624"
+    # bcourses_shared:
+      # 2026-spring:
+        # - "course::1552931"
+        # - "course::1550624"
