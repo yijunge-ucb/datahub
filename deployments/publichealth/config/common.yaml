@@ -71,7 +71,7 @@ jupyterhub:
   singleuser:
     image:
       name: us-central1-docker.pkg.dev/ucb-datahub-2018/user-images/publichealth-user-image
-      tag: a17015da7a6d
+      tag: 33f2822a00e7
     extraFiles:
       # DH-305
       remove-exporters:
